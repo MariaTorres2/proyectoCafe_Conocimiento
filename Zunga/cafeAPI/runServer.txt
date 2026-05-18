@@ -1,0 +1,8 @@
+cafefastapi-env\Scripts\activate.bat
+uvicorn main:app --reload --port 8001
+
+Consulta: 
+
+{
+  "query": "PREFIX : <http://www.semanticweb.org/cafe/> PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT (STR(?id) AS ?ID) (STR(?cantidad) AS ?Cantidad) (STR(xsd:decimal(?precio)) AS ?Precio) (STR(?estado) AS ?Estado) (STR(?fecha) AS ?Fecha) WHERE { ?compras a :compra ; :cantidad ?cantidad ; :estado ?estado ; :fecha ?fecha ; :id ?id ; :precio ?precio . }"
+}

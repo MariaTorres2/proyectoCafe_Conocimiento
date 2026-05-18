@@ -1,0 +1,752 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+   xmlns="http://www.semanticweb.org/cafe/"
+   xmlns:gdy="urn:absolute:gdy#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/lot300">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/lote"/>
+    <estableceRecoleccion rdf:resource="http://www.semanticweb.org/cafe/event4"/>
+    <seAbastecePor rdf:resource="http://www.semanticweb.org/cafe/suministra300"/>
+    <tieneMantenimiento rdf:resource="http://www.semanticweb.org/cafe/mantenimiento300"/>
+    <area rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2300</area>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">10000</cantidad>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</estado>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">300</id>
+    <nombre>lote300</nombre>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/rec2">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/recoleccion"/>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-30T10:25:00</fecha>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2</id>
+    <gdy:FK_idRecolector>2</gdy:FK_idRecolector>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/inv_001">
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/inventario"/>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">701</id>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">50</cantidad>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2026-04-03</fecha>
+    <unidadMedida rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Kilogramos</unidadMedida>
+    <contieneInsumo rdf:resource="http://www.semanticweb.org/cafe/insumo_001"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/compra400">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/compra"/>
+    <adquiereInsumo rdf:resource="http://www.semanticweb.org/cafe/insu301"/>
+    <esCompraDe rdf:resource="http://www.semanticweb.org/cafe/finca400"/>
+    <incluyeInsumo rdf:resource="http://www.semanticweb.org/cafe/insu301"/>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">410</cantidad>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</estado>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-01-09T10:00:00</fecha>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">400</id>
+    <precio rdf:datatype="http://www.w3.org/2001/XMLSchema#double">34000.0</precio>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/event_001">
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/eventoRecoleccion"/>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">401</id>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">120</cantidad>
+    <generaRecoleccion rdf:resource="http://www.semanticweb.org/cafe/recoleccion_001"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/compra3">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/compra"/>
+    <adquiereInsumo rdf:resource="http://www.semanticweb.org/cafe/insu3"/>
+    <esCompraDe rdf:resource="http://www.semanticweb.org/cafe/finca3"/>
+    <incluyeInsumo rdf:resource="http://www.semanticweb.org/cafe/insu3"/>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">40</cantidad>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</estado>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2025-09-05T11:30:00</fecha>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">3</id>
+    <precio rdf:datatype="http://www.w3.org/2001/XMLSchema#double">48000.0</precio>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/recoleccion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/compra4">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/compra"/>
+    <adquiereInsumo rdf:resource="http://www.semanticweb.org/cafe/insu300"/>
+    <esCompraDe rdf:resource="http://www.semanticweb.org/cafe/finca4"/>
+    <incluyeInsumo rdf:resource="http://www.semanticweb.org/cafe/insu300"/>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">20</cantidad>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</estado>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2025-09-10T14:20:00</fecha>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">4</id>
+    <precio rdf:datatype="http://www.w3.org/2001/XMLSchema#double">30000.0</precio>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/lot3">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/lote"/>
+    <estableceRecoleccion rdf:resource="http://www.semanticweb.org/cafe/event3"/>
+    <seAbastecePor rdf:resource="http://www.semanticweb.org/cafe/suministra3"/>
+    <tieneMantenimiento rdf:resource="http://www.semanticweb.org/cafe/mantenimiento3"/>
+    <area rdf:datatype="http://www.w3.org/2001/XMLSchema#int">900</area>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">4200</cantidad>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</estado>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">3</id>
+    <nombre>lote3</nombre>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/compra2">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/compra"/>
+    <adquiereInsumo rdf:resource="http://www.semanticweb.org/cafe/insu2"/>
+    <esCompraDe rdf:resource="http://www.semanticweb.org/cafe/finca2"/>
+    <incluyeInsumo rdf:resource="http://www.semanticweb.org/cafe/insu2"/>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">12</cantidad>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</estado>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2025-09-01T10:15:00</fecha>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2</id>
+    <precio rdf:datatype="http://www.w3.org/2001/XMLSchema#double">25000.0</precio>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/inven301">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/inventario"/>
+    <contieneInsumo rdf:resource="http://www.semanticweb.org/cafe/insu301"/>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">306</cantidad>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-02-22T08:00:00</fecha>
+    <precio rdf:datatype="http://www.w3.org/2001/XMLSchema#int">301</precio>
+    <unidadMedida>KG</unidadMedida>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/REC-001">
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/recoleccion"/>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</id>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2026-04-03</fecha>
+    <fk_idRecolector rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1075223344</fk_idRecolector>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/mant_001">
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/mantenimiento"/>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">201</id>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2026-04-03</fecha>
+    <tipo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Poda Selectiva</tipo>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/inven300">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/inventario"/>
+    <contieneInsumo rdf:resource="http://www.semanticweb.org/cafe/insu300"/>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">305</cantidad>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-02-21T08:00:00</fecha>
+    <precio rdf:datatype="http://www.w3.org/2001/XMLSchema#int">300</precio>
+    <unidadMedida>KG</unidadMedida>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/mantenimiento301">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/mantenimiento"/>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-22T07:30:00</fecha>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">301</id>
+    <tipo>poda</tipo>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/lot2">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/lote"/>
+    <estableceRecoleccion rdf:resource="http://www.semanticweb.org/cafe/event2"/>
+    <seAbastecePor rdf:resource="http://www.semanticweb.org/cafe/suministra2"/>
+    <tieneMantenimiento rdf:resource="http://www.semanticweb.org/cafe/mantenimiento2"/>
+    <area rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1200</area>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">6500</cantidad>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</estado>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2</id>
+    <nombre>lote2</nombre>
+  </rdf:Description>
+  <rdf:Description rdf:about="urn:absolute:gdy#FK_idRecolector">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/recoleccion"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/finca4">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/finca"/>
+    <contieneLote rdf:resource="http://www.semanticweb.org/cafe/lot300"/>
+    <realizaCompra rdf:resource="http://www.semanticweb.org/cafe/compra4"/>
+    <altitud rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1750</altitud>
+    <area rdf:datatype="http://www.w3.org/2001/XMLSchema#int">52000</area>
+    <direccion>La Primavera</direccion>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">4</id>
+    <nombre>Santa María</nombre>
+    <gdy:FK_idPropietario></gdy:FK_idPropietario>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/mantenimiento1">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/mantenimiento"/>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-13T15:35:10</fecha>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</id>
+    <tipo>deshijado</tipo>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/insu3">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/insumo"/>
+    <esAdquiridoPor rdf:resource="http://www.semanticweb.org/cafe/compra3"/>
+    <permiteLa rdf:resource="http://www.semanticweb.org/cafe/suministra3"/>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</estado>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">3</id>
+    <nombre>fungicafe</nombre>
+    <precio rdf:datatype="http://www.w3.org/2001/XMLSchema#double">38000.0</precio>
+    <tipo>fungicida</tipo>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/finca2">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/finca"/>
+    <contieneLote rdf:resource="http://www.semanticweb.org/cafe/lot2"/>
+    <realizaCompra rdf:resource="http://www.semanticweb.org/cafe/finca2"/>
+    <altitud rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1700</altitud>
+    <area rdf:datatype="http://www.w3.org/2001/XMLSchema#int">45000</area>
+    <direccion>San Antonio</direccion>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2</id>
+    <nombre>El Progreso</nombre>
+    <gdy:FK_idPropietario>1</gdy:FK_idPropietario>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/incluyeInsumo">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/compra"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/cafe/insumo"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/compra_001">
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/compra"/>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">801</id>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2026-04-03</fecha>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">10</cantidad>
+    <precio rdf:datatype="http://www.w3.org/2001/XMLSchema#double">450000.0</precio>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</estado>
+    <incluyeInsumo rdf:resource="http://www.semanticweb.org/cafe/insumo_001"/>
+    <esCompraDe rdf:resource="http://www.semanticweb.org/cafe/finca_001"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/inventario">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/finca">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/insu1">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/insumo"/>
+    <esAdquiridoPor rdf:resource="http://www.semanticweb.org/cafe/compra1"/>
+    <permiteLa rdf:resource="http://www.semanticweb.org/cafe/suministra1"/>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</estado>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</id>
+    <nombre>crecernatural</nombre>
+    <precio rdf:datatype="http://www.w3.org/2001/XMLSchema#double">35000.0</precio>
+    <tipo>fertilizante</tipo>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/insu301">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/insumo"/>
+    <esAdquiridoPor rdf:resource="http://www.semanticweb.org/cafe/compra400"/>
+    <permiteLa rdf:resource="http://www.semanticweb.org/cafe/suministra301"/>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</estado>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">301</id>
+    <nombre>insumo301</nombre>
+    <precio rdf:datatype="http://www.w3.org/2001/XMLSchema#double">26020.0</precio>
+    <tipo>fertilizante</tipo>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/inven1">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/inventario"/>
+    <contieneInsumo rdf:resource="http://www.semanticweb.org/cafe/insu1"/>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">23</cantidad>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-25T01:23:00</fecha>
+    <precio rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</precio>
+    <unidadMedida>G</unidadMedida>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/rec_8484f903b7">
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/recoleccion"/>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">778191617</id>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2026-05-01</fecha>
+    <fk_idRecolector rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1117930622</fk_idRecolector>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/compra1">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/compra"/>
+    <adquiereInsumo rdf:resource="http://www.semanticweb.org/cafe/insu1"/>
+    <esCompraDe rdf:resource="http://www.semanticweb.org/cafe/finca1"/>
+    <incluyeInsumo rdf:resource="http://www.semanticweb.org/cafe/insu1"/>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">35</cantidad>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</estado>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2025-08-12T08:43:29</fecha>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</id>
+    <precio rdf:datatype="http://www.w3.org/2001/XMLSchema#double">36000.0</precio>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/insu300">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/insumo"/>
+    <esAdquiridoPor rdf:resource="http://www.semanticweb.org/cafe/compra4"/>
+    <permiteLa rdf:resource="http://www.semanticweb.org/cafe/suministra300"/>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</estado>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">300</id>
+    <nombre>insumo300</nombre>
+    <precio rdf:datatype="http://www.w3.org/2001/XMLSchema#double">26000.0</precio>
+    <tipo>fertilizante</tipo>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/insumo_001">
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/insumo"/>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">501</id>
+    <nombre rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Abono Orgánico</nombre>
+    <precio rdf:datatype="http://www.w3.org/2001/XMLSchema#double">45000.0</precio>
+    <tipo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Fertilizante</tipo>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</estado>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/rec300">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/recoleccion"/>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-04-21T09:00:00</fecha>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">300</id>
+    <gdy:FK_idRecolector></gdy:FK_idRecolector>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/finca_a1c215b1ac">
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/finca"/>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">778697655</id>
+    <nombre rdf:datatype="http://www.w3.org/2001/XMLSchema#string">cheches</nombre>
+    <direccion rdf:datatype="http://www.w3.org/2001/XMLSchema#string">acamism</direccion>
+    <area rdf:datatype="http://www.w3.org/2001/XMLSchema#int">3000</area>
+    <altitud rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1000</altitud>
+    <fk_idPropietario rdf:datatype="http://www.w3.org/2001/XMLSchema#string">40075517</fk_idPropietario>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/estado">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/compra"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/insumo"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/lote"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/rec301">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/recoleccion"/>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-04-22T09:00:00</fecha>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">301</id>
+    <gdy:FK_idRecolector></gdy:FK_idRecolector>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/mantenimiento2">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/mantenimiento"/>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-14T08:15:00</fecha>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2</id>
+    <tipo>poda</tipo>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/finca_6dd922786b">
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/finca"/>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">778694187</id>
+    <nombre rdf:datatype="http://www.w3.org/2001/XMLSchema#string">prueba1</nombre>
+    <direccion rdf:datatype="http://www.w3.org/2001/XMLSchema#string">alla</direccion>
+    <area rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2000</area>
+    <altitud rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1000</altitud>
+    <fk_idPropietario rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1118020084</fk_idPropietario>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/cantidad">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/compra"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/inventario"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/lote"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/suministroInsumo"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/inven2">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/inventario"/>
+    <contieneInsumo rdf:resource="http://www.semanticweb.org/cafe/insu2"/>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">45</cantidad>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-26T09:00:00</fecha>
+    <precio rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2</precio>
+    <unidadMedida>KG</unidadMedida>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/nombre">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/finca"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/insumo"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/lote"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/sum_001">
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/suministroInsumo"/>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">601</id>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2026-04-03</fecha>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2</cantidad>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</estado>
+    <requiereA rdf:resource="http://www.semanticweb.org/cafe/insumo_001"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/ocurreEn">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/eventoRecoleccion"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/cafe/lote"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/finca1">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/finca"/>
+    <contieneLote rdf:resource="http://www.semanticweb.org/cafe/lot1"/>
+    <realizaCompra rdf:resource="http://www.semanticweb.org/cafe/compra1"/>
+    <altitud rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1800</altitud>
+    <area rdf:datatype="http://www.w3.org/2001/XMLSchema#int">50000</area>
+    <direccion>Gallardo</direccion>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</id>
+    <nombre>La Esmeralda</nombre>
+    <gdy:FK_idPropietario>1</gdy:FK_idPropietario>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/suministra2">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/suministroInsumo"/>
+    <requiereA rdf:resource="http://www.semanticweb.org/cafe/insu2"/>
+    <seaplicaEn rdf:resource="http://www.semanticweb.org/cafe/lot2"/>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">15</cantidad>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</estado>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-14T12:20:00</fecha>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/inven3">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/inventario"/>
+    <contieneInsumo rdf:resource="http://www.semanticweb.org/cafe/insu3"/>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">70</cantidad>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-27T10:30:00</fecha>
+    <precio rdf:datatype="http://www.w3.org/2001/XMLSchema#int">3</precio>
+    <unidadMedida>KG</unidadMedida>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/rec_a536f320dc">
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/recoleccion"/>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">778202039</id>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2026-05-02</fecha>
+    <fk_idRecolector rdf:datatype="http://www.w3.org/2001/XMLSchema#string">12345</fk_idRecolector>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/generaRecoleccion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/eventoRecoleccion"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/cafe/recoleccion"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/recoleccion_31">
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/recoleccion"/>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">31</id>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#string">2026-04-03</fecha>
+    <fk_idRecolector rdf:datatype="http://www.w3.org/2001/XMLSchema#string">117930</fk_idRecolector>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/altitud">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/finca"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/suministra301">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/suministroInsumo"/>
+    <requiereA rdf:resource="http://www.semanticweb.org/cafe/insu301"/>
+    <seaplicaEn rdf:resource="http://www.semanticweb.org/cafe/lot301"/>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">301</cantidad>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</estado>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-05-22T11:00:00</fecha>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/event2">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/eventoRecoleccion"/>
+    <generaRecoleccion rdf:resource="http://www.semanticweb.org/cafe/rec2"/>
+    <ocurreEn rdf:resource="http://www.semanticweb.org/cafe/lot2"/>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">125</cantidad>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/lot1">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/lote"/>
+    <estableceRecoleccion rdf:resource="http://www.semanticweb.org/cafe/event1"/>
+    <seAbastecePor rdf:resource="http://www.semanticweb.org/cafe/suministra1"/>
+    <tieneMantenimiento rdf:resource="http://www.semanticweb.org/cafe/mantenimiento1"/>
+    <area rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1000</area>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">5000</cantidad>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</estado>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</id>
+    <nombre>lote1</nombre>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/id">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/compra"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/finca"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/insumo"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/inventario"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/lote"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/mantenimiento"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/recoleccion"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/mantenimiento3">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/mantenimiento"/>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-15T07:40:00</fecha>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">3</id>
+    <tipo>fertilizacion</tipo>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/event4">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/eventoRecoleccion"/>
+    <generaRecoleccion rdf:resource="http://www.semanticweb.org/cafe/rec300"/>
+    <ocurreEn rdf:resource="http://www.semanticweb.org/cafe/lot300"/>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">68</cantidad>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/lote">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/finca3">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/finca"/>
+    <contieneLote rdf:resource="http://www.semanticweb.org/cafe/lot3"/>
+    <realizaCompra rdf:resource="http://www.semanticweb.org/cafe/compra3"/>
+    <altitud rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1650</altitud>
+    <area rdf:datatype="http://www.w3.org/2001/XMLSchema#int">60000</area>
+    <direccion>La Reforma</direccion>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">3</id>
+    <nombre>Monte Verde</nombre>
+    <gdy:FK_idPropietario>2</gdy:FK_idPropietario>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/direccion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/finca"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/seaplicaEn">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/suministroInsumo"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/cafe/lote"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/FINCA-001">
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/finca"/>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</id>
+    <nombre rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Finca La Esperanza</nombre>
+    <direccion rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Vereda El Cedro, Neiva</direccion>
+    <area rdf:datatype="http://www.w3.org/2001/XMLSchema#int">50</area>
+    <altitud rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1500</altitud>
+    <fk_idPropietario rdf:datatype="http://www.w3.org/2001/XMLSchema#string">1075223344</fk_idPropietario>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/insu2">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/insumo"/>
+    <esAdquiridoPor rdf:resource="http://www.semanticweb.org/cafe/compra2"/>
+    <permiteLa rdf:resource="http://www.semanticweb.org/cafe/suministra2"/>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</estado>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2</id>
+    <nombre>nutricafe</nombre>
+    <precio rdf:datatype="http://www.w3.org/2001/XMLSchema#double">42000.0</precio>
+    <tipo>fertilizante</tipo>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/finca_001">
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/finca"/>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">10</id>
+    <nombre rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Hacienda El Cafetal</nombre>
+    <direccion rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Vereda La Sierra, Lote 4</direccion>
+    <area rdf:datatype="http://www.w3.org/2001/XMLSchema#int">20</area>
+    <altitud rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1550</altitud>
+    <fk_idPropietario rdf:datatype="http://www.w3.org/2001/XMLSchema#string">12344678</fk_idPropietario>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/requiereA">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/suministroInsumo"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/cafe/insumo"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/event1">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/eventoRecoleccion"/>
+    <generaRecoleccion rdf:resource="http://www.semanticweb.org/cafe/rec1"/>
+    <ocurreEn rdf:resource="http://www.semanticweb.org/cafe/lot1"/>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">35</cantidad>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/compra">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/5555555555">
+    <email_propietario>frssm@wnm2</email_propietario>
+    <estado_propietario rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</estado_propietario>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/mantenimiento300">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/mantenimiento"/>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-21T07:30:00</fecha>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">300</id>
+    <tipo>poda</tipo>
+  </rdf:Description>
+  <rdf:Description rdf:about="urn:absolute:gdy#FK_idPropietario">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/finca"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/suministra3">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/suministroInsumo"/>
+    <requiereA rdf:resource="http://www.semanticweb.org/cafe/insu3"/>
+    <seaplicaEn rdf:resource="http://www.semanticweb.org/cafe/lot3"/>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">8</cantidad>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</estado>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-15T16:45:00</fecha>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/12345">
+    <fk_tipo_documento rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</fk_tipo_documento>
+    <nombre_persona>Recolectorprueba</nombre_persona>
+    <edad_persona rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">21</edad_persona>
+    <telefono_persona>3214213545</telefono_persona>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/event5">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/eventoRecoleccion"/>
+    <generaRecoleccion rdf:resource="http://www.semanticweb.org/cafe/rec301"/>
+    <ocurreEn rdf:resource="http://www.semanticweb.org/cafe/lot301"/>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">220</cantidad>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/rec3">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/recoleccion"/>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-04-30T10:25:00</fecha>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">3</id>
+    <gdy:FK_idRecolector>1</gdy:FK_idRecolector>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/permiteLa">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/insumo"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/cafe/suministroInsumo"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/suministra300">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/suministroInsumo"/>
+    <requiereA rdf:resource="http://www.semanticweb.org/cafe/insu300"/>
+    <seaplicaEn rdf:resource="http://www.semanticweb.org/cafe/lot300"/>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">300</cantidad>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</estado>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-05-21T11:00:00</fecha>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/lot301">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/lote"/>
+    <estableceRecoleccion rdf:resource="http://www.semanticweb.org/cafe/event5"/>
+    <seAbastecePor rdf:resource="http://www.semanticweb.org/cafe/suministra301"/>
+    <tieneMantenimiento rdf:resource="http://www.semanticweb.org/cafe/mantenimiento301"/>
+    <area rdf:datatype="http://www.w3.org/2001/XMLSchema#int">2305</area>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">10020</cantidad>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</estado>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">301</id>
+    <nombre>lote301</nombre>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/eventoRecoleccion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/area">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/finca"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/lote"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/suministra1">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/suministroInsumo"/>
+    <requiereA rdf:resource="http://www.semanticweb.org/cafe/insu1"/>
+    <seaplicaEn rdf:resource="http://www.semanticweb.org/cafe/lot1"/>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">10</cantidad>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">false</estado>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-13T13:25:12</fecha>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/seAbastecePor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/lote"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/cafe/suministroInsumo"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/estableceRecoleccion">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/lote"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/cafe/eventoRecoleccion"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/tipo">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/insumo"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/mantenimiento"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/finca400">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/finca"/>
+    <contieneLote rdf:resource="http://www.semanticweb.org/cafe/lot301"/>
+    <realizaCompra rdf:resource="http://www.semanticweb.org/cafe/compra400"/>
+    <altitud rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1700</altitud>
+    <area rdf:datatype="http://www.w3.org/2001/XMLSchema#int">44000</area>
+    <direccion>Sector400</direccion>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">400</id>
+    <nombre>Finca400</nombre>
+    <gdy:FK_idPropietario>5</gdy:FK_idPropietario>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/fecha">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/compra"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/inventario"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/mantenimiento"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/recoleccion"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="urn:absolute:gdy">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Ontology"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/precio">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/compra"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/insumo"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#double"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/realizaCompra">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/finca"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/cafe/compra"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/event3">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/eventoRecoleccion"/>
+    <generaRecoleccion rdf:resource="http://www.semanticweb.org/cafe/rec3"/>
+    <ocurreEn rdf:resource="http://www.semanticweb.org/cafe/lot3"/>
+    <cantidad rdf:datatype="http://www.w3.org/2001/XMLSchema#int">336</cantidad>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/unidadMedida">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#DatatypeProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/inventario"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/esCompraDe">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/compra"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/cafe/finca"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/rec1">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/recoleccion"/>
+    <fecha rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-03-13T02:35:00</fecha>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">1</id>
+    <gdy:FK_idRecolector>1</gdy:FK_idRecolector>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/contieneInsumo">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/inventario"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/cafe/insumo"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/esAdquiridoPor">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/insumo"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/cafe/compra"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/contieneLote">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/finca"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/cafe/lote"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/adquiereInsumo">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/compra"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/cafe/insumo"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/123">
+    <rdf:type rdf:resource="http://www.semanticweb.org/cafe/insumo"/>
+    <id rdf:datatype="http://www.w3.org/2001/XMLSchema#int">778698246</id>
+    <nombre rdf:datatype="http://www.w3.org/2001/XMLSchema#string">yuca</nombre>
+    <precio rdf:datatype="http://www.w3.org/2001/XMLSchema#double">2000.0</precio>
+    <tipo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">arracacha</tipo>
+    <estado rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</estado>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/insumo">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/tieneMantenimiento">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="http://www.semanticweb.org/cafe/lote"/>
+    <rdfs:range rdf:resource="http://www.semanticweb.org/cafe/mantenimiento"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/suministroInsumo">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.semanticweb.org/cafe/mantenimiento">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+  </rdf:Description>
+</rdf:RDF>
