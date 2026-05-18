@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/theme.css' %}" rel="stylesheet">
+<link href="{% static 'css/admin.css' %}?v=bp2" rel="stylesheet">
+<link href="{% static 'css/persona.css' %}" rel="stylesheet">
+<link href="{% static 'css/app-shell.css' %}?v=bp2" rel="stylesheet" />
+    <title>Insumo</title>
+    
+</head>
+<body>
+    <div class="contenedor_padre">
+        <div class="boton_contenedor">
+            <div class="letras" id="vista_title">Insumo</div>
+            <div id="ordena_boton">
+            <div class="letras" id="letra_gestion">Gestionar</div>
+            <button id="botones" onclick="showPanel('panel1')">Agregar</button>
+            <button id="botones" onclick="showPanel('panel2')">Editar</button>
+            <button id="botones" onclick="showPanel('panel3')">Eliminar</button>
+            <button id="botones" onclick="showPanel('panel4')">Ver</button>
+            <button id="botonVolver" >Volver</button>
+            </div>
+        </div>
+        
+        <!-- ///Registro de Insumo -->
+<div class="panel" id="panel1">
+    <form id="registroinsumo">
+        <div>
+            <label class="labels" id="id">ID insumo</label>
+            <input
+              type="text"
+              class="entrada"
+              id="id_insumo"
+              maxlength="45"
+              required
+            />
+          </div>
+      <div>
+        <label class="labels" id="nombre_insumo_label">Nombre del insumo</label>
+        <input
+          type="text"
+          class="entrada"
+          id="nombre_insumo"
+          maxlength="45"
+          required
+        />
+      </div>
+      <div>
+        <label class="labels" id="preciounidadl">Precio por Unidad</label>
+        <input
+          type="text"
+          class="entrada"
+          id="preciounidad_insumo"
+          required
+        />
+      </div>
+      <div>
+        <label class="labels" id="estado">Estado</label>
+        <select class="selector" id="estado_insumo" required>
+          <option value="true" selected>Activo</option>
+          <option value="false">Inactivo</option>
+        </select>
+      </div>
+      <div>
+        <label class="labels" id="id_tipo">Tipo de Insumo</label>
+        <select class="selector" id="id_tipoinsumo" required>
+          <option value="">---Seleccione tipo---</option>
+        </select>
+      </div>
+      <div>
+        <label class="labels" id="unidad">Unidad de Medida</label>
+        <select class="selector" id="unidad_medida" required>
+          <option value="">---Seleccione unidad---</option>
+        </select>
+      </div>
+      <div>
+        <label class="labels" id="metodo">Método de Aplicación</label>
+        <select class="selector" id="metodo_aplicacion" required>
+          <option value="">---Seleccione método---</option>
+        </select>
+      </div>
+      <button type="submit" class="botonsum" id="botonaccion">
+        Guardar
+      </button>
+    </form>
+    <div id="resultado"></div>
+  </div>
+
+  <!-- ///Eliminar -->
+<div class="panel" id="panel3">
+    <form id="eliminarUnidadMedida">
+      <label class="labels" id="documento">ID Insumo</label>
+      <input type="text" class="entrada" id="id_eliminar" required />
+      <div>
+        <button type="submit" class="botonsum" id="botonEliminar">
+          Eliminar
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Tabla de Insumos -->
+<div class="panel" id="panel4">
+    <div id="tablaPerson">
+      <table id="mostrarInsumos" border="1">
+        <thead>
+          <tr>
+            <th>ID Insumo</th>
+            <th>Nombre</th>
+            <th>Precio Unidad</th>
+            <th>Estado</th>
+            <th>ID Tipo Insumo</th>
+            <th>Unidad de Medida</th>
+            <th>Método de Aplicación</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+<!-- ///Buscar Insumo -->
+<div class="panel" id="panel2">
+    <form id="buscarInsumo">
+      <div>
+        <label class="labels" id="documento">ID Insumo</label>
+        <input type="text" class="entrada" id="id_buscar" required />
+      </div>
+      <button type="submit" class="botonsum" id="botonBuscar">Buscar</button>
+    </form>
+  </div>
+  
+  <!-- ///Editar Insumo -->
+  <div class="panel" id="panel22">
+    <form id="editarInsumo">
+      <div>
+        <label class="labels" id="documento">ID Insumo</label>
+        <input type="text" class="entrada2" id="id_insumo2" disabled />
+      </div>
+      <div>
+        <label class="labels" id="nombre">Nombre del insumo</label>
+        <input type="text" class="entrada2" id="nombre_insumo2" disabled />
+      </div>
+      <div>
+        <label class="labels" id="precio">Precio por Unidad</label>
+        <input type="number" class="entrada2" id="preciounidad_insumo2" disabled />
+      </div>
+      <div>
+        <label class="labels" id="estado">Estado Insumo</label>
+        <select class="entrada2" id="estado_insumo2" disabled>
+          <option value="true">Activo</option>
+          <option value="false">Inactivo</option>
+        </select>
+      </div>
+      <div>
+        <label class="labels" id="tipo">ID tipo insumo</label>
+        <select class="entrada2" id="tipo_insumo2" disabled>
+          <option value="">---Seleccione tipo---</option>
+        </select>
+      </div>
+      <div>
+        <label class="labels" id="medida">Unidad medida</label>
+        <select class="entrada2" id="unidad_medida2" disabled>
+          <option value="">---Seleccione unidad---</option>
+        </select>
+      </div>
+      <div>
+        <label class="labels" id="metodo2_label">Método de Aplicación</label>
+        <select class="entrada2" id="metodo_aplicacion2" disabled>
+          <option value="">---Seleccione método---</option>
+        </select>
+      </div>
+      <button type="submit" class="botonsum" id="botoneditar" disabled>
+        Actualizar
+      </button>
+    </form>
+    <button class="botonsum" id="botondesbloquear">Editar</button>
+    <button class="botonsum" id="botonvolvered">Volver</button>
+  </div>
+
+    </div>
+    <script>
+        function showPanel(panelId) {
+            const panels = document.querySelectorAll('.panel');
+            panels.forEach(panel => panel.style.display = 'none');
+            const selectedPanel = document.getElementById(panelId);
+            selectedPanel.style.display = 'flex';
+            result.innerText='';
+        }
+        const redirectVolver = document.getElementById("botonVolver");
+
+redirectVolver.addEventListener("click", () => {
+  window.location.href = "{{ volver_url }}";
+});
+
+function setOptions(selectId, rows, getValue, getLabel, placeholder) {
+  const sel = document.getElementById(selectId);
+  if (!sel) return;
+  const actual = sel.value;
+  sel.innerHTML = `<option value="">${placeholder}</option>`;
+  rows.forEach((row) => {
+    const value = String(getValue(row) || "").trim();
+    if (!value) return;
+    const opt = document.createElement("option");
+    opt.value = value;
+    opt.textContent = getLabel(row);
+    sel.appendChild(opt);
+  });
+  if (actual) sel.value = actual;
+}
+
+async function cargarCatalogosInsumo() {
+  try {
+    const [tiposResp, unidadesResp, metodosResp] = await Promise.all([
+      fetch("/api/tiposinsumo"),
+      fetch("/api/productosmedida"),
+      fetch("/api/productosmetodoaplica"),
+    ]);
+    const tipos = tiposResp.ok ? await tiposResp.json() : [];
+    const unidades = unidadesResp.ok ? await unidadesResp.json() : [];
+    const metodos = metodosResp.ok ? await metodosResp.json() : [];
+
+    ["id_tipoinsumo", "tipo_insumo2"].forEach((id) => {
+      setOptions(
+        id,
+        Array.isArray(tipos) ? tipos : [],
+        (x) => x.id_tipoinsumo,
+        (x) => `${x.id_tipoinsumo} - ${x.nombre_tipo || ""}`,
+        "---Seleccione tipo---"
+      );
+    });
+    ["unidad_medida", "unidad_medida2"].forEach((id) => {
+      setOptions(
+        id,
+        Array.isArray(unidades) ? unidades : [],
+        (x) => x.id_unidadmedida,
+        (x) => `${x.id_unidadmedida} - ${x.nombre_unidadmedida || ""}`,
+        "---Seleccione unidad---"
+      );
+    });
+    ["metodo_aplicacion", "metodo_aplicacion2"].forEach((id) => {
+      setOptions(
+        id,
+        Array.isArray(metodos) ? metodos : [],
+        (x) => x.id_metodoaplicacion,
+        (x) => `${x.id_metodoaplicacion} - ${x.nombre_metodoaplicacion || x.nombre_aplicacion || ""}`,
+        "---Seleccione método---"
+      );
+    });
+  } catch (error) {
+    console.error("Error al cargar catálogos de insumo:", error);
+  }
+}
+
+        document.getElementById("registroinsumo").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const id_insumo = document.getElementById("id_insumo").value;
+  const nombre_insumo = document.getElementById("nombre_insumo").value;
+  const preciounidad_insumo = document.getElementById("preciounidad_insumo").value;
+  const estado_insumo = document.getElementById("estado_insumo").value;
+  const id_tipoinsumo = document.getElementById("id_tipoinsumo").value;
+  const unidad_medida = document.getElementById("unidad_medida").value;
+  const metodo_aplicacion = document.getElementById("metodo_aplicacion").value;
+
+
+  const validarDescripcion = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+  if (!validarDescripcion.test(nombre_insumo)) {
+    alert("La descripción solo debe contener letras.");
+    return false;
+  }
+  try {
+   
+    const response = await fetch("/api/insumos", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id_insumo,
+        nombre_insumo,
+        preciounidad_insumo,
+        estado_insumo,
+        id_tipoinsumo,
+        unidad_medida,
+        metodo_aplicacion,
+      }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      const resultadoDiv = document.getElementById("resultado");
+      resultadoDiv.innerHTML = `
+        <p id="tituloDatos"><strong>Datos guardados</strong></p>
+        <p><strong>ID Insumo:</strong> ${data.data.id_insumo}</p>
+        <p><strong>Descripción:</strong> ${data.data.nombre_insumo}</p>
+        <p><strong>Precio Unidad:</strong> ${data.data.preciounidad_insumo}</p>
+        <p><strong>Estado:</strong> ${data.data.estado_insumo}</p>
+        <p><strong>Tipo de Insumo:</strong> ${data.data.id_tipoinsumo}</p>
+        <p><strong>Unidad de Medida:</strong> ${data.data.unidad_medida}</p>
+        <p><strong>Método de Aplicación:</strong> ${data.data.metodo_aplicacion}</p>
+      `;
+      alert("Datos guardados con éxito");
+    } else {
+      alert(data.message || "Hubo un error al registrar los datos.");
+    }
+  } catch (error) {
+    alert("Hubo un error al registrar los datos.");
+  }
+  document.getElementById("registroinsumo").reset();
+  document.getElementById("estado_insumo").value = "true";
+  result.innerText='';
+});
+
+document.getElementById("eliminarUnidadMedida").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const id_insumo = document.getElementById("id_eliminar").value;
+  try {
+    const response = await fetch(`/api/insumos/${id_insumo}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    if (response.ok) {
+      alert(data.message);
+    } else {
+      alert(data.message || "Hubo un error al eliminar el insumo.");
+    }
+  } catch (error) {
+    alert("Hubo un error al eliminar el insumo.");
+  }
+  document.getElementById("eliminarUnidadMedida").reset();
+});
+
+document.getElementById("buscarInsumo").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const id_insumo = document.getElementById("id_buscar").value;
+
+  try {
+    const response = await fetch(`/api/insumos/${id_insumo}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    if (response.ok) {
+      showPanel("panel22");
+      document.getElementById("id_insumo2").value = data.id_insumo;
+      document.getElementById("nombre_insumo2").value = data.nombre_insumo;
+      document.getElementById("preciounidad_insumo2").value = data.preciounidad_insumo;
+      document.getElementById("estado_insumo2").value = String(data.estado_insumo).toLowerCase() === "activo" || data.estado_insumo === "1" || data.estado_insumo === true ? "true" : "false";
+      document.getElementById("tipo_insumo2").value = data.id_tipoinsumo;
+      document.getElementById("unidad_medida2").value = data.unidad_medida;
+      document.getElementById("metodo_aplicacion2").value = data.metodo_aplicacion || "";
+    } else {
+      alert(data.message || "No se pudieron cargar los datos.");
+    }
+  } catch (error) {
+    alert("Hubo un error al cargar los datos.");
+  }
+  document.getElementById("buscarInsumo").reset();
+});
+
+const redirecteditar = document.getElementById("botondesbloquear");
+redirecteditar.addEventListener("click", () => {
+  const botondesb = document.getElementById("botondesbloquear");
+  const entradas = document.querySelectorAll(".entrada2");
+  const boton = document.getElementById("botoneditar");
+  boton.disabled = false;
+  botondesb.disabled = true;
+  entradas.forEach((entrada) => {
+    if (entrada.id !== "id_insumo2") {
+      entrada.disabled = false;
+    }
+  });
+});
+
+document.getElementById("editarInsumo").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const botondesb = document.getElementById("botondesbloquear");
+  const boton = document.getElementById("botoneditar");
+  botondesb.disabled = false;
+  boton.disabled = true;
+
+  const id_insumo = document.getElementById("id_insumo2").value;
+  const nombre_insumo = document.getElementById("nombre_insumo2").value;
+  const preciounidad_insumo = document.getElementById("preciounidad_insumo2").value;
+  const estado_insumo = document.getElementById("estado_insumo2").value;
+  const id_tipoinsumo = document.getElementById("tipo_insumo2").value;
+  const unidad_medida = document.getElementById("unidad_medida2").value;
+  const metodo_aplicacion = document.getElementById("metodo_aplicacion2").value;
+
+  try {
+    const response = await fetch(
+      `/api/insumos/${id_insumo}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id_insumo,
+          nombre_insumo,
+          preciounidad_insumo,
+          estado_insumo,
+          id_tipoinsumo,
+          unidad_medida,
+          metodo_aplicacion,
+        }),
+      }
+    );
+    const data = await response.json();
+    if (response.ok) {
+      alert("Datos actualizados con éxito");
+      const entradas2 = document.querySelectorAll(".entrada2");
+      entradas2.forEach((entrada) => {
+        entrada.disabled = true;
+      });
+    } else {
+      alert(data.message || "Hubo un error al actualizar los datos.");
+    }
+  } catch (error) {
+    alert("Hubo un error al guardar los datos.");
+  }
+  showPanel("panel2");
+  document.getElementById("editarInsumo").reset();
+});
+
+function obtenerInsumos() {
+    fetch("/api/insumos")
+      .then((response) => response.json())
+      .then((insumos) => {
+        actualizarInsumos(insumos);
+      })
+      .catch((error) => console.error("Error al obtener insumos:", error));
+  }
+
+
+  function actualizarInsumos(insumos) {
+    const tablaBody = document.getElementById("mostrarInsumos").getElementsByTagName("tbody")[0];
+    tablaBody.innerHTML = "";
+    insumos.forEach((insumo) => {
+      const fila = document.createElement("tr");
+
+      const idInsumo = document.createElement("td");
+      idInsumo.textContent = insumo.id_insumo;
+      fila.appendChild(idInsumo);
+
+      const descripcionInsumo = document.createElement("td");
+      descripcionInsumo.textContent = insumo.nombre_insumo;
+      fila.appendChild(descripcionInsumo);
+
+      const precioUnidad = document.createElement("td");
+      precioUnidad.textContent = insumo.preciounidad_insumo;
+      fila.appendChild(precioUnidad);
+
+      const estadoInsumo = document.createElement("td");
+      estadoInsumo.textContent = insumo.estado_insumo;
+      fila.appendChild(estadoInsumo);
+
+      const idTipoInsumo = document.createElement("td");
+      idTipoInsumo.textContent = insumo.id_tipoinsumo;
+      fila.appendChild(idTipoInsumo);
+
+      const unidadMedida = document.createElement("td");
+      unidadMedida.textContent = insumo.unidad_medida || "Sin Unidad";
+      fila.appendChild(unidadMedida);
+
+      const metodoAplicacion = document.createElement("td");
+      metodoAplicacion.textContent = insumo.metodo_aplicacion || "Sin Método";
+      fila.appendChild(metodoAplicacion);
+
+      tablaBody.appendChild(fila);
+    });
+  }
+
+  setInterval(obtenerInsumos, 3000);
+
+
+  cargarCatalogosInsumo();
+  obtenerInsumos();
+    </script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/app-ui.js' %}" defer></script>
+</body>
+</html>

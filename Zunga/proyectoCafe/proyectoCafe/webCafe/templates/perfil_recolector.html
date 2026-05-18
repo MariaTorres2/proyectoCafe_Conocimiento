@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  {% load static %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/theme.css' %}" rel="stylesheet">
+  <link href="{% static 'css/admin.css' %}?v=bp2" rel="stylesheet">
+  <link href="{% static 'css/persona.css' %}" rel="stylesheet">
+<link href="{% static 'css/app-shell.css' %}?v=bp2" rel="stylesheet" />
+  <title>Mi perfil</title>
+</head>
+<body>
+  <div class="contenedor_padre">
+    <div class="boton_contenedor">
+      <div class="letras" id="vista_title">MI PERFIL</div>
+      <div id="ordena_boton">
+        <button id="botonVolver">Volver</button>
+      </div>
+    </div>
+
+    <div class="panel app-panel-block">
+      <form id="perfilForm">
+        {% csrf_token %}
+        <div>
+          <label class="labels">Documento (no editable)</label>
+          <input type="text" class="entrada" id="documento_persona" value="{{ persona.documento_persona }}" disabled />
+        </div>
+        <div>
+          <label class="labels">Tipo documento</label>
+          <select class="selector" id="fk_tipo_documento">
+            <option value="0">---Seleccione---</option>
+            <option value="1">Cedula de ciudadania</option>
+            <option value="2">Tarjeta de identidad</option>
+            <option value="3">Cedula de extranjeria</option>
+          </select>
+        </div>
+        <div>
+          <label class="labels">Nombre</label>
+          <input type="text" class="entrada" id="nombre_persona" value="{{ persona.nombre_persona }}" required />
+        </div>
+        <div>
+          <label class="labels">Edad</label>
+          <input type="number" class="entrada" id="edad_persona" value="{{ persona.edad_persona }}" required />
+        </div>
+        <div>
+          <label class="labels">Teléfono</label>
+          <input type="text" class="entrada" id="telefono_persona" value="{{ persona.telefono_persona }}" required />
+        </div>
+        <button type="submit" class="botonsum">Guardar cambios</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("botonVolver").addEventListener("click", () => {
+      window.location.href = "{{ volver_url }}";
+    });
+
+    (function initTipoDoc() {
+      const sel = document.getElementById("fk_tipo_documento");
+      const current = "{{ persona.fk_tipo_documento }}";
+      if (sel && current) sel.value = String(current);
+    })();
+
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie) {
+        const cookies = document.cookie.split(";");
+        for (let cookie of cookies) {
+          if (cookie.trim().startsWith(name + "=")) {
+            cookieValue = cookie.split("=")[1];
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    document.getElementById("perfilForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const fk_tipo_documento = parseInt(document.getElementById("fk_tipo_documento").value, 10);
+      if (!fk_tipo_documento) {
+        alert("Seleccione un tipo de documento válido.");
+        return;
+      }
+      const payload = {
+        fk_tipo_documento,
+        nombre_persona: document.getElementById("nombre_persona").value,
+        edad_persona: parseInt(document.getElementById("edad_persona").value, 10),
+        telefono_persona: document.getElementById("telefono_persona").value,
+      };
+      try {
+        const r = await fetch("/perfil_recolector/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken"),
+          },
+          body: JSON.stringify(payload),
+        });
+        const data = await r.json();
+        if (r.ok && data.status === "success") {
+          alert("Perfil actualizado.");
+        } else {
+          alert(data.message || "No se pudo actualizar.");
+        }
+      } catch (err) {
+        alert("Error de conexión.");
+      }
+    });
+  </script>
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/app-ui.js' %}" defer></script>
+</body>
+</html>
+

@@ -1,0 +1,317 @@
+/**
+ * Capa final — barra de aplicación (debe ir DESPUÉS de admin.css / persona.css / finanzas.css).
+ * Elimina aspecto “panel verde + botones blancos” y alinea con login (cristal oscuro, oro, Outfit/Fraunces vía theme).
+ */
+
+html body:not(.login-page) .contenedor_padre > .boton_contenedor {
+  position: sticky !important;
+  top: 0;
+  z-index: 100;
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.55rem 1rem;
+  padding: 0.6rem clamp(0.75rem, 2.5vw, 1.35rem) 0.85rem !important;
+  isolation: isolate;
+  color: var(--color-ink, #e8f2ec) !important;
+  border-bottom: 1px solid rgba(212, 165, 116, 0.28) !important;
+  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.5) !important;
+  background:
+    radial-gradient(ellipse 100% 80% at 50% -20%, rgba(212, 165, 116, 0.1), transparent 50%),
+    radial-gradient(ellipse 70% 55% at 100% 100%, rgba(45, 100, 72, 0.14), transparent 45%),
+    linear-gradient(165deg, #020806 0%, #0a1210 40%, #050a08 100%) !important;
+}
+
+html body:not(.login-page) .contenedor_padre > .boton_contenedor::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.045) 0%, transparent 38%);
+}
+
+html body:not(.login-page) .contenedor_padre > .boton_contenedor > .letras#vista_title,
+html body:not(.login-page) .contenedor_padre > .boton_contenedor > #vista_title.letras {
+  position: relative;
+  z-index: 1;
+  margin: 0 !important;
+  padding: 0.42rem 0.95rem !important;
+  border-radius: 14px !important;
+  background: linear-gradient(165deg, rgba(22, 34, 28, 0.95) 0%, rgba(6, 12, 10, 0.98) 100%) !important;
+  border: 1px solid rgba(212, 165, 116, 0.42) !important;
+  box-shadow:
+    0 6px 22px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+  font-family: var(--app-font-display, "Fraunces", Georgia, serif) !important;
+  font-style: italic;
+  font-weight: 700 !important;
+  color: #f6faf7 !important;
+  letter-spacing: -0.02em;
+}
+
+html body:not(.login-page) .contenedor_padre #ordena_boton {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem 0.55rem;
+  min-width: 0;
+  padding: 0.45rem 0.55rem 0.55rem !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(212, 165, 116, 0.18) !important;
+  background: linear-gradient(
+    165deg,
+    rgba(8, 16, 12, 0.72) 0%,
+    rgba(4, 10, 7, 0.88) 100%
+  ) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 10px 32px rgba(0, 0, 0, 0.35) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+html body:not(.login-page) .contenedor_padre #ordena_boton > .letragestion,
+html body:not(.login-page) .contenedor_padre #ordena_boton > #letra_gestion {
+  flex-basis: 100%;
+  width: 100%;
+  text-align: center;
+  order: 0;
+  padding: 0.2rem 0 0.35rem !important;
+  margin: 0 !important;
+  font-family: var(--app-font, "Outfit", system-ui, sans-serif) !important;
+  font-size: 0.7rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: rgba(212, 165, 116, 0.92) !important;
+  text-shadow: none !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 0.25rem !important;
+}
+
+html body:not(.login-page) .contenedor_padre #ordena_boton > button,
+html body:not(.login-page) .contenedor_padre #ordena_boton > button#botones {
+  order: 1;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  min-height: 46px !important;
+  padding: 0.5rem 1.1rem !important;
+  font-family: var(--app-font, "Outfit", system-ui, sans-serif) !important;
+  font-size: 0.84rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.03em !important;
+  border-radius: 999px !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.45rem !important;
+  color: var(--color-ink, #e8f2ec) !important;
+  background: linear-gradient(
+    165deg,
+    rgba(26, 40, 32, 0.96) 0%,
+    rgba(8, 14, 11, 0.99) 100%
+  ) !important;
+  border: 1px solid rgba(212, 165, 116, 0.42) !important;
+  box-shadow:
+    0 2px 14px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+html body:not(.login-page) .contenedor_padre #ordena_boton > button:hover {
+  color: #fff !important;
+  background: linear-gradient(
+    165deg,
+    rgba(38, 56, 46, 0.98) 0%,
+    rgba(14, 26, 20, 1) 100%
+  ) !important;
+  border-color: rgba(240, 210, 180, 0.58) !important;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(212, 165, 116, 0.12) !important;
+}
+
+html body:not(.login-page) .contenedor_padre #ordena_boton > #botonVolver {
+  border-style: dashed !important;
+  border-color: rgba(212, 165, 116, 0.38) !important;
+  background: rgba(0, 0, 0, 0.28) !important;
+}
+
+html body:not(.login-page) .contenedor_padre #ordena_boton > #botonVolver:hover {
+  background: rgba(212, 165, 116, 0.12) !important;
+  border-style: solid !important;
+}
+
+html body:not(.login-page) .contenedor_padre #ordena_boton > #salir {
+  order: 2;
+  margin-left: auto;
+  color: #ffe8e6 !important;
+  background: linear-gradient(
+    165deg,
+    rgba(130, 32, 26, 0.88) 0%,
+    rgba(56, 14, 12, 0.95) 100%
+  ) !important;
+  border-color: rgba(255, 180, 175, 0.52) !important;
+}
+
+html body:not(.login-page) .contenedor_padre .boton_contenedor > .botonsum {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  min-height: 46px !important;
+  padding: 0.5rem 1.15rem !important;
+  font-family: var(--app-font, "Outfit", system-ui, sans-serif) !important;
+  font-size: 0.84rem !important;
+  font-weight: 600 !important;
+  border-radius: 999px !important;
+  color: var(--color-ink, #e8f2ec) !important;
+  background: linear-gradient(
+    165deg,
+    rgba(26, 40, 32, 0.96) 0%,
+    rgba(8, 14, 11, 0.99) 100%
+  ) !important;
+  border: 1px solid rgba(212, 165, 116, 0.42) !important;
+  box-shadow:
+    0 2px 14px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+  filter: none !important;
+}
+
+html body:not(.login-page) .contenedor_padre .boton_contenedor > .botonsum:hover {
+  filter: none !important;
+  color: #fff !important;
+  border-color: rgba(240, 210, 180, 0.58) !important;
+}
+
+@media (max-width: 768px) {
+  html body:not(.login-page) .contenedor_padre > .boton_contenedor {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 0.65rem 0.75rem 1rem !important;
+    border-radius: 0 0 22px 22px !important;
+    margin: 0 0 0.35rem !important;
+  }
+
+  html body:not(.login-page) .contenedor_padre > .boton_contenedor > .letras#vista_title,
+  html body:not(.login-page) .contenedor_padre > .boton_contenedor > #vista_title.letras {
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  html body:not(.login-page) .contenedor_padre #ordena_boton {
+    flex-direction: column !important;
+    width: 100% !important;
+    padding: 0.65rem 0.65rem 0.75rem !important;
+    border-radius: 18px !important;
+  }
+
+  html body:not(.login-page) .contenedor_padre #ordena_boton > button,
+  html body:not(.login-page) .contenedor_padre #ordena_boton > button#botones {
+    width: 100% !important;
+    min-width: 0 !important;
+    flex: none !important;
+    border-radius: 14px !important;
+  }
+
+  html body:not(.login-page) .contenedor_padre #ordena_boton > #salir {
+    margin-left: 0 !important;
+    width: 100% !important;
+    order: 99 !important;
+  }
+}
+
+/* ——— Módulos (.botonPanel): cristal oscuro + oro; anula aspecto nativo de <button> ——— */
+/* Módulos: cristal oscuro + oro. Excluye .prop-fin-nav-btn (Finanzas propietario — propietario-finanzas.css). */
+html body:not(.login-page) .contenedor_padre .panel button.botonPanel:not(.prop-fin-nav-btn),
+html body:not(.login-page) .contenedor_padre > .panel button.botonPanel:not(.prop-fin-nav-btn) {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  box-sizing: border-box !important;
+  flex: none !important;
+  flex-grow: 0 !important;
+  flex-shrink: 0 !important;
+  width: fit-content !important;
+  max-width: min(22rem, 100%) !important;
+  min-width: 0 !important;
+  min-height: 52px !important;
+  height: auto !important;
+  padding: 0.75rem 0.85rem !important;
+  line-height: 1.35 !important;
+  font-family: var(--app-font, "Outfit", system-ui, sans-serif) !important;
+  font-size: clamp(0.8rem, 1.6vw, 0.9rem) !important;
+  font-weight: 600 !important;
+  color: var(--color-ink, #e8f2ec) !important;
+  background: linear-gradient(
+    165deg,
+    rgba(22, 34, 28, 0.94) 0%,
+    rgba(8, 14, 11, 0.97) 100%
+  ) !important;
+  border: 1px solid rgba(212, 165, 116, 0.4) !important;
+  border-radius: 14px !important;
+  box-shadow:
+    0 2px 14px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: visible !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+}
+
+html body:not(.login-page) .contenedor_padre .panel button.botonPanel:not(.prop-fin-nav-btn):hover,
+html body:not(.login-page) .contenedor_padre > .panel button.botonPanel:not(.prop-fin-nav-btn):hover {
+  color: #fff !important;
+  background: linear-gradient(
+    165deg,
+    rgba(32, 48, 40, 0.98) 0%,
+    rgba(14, 26, 20, 1) 100%
+  ) !important;
+  border-color: rgba(240, 210, 180, 0.55) !important;
+}
+
+/* Dock de módulos (admin / propietario insumos / proveedor): chips más redondeados + hover con relieve */
+html body:not(.login-page) .contenedor_padre .panel .app-module-dock button.botonPanel:not(.prop-fin-nav-btn) {
+  border-radius: 1.35rem !important;
+}
+
+html body:not(.login-page) .contenedor_padre .panel .app-module-dock button.botonPanel:not(.prop-fin-nav-btn):hover {
+  transform: translateY(-4px) scale(1.03) !important;
+  box-shadow:
+    0 14px 36px rgba(0, 0, 0, 0.42),
+    0 0 0 1px rgba(212, 165, 116, 0.35),
+    0 0 28px rgba(212, 165, 116, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  filter: saturate(1.08) !important;
+}
+
+html body:not(.login-page) .contenedor_padre .panel .app-module-dock button.botonPanel:not(.prop-fin-nav-btn):active {
+  transform: translateY(-1px) scale(1.01) !important;
+  filter: saturate(1) !important;
+}
+
+/* Icono de calendario visible sobre campos oscuros */
+html body:not(.login-page) input[type="date"] {
+  padding-right: 3.2rem !important;
+  cursor: pointer !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 1rem center !important;
+  background-size: 1.35rem 1.35rem !important;
+}
+
+html body:not(.login-page) input[type="date"]::-webkit-calendar-picker-indicator {
+  width: 3rem !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+  opacity: 0 !important;
+}

@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+   {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/theme.css' %}" rel="stylesheet">
+<link href="{% static 'css/admin.css' %}?v=bp2" rel="stylesheet">
+<link href="{% static 'css/persona.css' %}" rel="stylesheet">
+<link href="{% static 'css/app-shell.css' %}?v=bp2" rel="stylesheet" />
+    <title>Recolector</title>
+    
+</head>
+<body>
+    <div class="contenedor_padre">
+        <div class="boton_contenedor">
+            <div class="letras" id="vista_title">Recolector</div>
+            <div id="ordena_boton">
+            <div class="letras" id="letra_gestion">Gestionar</div>
+            <button id="botones" onclick="showPanel('panel1')">Agregar</button>
+            <button id="botones" onclick="showPanel('panel2')">Editar</button>
+            <button id="botones" onclick="showPanel('panel3')">Eliminar</button>
+            <button id="botones" onclick="showPanel('panel4')">Ver</button>
+            <button id="botonVolver" >Volver</button>
+            </div>
+        </div>
+       
+        <!-- ///Registro Recolector -->
+<div class="panel" id="panel1">
+    <form id="registroRecolector">
+        {% csrf_token %}
+        <div class="app-form-stack">
+        <div class="app-card">
+          <div class="labels app-label-lg">Crear recolector</div>
+          <p class="app-hint">
+            Flujo recomendado: <b>1)</b> datos de persona → <b>2)</b> fechas del contrato → <b>3)</b> asignación (propietario y finca).
+          </p>
+        </div>
+
+        <div class="app-card">
+          <div class="labels app-label-tight">1) Datos de la persona</div>
+        <div>
+            <label class="labels">Documento de Persona</label>
+            <input class="entrada" type="text" id="documento_persona" name="documento_persona" required />
+        </div>
+        <div>
+            <label class="labels">Tipo documento</label>
+            <select class="selector" id="id_tipodoc_prop_recolector" name="id_tipodoc" required>
+              <option value="">---Seleccione---</option>
+              <option value="1">Cédula de ciudadanía</option>
+              <option value="2">Tarjeta de identidad</option>
+              <option value="3">Cédula de extranjería</option>
+            </select>
+        </div>
+        <div>
+            <label class="labels">Nombre completo</label>
+            <input class="entrada" type="text" id="nombre_persona_prop_recolector" name="nombre_persona" required />
+        </div>
+        <div>
+            <label class="labels">Edad</label>
+            <input class="entrada" type="number" id="edad_persona_prop_recolector" name="edad_persona" min="1" max="120" required />
+        </div>
+        <div>
+            <label class="labels">Teléfono</label>
+            <input class="entrada" type="text" id="telefono_persona_prop_recolector" name="telefono_persona" minlength="10" required />
+        </div>
+        </div>
+
+        <div class="app-card">
+          <div class="labels app-label-tight">2) Contrato</div>
+        <div>
+            <label class="labels">Fecha de Inicio</label>
+            <input class="entrada" type="date" id="fechainicio_recolector" name="fechainicio_recolector" required />
+        </div>
+        <div>
+            <label class="labels">Fecha de Fin</label>
+            <input class="entrada" type="date" id="fechafin_recolector" name="fechafin_recolector"/>
+        </div>
+        <div>
+            <label class="labels">Estado del contrato</label>
+            <select class="selector" id="estado_recolector_alta" name="estado_recolector_alta" required>
+              <option value="1">Activo</option>
+              <option value="0">Inactivo</option>
+            </select>
+        </div>
+        </div>
+
+        {% if is_admin %}
+        <div class="app-card app-card--accent">
+          <div class="labels app-label-tight">3) Asignación (Administrador)</div>
+          <div>
+              <label class="labels">Propietario del recolector</label>
+              <select class="selector" id="select_propietario_admin" name="fk_id_propietario" required>
+                  <option value="">--- Cargando propietarios ---</option>
+              </select>
+              <p class="app-microcopy">Esto define a quién le aparecerá el recolector en Finanzas.</p>
+          </div>
+          <div class="app-mt-sm">
+              <label class="labels">Finca asignada (opcional)</label>
+              <select class="selector" id="select_finca_admin" name="fk_id_finca">
+                  <option value="">--- Seleccione un propietario para ver sus fincas ---</option>
+              </select>
+          </div>
+        </div>
+        {% endif %}
+
+        {% if is_propietario %}
+        <div id="wrap_finca_propietario">
+            <label class="labels">Finca asignada</label>
+            <select class="selector" id="select_finca_propietario" name="fk_id_finca" required>
+                <option value="">--- Cargando fincas ---</option>
+            </select>
+        </div>
+        {% endif %}
+        <div class="app-inline-row">
+          <button type="submit" class="botonsum" id="botonaccion">Guardar recolector</button>
+          <span class="app-inline-hint">Se crea la persona y luego el contrato del recolector.</span>
+        </div>
+        </div>
+    </form>
+    <div id="resultado"></div>
+</div>
+
+<!-- ///Eliminar Recolector -->
+<div class="panel" id="panel3">
+  <form id="eliminarRecolector">
+      {% csrf_token %}
+      <label class="labels" id="documento">Documento Recolector</label>
+      <input type="text" class="entrada" id="id_eliminar" name="id_eliminar" required />
+      <div>
+          <button type="submit" class="botonsum" id="botonEliminar">
+              Eliminar
+          </button>
+      </div>
+  </form>
+</div>
+
+<!-- ///Mostrar Recolectores -->
+<div class="panel" id="panel4">
+  <div id="tablaPerson">
+      <table id="mostrarRecolector" border="1">
+          <thead>
+              <tr>
+                  <th>Documento</th>
+                  <th>Fecha Inicio</th>
+                  <th>Fecha Fin</th>
+                  <th>Días Trabajados</th>
+                  <th>Finca</th>
+                  <th>Estado</th>
+              </tr>
+          </thead>
+          <tbody></tbody>
+      </table>
+  </div>
+</div>
+
+<!-- ///Buscar Recolector -->
+<div class="panel" id="panel2">
+  <form id="buscarRecolector">
+      <div>
+          <label class="labels" id="documento">Documento Recolector</label>
+          <input type="text" class="entrada" id="id_buscar" name="id_buscar" required />
+      </div>
+      <button type="submit" class="botonsum" id="botonBuscar">Buscar</button>
+  </form>
+</div>
+
+<!-- ///Editar Recolector -->
+<div class="panel" id="panel22">
+  <form id="editarRecolector">
+      {% csrf_token %}
+      <div>
+          <label class="labels" id="documento">Documento</label>
+          <input type="text" class="entrada2" id="id_recolector_editar" name="id_recolector_editar" disabled />
+      </div>
+      <div>
+          <label class="labels" id="fechainicio">Fecha de Inicio</label>
+          <input type="date" class="entrada2" id="fechainicio_recolector_editar" name="fechainicio_recolector_editar" disabled />
+      </div>
+      <div>
+          <label class="labels" id="fechafin">Fecha de Fin</label>
+          <input type="date" class="entrada2" id="fechafin_recolector_editar" name="fechafin_recolector_editar" disabled />
+      </div>
+      <div>
+          <label class="labels" id="diastrabajados">Días Trabajados</label>
+          <input type="number" class="entrada2" id="diastrabajados_recolector_editar" name="diastrabajados_recolector_editar" disabled />
+      </div>
+      <div>
+          <label class="labels" id="estado">Estado</label>
+          <select class="entrada2" id="estado_recolector_editar" name="estado_recolector_editar" disabled>
+              <option value="2">--Seleccione--</option>
+              <option value="1">Activo</option>
+              <option value="0">Inactivo</option>
+          </select>
+      </div>
+      <button type="submit" class="botonsum" id="botoneditar" disabled>
+          Actualizar
+      </button>
+  </form>
+  <button class="botonsum" id="botondesbloquear">Editar</button>
+  <button class="botonsum" id="botonvolvered">Volver</button>
+</div>
+
+</div>
+    <script>
+        function showPanel(panelId) {
+        const panels = document.querySelectorAll(".panel");
+        panels.forEach((panel) => (panel.style.display = "none"));
+        const selectedPanel = document.getElementById(panelId);
+        selectedPanel.style.display = "flex";
+        const result = document.getElementById("resultado");
+        result.innerText = "";
+      }
+      const redirectVolver = document.getElementById("botonVolver");
+
+redirectVolver.addEventListener("click", () => {
+  window.location.href = "{{ volver_url }}";
+});
+
+       const redirectVolverEditar = document.getElementById("botonvolvered");
+       redirectVolverEditar.addEventListener("click", () => {
+         showPanel("panel2");
+       const botondesb = document.getElementById("botondesbloquear");
+         const boton = document.getElementById("botoneditar");
+       botondesb.disabled = false;
+       boton.disabled = true;
+        const entradas2 = document.querySelectorAll(".entrada2");
+         entradas2.forEach((entrada) => {
+         entrada.disabled = true;
+         });
+       document.getElementById("editarRecolector").reset();
+       });
+
+//// Registrar Recolector
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const IS_PROPIETARIO = {% if is_propietario %}true{% else %}false{% endif %};
+const IS_ADMIN = {% if is_admin %}true{% else %}false{% endif %};
+const PROPIETARIO_DOC = "{{ propietario_doc|escapejs }}";
+
+async function cargarFincasPropietario() {
+    const sel = document.getElementById("select_finca_propietario");
+    if (!sel || !IS_PROPIETARIO) return;
+    try {
+        const r = await fetch("/api/productosfinca");
+        const rows = await r.json();
+        sel.innerHTML = '<option value="">---Seleccione finca---</option>';
+        if (!Array.isArray(rows)) return;
+        rows.filter((f) => String(f.id_propietario || "") === String(PROPIETARIO_DOC)).forEach((f) => {
+            const opt = document.createElement("option");
+            opt.value = String(f.id_finca || "");
+            opt.textContent = `${f.nombre_finca || f.id_finca} (${f.id_finca})`;
+            sel.appendChild(opt);
+        });
+    } catch (e) {
+        sel.innerHTML = '<option value="">Error cargando fincas</option>';
+    }
+}
+
+async function cargarPropietariosAdmin() {
+    const sel = document.getElementById("select_propietario_admin");
+    if (!sel || !IS_ADMIN) return;
+    sel.innerHTML = '<option value="">--- Cargando propietarios ---</option>';
+    try {
+        const r = await fetch("/get_todos/Propietario/");
+        const rows = await r.json();
+        sel.innerHTML = '<option value="">---Seleccione propietario---</option>';
+        if (!Array.isArray(rows)) return;
+        rows.forEach((p) => {
+            const doc = String(p.id_propietario || "").trim();
+            if (!doc) return;
+            const opt = document.createElement("option");
+            opt.value = doc;
+            opt.textContent = `${doc}${p.email_propietario ? " · " + p.email_propietario : ""}`;
+            sel.appendChild(opt);
+        });
+    } catch (e) {
+        sel.innerHTML = '<option value="">Error cargando propietarios</option>';
+    }
+}
+
+async function cargarFincasDePropietarioAdmin(propDoc) {
+    const sel = document.getElementById("select_finca_admin");
+    if (!sel || !IS_ADMIN) return;
+    const pd = String(propDoc || "").trim();
+    if (!pd) {
+        sel.innerHTML = '<option value="">--- Seleccione un propietario para ver sus fincas ---</option>';
+        return;
+    }
+    sel.innerHTML = '<option value="">--- Cargando fincas ---</option>';
+    try {
+        const r = await fetch("/api/productosfinca");
+        const rows = await r.json();
+        sel.innerHTML = '<option value="">(Sin finca)</option>';
+        if (!Array.isArray(rows)) return;
+        rows
+          .filter((f) => String(f.id_propietario || "") === pd)
+          .forEach((f) => {
+              const opt = document.createElement("option");
+              opt.value = String(f.id_finca || "");
+              opt.textContent = `${f.nombre_finca || f.id_finca} (${f.id_finca})`;
+              sel.appendChild(opt);
+          });
+    } catch (e) {
+        sel.innerHTML = '<option value="">Error cargando fincas</option>';
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    if (IS_PROPIETARIO) cargarFincasPropietario();
+    if (IS_ADMIN) {
+        cargarPropietariosAdmin().then(() => {
+            const selP = document.getElementById("select_propietario_admin");
+            if (selP) cargarFincasDePropietarioAdmin(selP.value);
+        });
+        const selP = document.getElementById("select_propietario_admin");
+        if (selP) selP.addEventListener("change", (e) => cargarFincasDePropietarioAdmin(e.target.value));
+    }
+    obtenerRecolectores();
+    setInterval(obtenerRecolectores, 5000);
+    const urlParams = new URLSearchParams(window.location.search);
+    const panelActivo = urlParams.get('panel');
+    const docRecibido = urlParams.get('doc');
+    if (panelActivo === 'agregar') showPanel('panel1');
+    if (docRecibido) {
+        const inputID = document.getElementById("documento_persona");
+        if (inputID) {
+            inputID.value = docRecibido;
+            inputID.readOnly = true;
+            inputID.style.backgroundColor = "#f0f0f0";
+        }
+    }
+});
+
+document.getElementById("registroRecolector").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const token = getCookie("csrftoken");
+  const divResultado = document.getElementById("resultado");
+
+  try {
+    const doc = document.getElementById("documento_persona").value.trim();
+    const tid = document.getElementById("id_tipodoc_prop_recolector")?.value || "";
+    const nombre = document.getElementById("nombre_persona_prop_recolector")?.value.trim() || "";
+    const edad = document.getElementById("edad_persona_prop_recolector")?.value || "";
+    const tel = document.getElementById("telefono_persona_prop_recolector")?.value.trim() || "";
+    if (!doc) {
+        alert("Ingrese el documento.");
+        return;
+    }
+    if (!tid) {
+        alert("Seleccione el tipo de documento.");
+        return;
+    }
+    if (!nombre) {
+        alert("Ingrese el nombre completo.");
+        return;
+    }
+    if (!edad || parseInt(edad, 10) < 1) {
+        alert("Ingrese una edad válida.");
+        return;
+    }
+    if (!tel || tel.length < 10) {
+        alert("Ingrese un teléfono válido (mínimo 10 dígitos).");
+        return;
+    }
+    const fdTemp = new FormData();
+    fdTemp.append("documento_persona", doc);
+    fdTemp.append("id_tipodoc", tid);
+    fdTemp.append("nombre_persona", nombre);
+    fdTemp.append("edad_persona", edad);
+    fdTemp.append("telefono_persona", tel);
+    const rTemp = await fetch("/insert_persona_temporal/", {
+        method: "POST",
+        headers: { "X-CSRFToken": token },
+        body: fdTemp,
+    });
+    const jTemp = await rTemp.json();
+    if (!jTemp.success) {
+        alert(jTemp.message || "No se pudieron guardar los datos de la persona.");
+        return;
+    }
+    const datosSesion = { success: true, data: jTemp.data };
+
+    const envioPersona = new FormData();
+    Object.keys(datosSesion.data).forEach(k => envioPersona.append(k, datosSesion.data[k]));
+    envioPersona.append("id_tipodoc", datosSesion.data.fk_tipo_documento);
+
+    const respP = await fetch("/insert_persona/", {
+        method: "POST",
+        headers: { "X-CSRFToken": token },
+        body: envioPersona
+    });
+    const dataP = await respP.json();
+
+    if (dataP.success) {
+        const fechainicio = document.getElementById("fechainicio_recolector").value;
+        const fechafin = document.getElementById("fechafin_recolector").value;
+        const documento = document.getElementById("documento_persona").value.trim();
+
+        const formData = new FormData();
+        formData.append("id_recolector", documento);
+        formData.append("fechainicio_recolector", fechainicio);
+        formData.append("fechafin_recolector", fechafin);
+        const estadoVal = document.getElementById("estado_recolector_alta")?.value || "1";
+        formData.append("estado_recolector", estadoVal);
+        formData.append("diastrabajados_recolector", "0");
+
+        if (IS_ADMIN) {
+            const pid = document.getElementById("select_propietario_admin")?.value || "";
+            if (!pid) {
+                alert("Seleccione el propietario del recolector.");
+                return;
+            }
+            formData.append("fk_id_propietario", pid);
+            const fid = document.getElementById("select_finca_admin")?.value || "";
+            if (fid) formData.append("fk_id_finca", fid);
+        }
+
+        if (IS_PROPIETARIO) {
+            const fid = document.getElementById("select_finca_propietario")?.value || "";
+            if (!fid) {
+                alert("Seleccione una finca.");
+                return;
+            }
+            formData.append("fk_id_finca", fid);
+        }
+
+        const respRec = await fetch("/insert_recolector/", {
+            method: "POST",
+            headers: { "X-CSRFToken": token },
+            body: formData
+        });
+        const dataRec = await respRec.json();
+
+        if (dataRec.success || dataRec.status === "success") {
+            if (dataRec.aviso) {
+                alert(dataRec.aviso);
+            }
+            const estadoTxt = estadoVal === "1" ? "Activo" : "Inactivo";
+            let fincaTxt = "";
+            if (IS_PROPIETARIO) {
+                const sel = document.getElementById("select_finca_propietario");
+                const opt = sel?.selectedOptions?.[0];
+                fincaTxt = opt ? `<p><strong>Finca:</strong> ${opt.textContent}</p>` : "";
+            }
+            divResultado.innerHTML = `
+                <h3 class="app-result-title">Datos guardados</h3>
+                <div class="app-result-body">
+                    <p><strong>Recolector:</strong> ${dataP.data.nombre_persona}</p>
+                    <p><strong>Documento:</strong> ${documento}</p>
+                    <p><strong>Teléfono:</strong> ${datosSesion.data.telefono_persona || "—"}</p>
+                    <p><strong>Fecha Inicio:</strong> ${fechainicio}</p>
+                    <p><strong>Estado:</strong> ${estadoTxt}</p>
+                    ${fincaTxt}
+                </div>
+            `;
+            alert("Recolector registrado con éxito");
+            document.getElementById("registroRecolector").reset();
+            const est = document.getElementById("estado_recolector_alta");
+            if (est) est.value = "1";
+            if (IS_PROPIETARIO) cargarFincasPropietario();
+            if (IS_ADMIN) {
+                cargarPropietariosAdmin();
+                const selP = document.getElementById("select_propietario_admin");
+                if (selP) cargarFincasDePropietarioAdmin(selP.value);
+            }
+            obtenerRecolectores();
+        } else {
+            alert("Error Recolector: " + (dataRec.message || "Fallo en el registro"));
+            await fetch(`/eliminar_registro/Persona/${documento}/`, {
+                method: "POST",
+                headers: { "X-CSRFToken": token }
+            });
+        }
+    } else {
+        alert("Error Persona: " + dataP.message);
+    }
+  } catch (error) {
+    console.error(error);
+    alert("Hubo un error al conectar con el servidor.");
+  }
+});
+
+// // Eliminar Recolector
+ document.getElementById("eliminarRecolector").addEventListener("submit", async (e) => {
+   e.preventDefault();
+   const id_recolector = document.getElementById("id_eliminar").value;
+   const token = getCookie("csrftoken");
+   try {
+     const response = await fetch(`/eliminar_registro/Recolector/${id_recolector}/`, {
+      method: "POST",
+      headers: { "X-CSRFToken": token }
+    });
+     const data = await response.json();
+     if (response.ok) {
+       alert("Recolector eliminado");
+       obtenerRecolectores();
+    } else {
+      alert(data.message || "Hubo un error al eliminar.");
+   }
+ } catch (error) {
+    alert("Hubo un error al eliminar.");
+  }
+   document.getElementById("eliminarRecolector").reset();
+ });
+ 
+// ///mostrar
+async function obtenerRecolectores() {
+    try {
+        const response = await fetch('/get_todos/Recolector/');
+        const recolectores = await response.json();
+        const tablaBody = document.querySelector('#mostrarRecolector tbody');
+        if (!tablaBody) return;
+        tablaBody.innerHTML = ''; 
+        
+        recolectores.forEach(rec => {
+            const dias = calcularDias(rec.fechainicio_recolector, rec.fechafin_recolector);
+            const fila = document.createElement('tr');
+            fila.innerHTML = `
+                <td>${rec.id_recolector || '---'}</td>
+                <td>${rec.fechainicio_recolector || '---'}</td>
+                <td>${rec.fechafin_recolector || '---'}</td>
+                <td>${dias}</td>
+                <td>${rec.fk_id_finca || '---'}</td>
+                <td>${rec.estado_recolector ? 'Activo' : 'Inactivo'}</td>
+            `;
+            tablaBody.appendChild(fila);
+        });
+    } catch (error) {
+        console.error('Error al obtener recolectores:', error);
+    }
+}
+
+//// Calcular días trabajados
+function calcularDias(inicio, fin) {
+    if (!inicio || !fin) return 0;
+    const fechaInicio = new Date(inicio);
+    const fechaFin = new Date(fin);
+    const diferencia = fechaFin - fechaInicio;
+    if (diferencia < 0) return 0;
+    return Math.floor(diferencia / (1000 * 60 * 60 * 24));
+}
+
+// Eventos para calcular automáticamente al editar
+document.getElementById("fechainicio_recolector_editar").addEventListener("change", () => {
+    const inicio = document.getElementById("fechainicio_recolector_editar").value;
+    const fin = document.getElementById("fechafin_recolector_editar").value;
+    document.getElementById("diastrabajados_recolector_editar").value = calcularDias(inicio, fin);
+});
+
+document.getElementById("fechafin_recolector_editar").addEventListener("change", () => {
+    const inicio = document.getElementById("fechainicio_recolector_editar").value;
+    const fin = document.getElementById("fechafin_recolector_editar").value;
+    document.getElementById("diastrabajados_recolector_editar").value = calcularDias(inicio, fin);
+});
+
+// /// Buscar
+ document.getElementById("buscarRecolector").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const id_recolector = document.getElementById("id_buscar").value;
+
+   try {
+    const response = await fetch(`/consultar_registro/Recolector/${id_recolector}/`);
+     const data = await response.json();
+     if (response.ok) {
+       const registro = data.data ? data.data : data;
+       showPanel("panel22");
+       document.getElementById("id_recolector_editar").value = registro.id_recolector || '';
+       document.getElementById("fechainicio_recolector_editar").value = registro.fechainicio_recolector || '';
+       document.getElementById("fechafin_recolector_editar").value = registro.fechafin_recolector || '';
+       
+       // Calcular días si no vienen de la API o para asegurar consistencia
+       const dias = calcularDias(registro.fechainicio_recolector, registro.fechafin_recolector);
+       document.getElementById("diastrabajados_recolector_editar").value = dias;
+       
+       document.getElementById("estado_recolector_editar").value = registro.estado_recolector ? "1" : "0";
+     } else {
+      alert(data.message || "No se encontró el registro.");
+     }
+   } catch (error) {
+    alert("Hubo un error al cargar los datos.");
+   }
+   document.getElementById("buscarRecolector").reset();
+});
+
+ /// Editar 
+const redirecteditar = document.getElementById("botondesbloquear");
+ redirecteditar.addEventListener("click", () => {
+  const entradas = document.querySelectorAll(".entrada2");   
+  const selector = document.getElementById("estado_recolector_editar");
+  const boton = document.getElementById("botoneditar");
+  const botondesb = document.getElementById("botondesbloquear");
+  
+  boton.disabled = false;
+  botondesb.disabled = true;
+  if (selector) selector.disabled = false;
+  
+  entradas.forEach((entrada) => {
+    // BLOQUEAR Días trabajados e ID Recolector
+    if (entrada.id !== "id_recolector_editar" && entrada.id !== "diastrabajados_recolector_editar") {
+        entrada.disabled = false;
+    }
+   });
+ });
+
+ document.getElementById("editarRecolector").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const id_recolector = document.getElementById("id_recolector_editar").value;
+  const fechainicio = document.getElementById("fechainicio_recolector_editar").value;
+  const fechafin = document.getElementById("fechafin_recolector_editar").value;
+  const diastrabajados = document.getElementById("diastrabajados_recolector_editar").value;
+  const estado = document.getElementById("estado_recolector_editar").value;
+  const token = getCookie("csrftoken");
+
+  const datos = {
+    fechainicio_recolector: fechainicio,  
+    fechafin_recolector: fechafin,     
+    estado_recolector: estado === "1"
+  };
+
+  try {
+    const response = await fetch(`/corregir_registro/Recolector/${id_recolector}/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": token
+      },
+      body: JSON.stringify(datos),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      alert("Datos actualizados con éxito");
+      showPanel("panel2");
+      obtenerRecolectores();
+    } else {
+      alert(data.message || "Hubo un error al actualizar.");
+    }
+  } catch (error) {
+    alert("Hubo un error al guardar los datos.");
+  }
+});
+
+    </script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/app-ui.js' %}" defer></script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/theme.css' %}" rel="stylesheet">
+<link href="{% static 'css/admin.css' %}?v=bp3" rel="stylesheet">
+<link href="{% static 'css/app-shell.css' %}?v=bp3" rel="stylesheet" />
+
+    <title>Administrador</title>
+    
+</head>
+<body>
+    <div class="contenedor_padre">
+        <div class="boton_contenedor">
+            <div class="letras" id="vista_title">ADMINISTRADOR</div>
+            <div id="ordena_boton">
+            <div class="letragestion" id="letra_gestion">Gestionar <img id="cafef" src="https://i.ibb.co/prgscZz/cafef.png" width="50px"></div>
+            <button id="botones" onclick="showPanel('panel1')">Personas <img class="cafef" src="https://i.ibb.co/ynwJSFB/grano.png" width="30px"></button>
+            <button id="botones" onclick="showPanel('panel2')">Finanzas <img class="cafef" src="https://i.ibb.co/ynwJSFB/grano.png" width="30px"></button>
+            <button id="botones" onclick="showPanel('panel3')">Insumos <img class="cafef" src="https://i.ibb.co/ynwJSFB/grano.png" width="30px"></button>
+            <button id="salir">Salir <img class="cafef" src="https://i.ibb.co/ynwJSFB/grano.png" width="30px"></button>
+            </div>
+        </div>
+
+        
+         <div id="panel1" class="panel panel--admin-hub">
+            <header class="app-admin-section-head">
+              <h2 class="app-admin-section-head__title">Personas</h2>
+              <p class="app-admin-section-head__lead">Elegí la tabla: el menú superior ya dejó el área en «Personas».</p>
+            </header>
+            <nav class="app-module-dock app-module-dock--admin" aria-label="Tablas del área Personas">
+            <button type="button" class="botonPanel" id="botonpersona">Gestionar</button>
+            <button type="button" class="botonPanel" id="botonpropietario">Propietarios</button>
+            <button type="button" class="botonPanel" id="botonrecolector">Recolectores</button>
+            </nav>
+         </div>
+
+         <div id="panel2" class="panel panel--admin-hub">
+            <header class="app-admin-section-head">
+              <h2 class="app-admin-section-head__title">Finanzas</h2>
+              <p class="app-admin-section-head__lead">Registros de operación, inventario y pagos.</p>
+            </header>
+            <nav class="app-module-dock app-module-dock--admin" aria-label="Módulos de finanzas">
+            <button type="button" class="botonPanel" id="botonfinca">Finca</button>
+            <button type="button" class="botonPanel" id="botonrecoleccion">Recoleccion</button>
+            <button type="button" class="botonPanel" id="botonpago">Pago</button>
+            <button type="button" class="botonPanel" id="botonreporte">Reporte</button>
+            <button type="button" class="botonPanel" id="botonlote">Lote</button>
+            <button type="button" class="botonPanel" id="botoncompra">Compra</button>
+            <button type="button" class="botonPanel" id="botoninventario">Inventario</button>
+            <button type="button" class="botonPanel" id="botonsuministro">Suministro</button>
+            <button type="button" class="botonPanel" id="botontipo_cafe">Mantenimiento</button>
+            </nav>
+         </div>
+         <div id="panel3" class="panel panel--admin-hub">
+            <header class="app-admin-section-head">
+              <h2 class="app-admin-section-head__title">Insumos</h2>
+              <p class="app-admin-section-head__lead">Catálogos y unidades usadas en insumos y aplicación.</p>
+            </header>
+            <nav class="app-module-dock app-module-dock--admin" aria-label="Módulos de insumos">
+            <button type="button" class="botonPanel" id="botoninsumo">Insumo</button>
+            <button type="button" class="botonPanel" id="botonmetodo_aplicacion">Método de aplicación</button>
+            <button type="button" class="botonPanel" id="botontipoinsumo">Tipo de insumo</button>
+            <button type="button" class="botonPanel" id="botonunidad_medida">Unidad de medida</button>
+            </nav>
+         </div>
+    </div>
+
+    <script>
+        function showPanel(panelId) {
+            const panels = document.querySelectorAll('.panel');
+            panels.forEach(panel => panel.style.display = 'none');
+            const selectedPanel = document.getElementById(panelId);
+            selectedPanel.style.display = 'flex';
+            const dock = selectedPanel.querySelector('.app-module-dock');
+            if (dock && window.matchMedia && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                dock.querySelectorAll('.botonPanel').forEach((btn) => {
+                    btn.style.animation = 'none';
+                    void btn.offsetWidth;
+                    btn.style.removeProperty('animation');
+                });
+            }
+        }
+        const redirecttipoinsumo= document.getElementById('botontipoinsumo');
+        redirecttipoinsumo.addEventListener('click', () => {
+            window.location.href = "/tipo_insumo/";
+        });
+        const redirectPersona = document.getElementById('botonpersona');
+        redirectPersona.addEventListener('click', () => {
+            window.location.href = "/persona/";
+        });
+
+        const redirectBPropietario = document.getElementById('botonpropietario');
+        redirectBPropietario.addEventListener('click', () => {
+            window.location.href = "/propietario/";
+        });
+        
+        const redirectSalir = document.getElementById('salir');
+        redirectSalir.addEventListener('click', () => {
+            window.location.href = "/";
+        });
+        const redirectfinca= document.getElementById('botonfinca');
+        redirectfinca.addEventListener('click', () => {
+            window.location.href = "/finca/";
+        });
+
+         const redirectpago= document.getElementById('botonpago');
+        redirectpago.addEventListener('click', () => {
+            window.location.href = "/pago/";
+        });
+        const redirectreporte= document.getElementById('botonreporte');
+        redirectreporte.addEventListener('click', () => {
+            window.location.href = "/reporte/";
+        });
+        document.getElementById('botonlote').addEventListener('click', () => {
+            window.location.href = "/lote/";
+        });
+        document.getElementById('botoncompra').addEventListener('click', () => {
+            window.location.href = "/compra/";
+        });
+        document.getElementById('botoninventario').addEventListener('click', () => {
+            window.location.href = "/inventario/";
+        });
+        document.getElementById('botonsuministro').addEventListener('click', () => {
+            window.location.href = "/suministro/";
+        });
+        const redirecttipo_cafe= document.getElementById('botontipo_cafe');
+        redirecttipo_cafe.addEventListener('click', () => {
+            window.location.href = "/mantenimiento/";
+        });
+
+        const redirectmetodo_aplicacion= document.getElementById('botonmetodo_aplicacion');
+        redirectmetodo_aplicacion.addEventListener('click', () => {
+            window.location.href = "/metodo_aplicacion/";
+        });
+        
+        const redirectunidad_medida= document.getElementById('botonunidad_medida');
+        redirectunidad_medida.addEventListener('click', () => {
+            window.location.href = "/unidad_medida/";
+        });
+
+        const redirectrecolector= document.getElementById('botonrecolector');
+        redirectrecolector.addEventListener('click', () => {
+            window.location.href = "/recolector/";
+        });
+
+        const redirectrecoleccion= document.getElementById('botonrecoleccion');
+        redirectrecoleccion.addEventListener('click', () => {
+            window.location.href = "/recoleccion/";
+        });
+
+        const redirectinsumo = document.getElementById('botoninsumo');
+
+redirectinsumo.addEventListener('click', async () => {
+  window.location.href = "/insumo/";
+  console.log("conectando a mongo");
+
+  try {
+    const response = await fetch("/api/connectMongo", {
+      method: "GET", 
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+
+    if (data.success) {
+      document.getElementById("dbResults").innerText = `Conexión exitosa: ${data.message}`;
+      console.log("se conectó");
+    } else {
+      document.getElementById("dbResults").innerText = `Error: ${data.message}`;
+    }
+  } catch (error) {
+    console.error("Error en la solicitud:", error);
+    document.getElementById("dbResults").innerText = "Error al conectar con MongoDB.";
+  }
+});
+    </script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/app-ui.js' %}" defer></script>
+</body>
+</html>

@@ -1,0 +1,545 @@
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+   {% load static %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/theme.css' %}" rel="stylesheet">
+<link href="{% static 'css/admin.css' %}?v=bp2" rel="stylesheet">
+<link href="{% static 'css/persona.css' %}" rel="stylesheet">
+<link href="{% static 'css/app-shell.css' %}?v=bp2" rel="stylesheet" />
+    <title>PERSONA</title>
+  </head>
+  <body>
+    <div class="contenedor_padre">
+      <div class="boton_contenedor">
+        <div class="letras" id="vista_title">PERSONA</div>
+        <div id="ordena_boton">
+          <div class="letras" id="letra_gestion">Gestionar <img id="cafef" src="https://i.ibb.co/prgscZz/cafef.png" width="50px"></div>
+          <button id="botones" onclick="showPanel('panel1')">Agregar <img class="cafef" src="https://i.ibb.co/ynwJSFB/grano.png" width="30px"></button>
+          <button id="botones" onclick="showPanel('panel2')">Buscar <img class="cafef" src="https://i.ibb.co/ynwJSFB/grano.png" width="30px"></button>
+          <button id="botones" onclick="showPanel('panel3')">Eliminar <img class="cafef" src="https://i.ibb.co/ynwJSFB/grano.png" width="30px"></button>
+          <button id="botones" onclick="showPanel('panel4')">Ver <img class="cafef" src="https://i.ibb.co/ynwJSFB/grano.png" width="30px"></button>
+          <button id="botonVolver">Volver <img class="cafef" src="https://i.ibb.co/ynwJSFB/grano.png" width="30px"></button>
+        </div>
+      </div>
+      <!-- ///Registro -->
+      <div class="panel" id="panel1">
+        <form id="registropersona">
+          {% csrf_token %}
+          <div>
+            <label class="labels" id="documento"  >Documento</label>
+            <input  type="text"  class="entrada"   id="documento_persona" name="documento_persona"  minlength="8"  required  />
+          </div>
+          <div>
+            <label class="labels" id="tipodoc" >Tipo documento</label>
+            <select class="selector"  id="id_tipodoc" name="id_tipodoc" required>\
+              <option value=0>---Seleccione---</option>
+              <option value=1>Cedula de ciudadania</option>
+              <option value=2>Tarjeta de identidad</option>
+              <option value=3>Cedula de extranjeria</option>
+            </select>
+          </div>
+          <div>
+            <label class="labels" id="nombre">Nombre</label>
+            <input type="text" class="entrada" id="nombre_persona" name="nombre_persona" required />
+          </div>
+          <div>
+            <label class="labels" id="edad">edad</label>
+            <input
+              type="text"
+              class="entrada"
+              id="edad_persona"
+              name="edad_persona"
+              required
+            />
+          </div>
+          <div>
+            <label class="labels" id="telefono">Teléfono</label>
+            <input type="text" class="entrada" id="telefono_persona" name="telefono_persona" minlength="10"  required />
+          </div>
+           <div>
+            <label class="labels" id="rol" >Rol</label>
+            <select class="selector"  id="roles" name="roles" required>\
+              <option value=0>---Seleccione---</option>
+              {% if is_admin %}<option value=1>Propietario</option>{% endif %}
+              <option value=2>Recolector</option>
+            </select>
+          </div>
+          <button type="submit" class="botonsum" id="botonaccion">
+            Guardar
+          </button>
+        </form>
+        <div id="resultado"></div>
+      </div>
+
+      <!-- ///Eliminar -->
+      <div class="panel" id="panel3">
+        <form id="eliminarpersona">
+          {% csrf_token %}
+          <label class="labels" id="documento">Documento</label>
+          <input type="text" class="entrada" id="documento_eliminar" name="documento_eliminar" required />
+          <div>
+          </div>
+               <button type="submit" class="botonsum" id="botoneliminar">
+              Eliminar
+            </button>
+            
+        </form>
+         <div id="resultado_eliminacion"></div>
+    
+      </div>
+
+      <!-- ///Buscar -->
+      <div class="panel" id="panel2">
+        <form id="buscarpersona">
+          <div>
+            <label class="labels" id="documento">Documento</label>
+            <input type="text" class="entrada" id="documento_buscar" name="documento_persona" required />
+          </div>
+          <button type="submit" class="botonsum" id="Buscar">Buscar</button>
+        </form>
+         <div id="resultado_busqueda"></div>
+      </div>
+
+      <!-- ///Editar -->
+      <div class="panel" id="panel22">
+        <form id="editarpersona">
+          {% csrf_token %}
+          <div>
+            <label class="labels" id="documento">Documento</label>
+            <input
+              type="text"
+              class="entrada2"
+              id="documento_persona2"
+              disabled
+            />
+          </div>
+          <div>
+            <label class="labels" id="tipodoc">Tipo documento</label>
+            <select class="selector"  id="id_tipodoc2" name="id_tipodoc2" disabled>\
+              <option value=0>---Seleccione---</option>
+              <option value=1>Cedula de ciudadania</option>
+              <option value=2>Tarjeta de identidad</option>
+              <option value=3>Cedula de extranjeria</option>
+            </select>
+          </div>
+          <div>
+            <label class="labels" id="nombre">Nombre</label>
+            <input type="text" class="entrada2" id="nombre_persona2" disabled />
+          </div>
+          <div>
+            <label class="labels" id="edad">Edad</label>
+            <input
+              type="text"
+              class="entrada2"
+              id="edad_persona2"
+              disabled
+            />
+          </div>
+          <div>
+            <label class="labels" id="telefono">Teléfono</label>
+            <input
+              type="text"
+              class="entrada2"
+              id="telefono_persona2"
+              disabled
+            />
+          </div>
+          <div>
+            <label class="labels" id="rol" >Rol (solo lectura)</label>
+            <input type="text" class="entrada2" id="rol_persona2" disabled />
+          </div>
+          <button type="submit" class="botonsum" id="botoneditar" disabled>
+            Actualizar
+          </button>
+        </form>
+        <button class="botonsum" id="botondesbloquear">Editar</button>
+        <button class="botonsum" id="botonvolvered">Volver</button>
+      </div>
+
+      <!-- ///Mostrar -->
+      <div class="panel" id="panel4">
+      <div id="tablaPerson">
+        <table id="mostrarPersonas" border="1">
+          <thead>
+            <tr>
+              <th>Documento</th>
+              <th>Tipo documento</th>
+              <th>Nombre</th>
+              <th>Edad</th>
+              <th>Telefono</th>
+            </tr>
+          </thead>
+          <tbody>
+           
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    </div>
+    <script>
+      ////mostrar/ocultar panel
+      function showPanel(panelId) {
+        const panels = document.querySelectorAll(".panel");
+        panels.forEach((panel) => (panel.style.display = "none"));
+        const selectedPanel = document.getElementById(panelId);
+        selectedPanel.style.display = "flex";
+        const result = document.getElementById("resultado");
+          result.innerText='';
+      }
+
+// Cargar tipos de documento desde backend (Postgres vía /api/productosTipodoc)
+async function cargarTiposDoc() {
+  try {
+    const r = await fetch("/api/productosTipodoc");
+    const rows = await r.json();
+    if (!Array.isArray(rows)) return;
+    const selects = [document.getElementById("id_tipodoc"), document.getElementById("id_tipodoc2")].filter(Boolean);
+    selects.forEach((sel) => {
+      const current = sel.value;
+      // conservar primera opción
+      sel.querySelectorAll("option").forEach((opt, idx) => { if (idx > 0) opt.remove(); });
+      rows.forEach((t) => {
+        const opt = document.createElement("option");
+        opt.value = String(t.id_tipodoc ?? t.id_doc ?? "");
+        opt.textContent = String(t.nombre_tipodoc ?? t.tipo ?? "");
+        sel.appendChild(opt);
+      });
+      if (current) sel.value = current;
+    });
+  } catch (e) {
+    // si falla, quedan los hardcoded
+  }
+}
+
+document.addEventListener("DOMContentLoaded", cargarTiposDoc);
+      
+      const redirectVolver = document.getElementById("botonVolver");
+
+redirectVolver.addEventListener("click", () => {
+  window.location.href = "{{ volver_url }}";
+});
+
+      const redirectVolverEditar = document.getElementById("botonvolvered");
+      redirectVolverEditar.addEventListener("click", () => {
+        showPanel("panel2");
+        const botondesb = document.getElementById("botondesbloquear");
+        const boton = document.getElementById("botoneditar");
+        const selector= document.getElementById("id_tipodoc2");
+        botondesb.disabled = false;
+        boton.disabled = true;
+        selector.disabled=true;
+        const entradas2 = document.querySelectorAll(".entrada2");
+entradas2.forEach((entrada) => {
+  entrada.disabled = true; })
+        document.getElementById("editarpersona").reset();
+      });
+
+    
+    function validarRegistro() {
+    const nombre = document.getElementById("nombre_persona").value;
+    const tipoDoc = document.getElementById("id_tipodoc").value;
+    const edad = document.getElementById("edad_persona").value;
+    const telefono = document.getElementById("telefono_persona").value;
+    if (tipoDoc === "0") {
+        alert("Por favor, seleccione un tipo de documento válido.");
+        return false;
+    }
+    const regexNombre = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+    if (!regexNombre.test(nombre)) {
+        alert("El nombre solo debe contener letras.");
+        return false; 
+    }
+    if (isNaN(edad) || edad <= 0) {
+        alert("Por favor, ingrese una edad válida.");
+        return false;
+    }
+
+    if (isNaN(telefono)) {
+        alert("Por favor, ingrese un telefono válida.");
+        return false;
+    }
+    return true;
+}
+
+//// Registrar
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie) {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            if (cookie.trim().startsWith(name + '=')) {
+                cookieValue = cookie.split('=')[1];
+            }
+        }
+    }
+    return cookieValue;
+}
+
+
+document.getElementById("registropersona").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const rolSeleccionado = document.getElementById("roles").value; 
+    if (typeof validarRegistro === 'function' && !validarRegistro()) return;
+    if (rolSeleccionado === "0") {
+        alert("Por favor, seleccione un rol (Propietario o Recolector).");
+        return;
+    }
+
+    try {
+        const response = await fetch("/insert_persona_temporal/", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+            body: formData
+        });
+        if (!response.ok) throw new Error("Error en el servidor");
+        const data = await response.json();
+        if (data.success) {
+            const doc = data.data.documento_persona;
+            let urlRedireccion = "";
+            if (rolSeleccionado === "1") {
+                urlRedireccion = `/propietario/?doc=${doc}&panel=agregar`;
+            } else if (rolSeleccionado === "2") {
+                urlRedireccion = `/recolector/?doc=${doc}&panel=agregar`;
+            }
+            if (urlRedireccion !== "") {
+                window.location.href = urlRedireccion;
+            }     
+        } else {
+            alert("Error: " + data.message);
+        }
+    } catch (error) {
+        console.error("Error en el registro:", error);
+        alert("Hubo un fallo al conectar con el servidor.");
+    }
+});
+
+
+////Buscar
+document.getElementById("buscarpersona").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const documento = document.getElementById("documento_buscar").value;
+    const contenedor = document.getElementById("resultado_busqueda");
+    contenedor.innerHTML = '<p class="app-search-muted">Buscando...</p>';
+    try {
+        const response = await fetch(`/consultar_registro/Persona/${documento}/`);
+        const data = await response.json();
+
+        if (response.ok) {
+            const registro = data.data ? data.data : data;
+            showPanel("panel22");
+            document.getElementById("documento_persona2").value = registro.documento_persona || '';
+            document.getElementById("nombre_persona2").value = registro.nombre_persona || '';
+            document.getElementById("edad_persona2").value = registro.edad_persona || '';
+            document.getElementById("telefono_persona2").value = registro.telefono_persona || '';
+            const rolInput = document.getElementById("rol_persona2");
+            if (rolInput) rolInput.value = registro.rol || "Sin Rol";
+            const selectTipoDoc = document.getElementById("id_tipodoc2");
+            if (selectTipoDoc) {
+                const valorId = registro.fk_tipo_documento; 
+                selectTipoDoc.value = String(valorId || "0");
+            }
+            contenedor.innerHTML = `
+                <h3 class="app-result-title">Datos guardados</h3>
+                <div class="app-result-body">
+                    <p><b>Documento:</b> ${registro.documento_persona || 'N/A'}</p>
+                    <p><b>Nombre:</b> ${registro.nombre_persona || 'N/A'}</p>
+                    <p><b>Edad:</b> ${registro.edad_persona || 'N/A'}</p>
+                    <p><b>Teléfono:</b> ${registro.telefono_persona || 'N/A'}</p>
+                    <p><b>Rol actual:</b> ${registro.rol || 'Sin Rol'}</p>
+                </div>
+            `;
+        } else {
+            contenedor.innerHTML = `<p class="app-alert-danger app-mt-sm">${data.error || 'No se encontró el registro'}</p>`;
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Hubo un error al cargar los datos.");
+    }
+    
+    document.getElementById("buscarpersona").reset();
+});
+  
+
+      /////editar
+      const redirecteditar = document.getElementById("botondesbloquear");
+redirecteditar.addEventListener("click", () => {
+    const entradas = document.querySelectorAll(".entrada2");
+    const selector = document.getElementById("id_tipodoc2");
+    const botonEditar = document.getElementById("botoneditar");
+    const botonDesbloquear = document.getElementById("botondesbloquear");
+
+    botonEditar.disabled = false;
+    botonDesbloquear.disabled = true;
+    selector.disabled = false;
+    
+    entradas.forEach((input) => {
+        if (input.id !== "documento_persona2") {
+            input.disabled = false;
+        }
+    });
+});
+
+document.getElementById("editarpersona").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const contenedorAbajo = document.getElementById("resultado_busqueda");
+    const documento = document.getElementById("documento_persona2").value;
+    const fk_tipo_documento = document.getElementById("id_tipodoc2").value;
+    const nombre_persona = document.getElementById("nombre_persona2").value;
+    const edad_persona = document.getElementById("edad_persona2").value;
+    const telefono_persona = document.getElementById("telefono_persona2").value;
+
+    if (fk_tipo_documento === "0") {
+        alert("Por favor, seleccione un tipo de documento válido.");
+        return;
+    }
+    const datos = {
+        fk_tipo_documento: parseInt(fk_tipo_documento),
+        nombre_persona: nombre_persona,
+        edad_persona: parseInt(edad_persona),
+        telefono_persona: telefono_persona
+    };
+
+    try {
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        const response = await fetch(`/corregir_registro/Persona/${documento}/`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrftoken
+            },
+            body: JSON.stringify(datos)
+        });
+        const data = await response.json();
+        if (response.ok) {
+            document.querySelectorAll(".entrada2, .selector").forEach(el => el.disabled = true);
+            document.getElementById("botoneditar").disabled = true;
+            document.getElementById("botondesbloquear").disabled = false;
+            if (contenedorAbajo) {
+                contenedorAbajo.innerHTML = `
+                    <h3 class="app-result-title">Datos actualizados</h3>
+                    <div class="app-result-body">
+                        <p><b>Documento:</b> ${documento}</p>
+                        <p><b>Nombre:</b> ${nombre_persona}</p>
+                        <p><b>Edad:</b> ${edad_persona}</p>
+                        <p><b>Teléfono:</b> ${telefono_persona}</p>
+                    </div>
+                `;
+            }
+            setTimeout(() => {
+                showPanel("panel2");
+                document.getElementById("editarpersona").reset();
+            }, 1500);
+
+        } else {
+            alert("Error: " + (data.message || "No se pudo guardar"));
+        }
+    } catch (error) {
+        console.error("Error en la petición:", error);
+        alert("Hubo un error al conectar con el servidor.");
+    }
+});
+    
+
+      ////Eliminar
+    document.getElementById("eliminarpersona").addEventListener("submit", async (e) => {
+    e.preventDefault(); 
+    const inputEliminar = document.getElementById("documento_eliminar");
+    const documento = inputEliminar.value.trim();
+    const contenedor = document.getElementById("resultado_eliminacion");
+    if (!documento) {
+        alert("Debe ingresar un número de documento para eliminar.");
+        return;
+    }
+
+    try {
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const response = await fetch(`/eliminar_registro/Persona/${documento}/`, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrftoken
+            }
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            inputEliminar.value = "";
+            if (contenedor) {
+                contenedor.innerHTML = `
+                    <div class="app-delete-notice">
+                        <h3 class="app-delete-notice__title">Datos eliminados con éxito</h3>
+                        <div class="app-delete-notice__body">
+                            <p><b>Documento eliminado:</b> ${documento}</p>
+                        </div>
+                    </div>
+                `;
+            }
+        } else {
+            alert("Error: " + (data.message || "No se pudo eliminar el registro."));
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Hubo un error al conectar con el servidor.");
+    }
+});
+    
+
+///Obtener personas
+
+async function obtenerPersonas() {
+    try {
+        const response = await fetch('/get_todos/Persona/', {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+        const personas = await response.json();
+        const tablaBody = document.querySelector('#mostrarPersonas tbody');
+        if (!tablaBody) return;
+        tablaBody.innerHTML = ''; 
+        if (personas.length === 0) {
+            tablaBody.innerHTML = '<tr class="app-table-empty"><td colspan="5">No hay registros para mostrar</td></tr>';
+            return;
+        }
+        personas.forEach(p => {
+            const fila = document.createElement('tr');
+            fila.innerHTML = `
+                <td>${p.documento_persona || '---'}</td>
+                <td>${getTipodoc(p.fk_tipo_documento)}</td>
+                <td>${p.nombre_persona || '---'}</td>
+                <td>${p.edad_persona || '0'}</td>
+                <td>${p.telefono_persona || '---'}</td>
+            `;
+            tablaBody.appendChild(fila);
+        });
+
+    } catch (error) {
+        console.error('Error al conectar:', error);
+    }
+}
+
+function getTipodoc(id) {
+    if (id == 1) return 'CC';
+    if (id == 2) return 'TI';
+    if (id == 3) return 'CE';
+    return '---';
+}
+
+//Actualizar tabla
+document.addEventListener('DOMContentLoaded', () => {
+    obtenerPersonas();
+    setInterval(obtenerPersonas, 5000);
+});
+
+    </script>
+   <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+      <script src="{% static 'js/app-ui.js' %}" defer></script>
+</body>
+</html>

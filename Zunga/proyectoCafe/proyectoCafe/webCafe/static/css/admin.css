@@ -1,0 +1,606 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* Shell: barra superior + contenido (sin columna lateral fija) */
+.contenedor_padre {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  animation: app-slide-up 0.45s var(--ease-out);
+}
+
+/* ——— Barra superior (sticky) — editorial oscuro, acentos oro (no banda verde plana) ——— */
+.boton_contenedor {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  min-width: unset;
+  min-height: unset;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem 1rem;
+  padding: 0.55rem clamp(0.75rem, 2.5vw, 1.5rem);
+  isolation: isolate;
+  color: var(--color-ink, #e8f2ec);
+  border-bottom: 1px solid rgba(212, 165, 116, 0.28);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  background:
+    radial-gradient(ellipse 120% 90% at 0% 0%, rgba(212, 165, 116, 0.09), transparent 45%),
+    radial-gradient(ellipse 80% 70% at 100% 100%, rgba(45, 100, 72, 0.12), transparent 42%),
+    linear-gradient(105deg, #040807 0%, #0a1210 38%, #060d0a 100%);
+}
+
+.boton_contenedor::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, transparent 42%);
+  pointer-events: none;
+}
+
+.letras {
+  font-family: var(--app-font-display);
+  font-size: clamp(0.95rem, 1.8vw, 1.2rem);
+  font-weight: 700;
+  font-style: italic;
+  color: #f6faf7;
+  letter-spacing: -0.02em;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.45);
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+#vista_title {
+  margin: 0;
+  padding: 0.4rem 0.9rem;
+  border-radius: 12px;
+  background: linear-gradient(165deg, rgba(22, 32, 28, 0.9) 0%, rgba(6, 12, 10, 0.95) 100%);
+  border: 1px solid rgba(212, 165, 116, 0.38);
+  width: auto;
+  text-align: left;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+#ordena_boton {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem 0.55rem;
+  padding: 0.15rem 0;
+  min-width: 0;
+}
+
+/* Título "Gestionar" ocupa línea completa encima de los botones de sección */
+#ordena_boton > .letragestion,
+#ordena_boton > #letra_gestion {
+  flex-basis: 100%;
+  width: 100%;
+  text-align: center;
+  order: 0;
+  padding: 0.15rem 0 0.25rem;
+  margin: 0;
+  font-family: var(--app-font);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(212, 165, 116, 0.88);
+}
+
+#ordena_boton > .letras:not(#vista_title) {
+  font-size: inherit;
+}
+
+#letra_gestion {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+/* Botones nav: anulan estilos por defecto / Bootstrap (evita fondo blanco y borde negro) */
+#ordena_boton > button {
+  order: 1;
+  width: auto;
+  min-height: 44px;
+  padding: 0.48rem 1.05rem;
+  min-width: 6.5rem;
+  font-family: var(--app-font);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  -webkit-appearance: none;
+  appearance: none;
+  color: var(--color-ink, #e8f2ec) !important;
+  background: linear-gradient(
+    165deg,
+    rgba(24, 36, 30, 0.92) 0%,
+    rgba(8, 14, 11, 0.96) 100%
+  ) !important;
+  border: 1px solid rgba(212, 165, 116, 0.38) !important;
+  box-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out),
+    background var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+#ordena_boton > button:hover {
+  transform: translateY(-1px);
+  color: #fff !important;
+  background: linear-gradient(
+    165deg,
+    rgba(36, 52, 44, 0.95) 0%,
+    rgba(14, 26, 20, 0.98) 100%
+  ) !important;
+  border-color: rgba(240, 210, 180, 0.55) !important;
+  box-shadow:
+    0 8px 28px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(212, 165, 116, 0.12);
+}
+
+#ordena_boton > button:active {
+  transform: translateY(0);
+}
+
+#ordena_boton > button:focus-visible {
+  outline: 2px solid var(--color-accent-warm, #d4a574);
+  outline-offset: 2px;
+}
+
+#ordena_boton > #botonVolver {
+  border-style: dashed !important;
+  border-color: rgba(212, 165, 116, 0.35) !important;
+  background: rgba(0, 0, 0, 0.25) !important;
+}
+
+#ordena_boton > #botonVolver:hover {
+  background: rgba(212, 165, 116, 0.1) !important;
+  border-style: solid !important;
+}
+
+#ordena_boton > #salir {
+  order: 2;
+  margin-top: 0;
+  margin-left: auto;
+  border-color: rgba(255, 180, 175, 0.5) !important;
+  background: linear-gradient(
+    165deg,
+    rgba(120, 28, 24, 0.55) 0%,
+    rgba(60, 14, 12, 0.75) 100%
+  ) !important;
+  color: #ffe8e6 !important;
+}
+
+#ordena_boton > #salir:hover {
+  background: linear-gradient(
+    165deg,
+    rgba(160, 40, 32, 0.75) 0%,
+    rgba(90, 22, 18, 0.9) 100%
+  ) !important;
+  border-color: rgba(255, 220, 215, 0.65) !important;
+}
+
+.cafef {
+  width: 18px !important;
+  height: 18px !important;
+  object-fit: contain;
+  flex-shrink: 0;
+  transition: transform 0.3s var(--ease-out);
+}
+
+#ordena_boton > button:hover .cafef {
+  transform: rotate(-8deg) scale(1.06);
+}
+
+#ordena_boton .letragestion img#cafef,
+#ordena_boton #letra_gestion img {
+  max-width: 28px;
+  width: auto;
+  height: auto;
+  vertical-align: middle;
+  opacity: 0.95;
+}
+
+/* ——— Contenido principal: todos los .panel apilan en la misma zona ——— */
+.contenedor_padre > .panel {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  display: none;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.75rem 0.85rem;
+  padding: clamp(1rem, 2.5vw, 1.75rem);
+  overflow-x: hidden;
+  overflow-y: auto;
+  text-align: center;
+  background:
+    radial-gradient(900px 480px at 50% -15%, rgba(45, 138, 84, 0.12), transparent 55%),
+    radial-gradient(700px 400px at 100% 18%, rgba(212, 165, 116, 0.08), transparent 48%),
+    linear-gradient(180deg, rgba(14, 24, 19, 0.55) 0%, rgba(6, 12, 9, 0.92) 55%, #040a07 100%);
+}
+
+/* Panel que solo contiene el dock de módulos: centra el bloque y evita filas “vacías” */
+.contenedor_padre > .panel:has(.app-module-dock) {
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  padding-top: clamp(1.25rem, 3vw, 2rem);
+}
+
+/* Admin: encabezado de área + dock alineado arriba (menos “doble menú” confuso) */
+.contenedor_padre > .panel.panel--admin-hub {
+  align-items: stretch;
+  padding-top: 0.45rem;
+  padding-left: clamp(0.65rem, 2vw, 1.15rem);
+  padding-right: clamp(0.65rem, 2vw, 1.15rem);
+}
+
+.app-admin-section-head {
+  width: 100%;
+  max-width: min(1040px, 100%);
+  margin: 0 auto 0.5rem;
+  padding: 0.25rem 0 0.65rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(212, 165, 116, 0.2);
+  box-sizing: border-box;
+}
+
+.app-admin-section-head__title {
+  margin: 0 0 0.35rem;
+  font-family: var(--app-font-display, "Fraunces", Georgia, serif);
+  font-size: clamp(1.05rem, 2vw, 1.45rem);
+  font-weight: 700;
+  font-style: italic;
+  color: #f6faf7;
+  letter-spacing: -0.02em;
+}
+
+.app-admin-section-head__lead {
+  margin: 0;
+  max-width: 52rem;
+  font-family: var(--app-font);
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--color-ink-muted, rgba(200, 220, 208, 0.82));
+}
+
+.app-module-dock.app-module-dock--admin {
+  margin-top: 0;
+  align-self: center;
+  width: 100%;
+}
+
+/* ——— Dock de módulos: tarjeta cristal + chips con entrada escalonada ——— */
+@keyframes app-module-chip-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.app-module-dock {
+  position: relative;
+  width: 100%;
+  max-width: min(1040px, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem 0.8rem;
+  padding: 1.35rem clamp(1rem, 2.8vw, 1.85rem) 1.5rem;
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.06) 0%, transparent 42%),
+    linear-gradient(165deg, rgba(18, 32, 26, 0.82) 0%, rgba(5, 10, 8, 0.92) 100%);
+  border: 1px solid rgba(212, 165, 116, 0.26);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.35),
+    0 22px 56px rgba(0, 0, 0, 0.48),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.app-module-dock::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 4px;
+  border-radius: 0 0 10px 10px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(212, 165, 116, 0.55) 28%,
+    rgba(45, 138, 84, 0.45) 72%,
+    transparent 100%
+  );
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.app-module-dock .botonPanel {
+  position: relative;
+  z-index: 1;
+  border-radius: 1.35rem !important;
+  letter-spacing: 0.02em;
+  isolation: isolate;
+  animation: app-module-chip-in 0.5s var(--ease-out) backwards;
+  box-shadow:
+    var(--shadow-sm),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 0 0 0 rgba(212, 165, 116, 0);
+  transition:
+    transform 0.22s var(--ease-out),
+    box-shadow 0.22s var(--ease-out),
+    border-color 0.22s var(--ease-out),
+    background 0.22s var(--ease-out),
+    color 0.22s var(--ease-out),
+    filter 0.22s var(--ease-out);
+}
+
+.app-module-dock .botonPanel:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow:
+    0 14px 36px rgba(0, 0, 0, 0.42),
+    0 0 0 1px rgba(212, 165, 116, 0.35),
+    0 0 28px rgba(212, 165, 116, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  filter: saturate(1.08);
+}
+
+.app-module-dock .botonPanel:active {
+  transform: translateY(-1px) scale(1.01);
+  transition-duration: 0.08s;
+}
+
+.app-module-dock .botonPanel:focus-visible {
+  outline: 2px solid rgba(212, 165, 116, 0.75);
+  outline-offset: 3px;
+}
+
+.app-module-dock .botonPanel:nth-child(1) {
+  animation-delay: 0.03s;
+}
+.app-module-dock .botonPanel:nth-child(2) {
+  animation-delay: 0.07s;
+}
+.app-module-dock .botonPanel:nth-child(3) {
+  animation-delay: 0.11s;
+}
+.app-module-dock .botonPanel:nth-child(4) {
+  animation-delay: 0.15s;
+}
+.app-module-dock .botonPanel:nth-child(5) {
+  animation-delay: 0.19s;
+}
+.app-module-dock .botonPanel:nth-child(6) {
+  animation-delay: 0.23s;
+}
+.app-module-dock .botonPanel:nth-child(7) {
+  animation-delay: 0.27s;
+}
+.app-module-dock .botonPanel:nth-child(8) {
+  animation-delay: 0.31s;
+}
+.app-module-dock .botonPanel:nth-child(9) {
+  animation-delay: 0.35s;
+}
+.app-module-dock .botonPanel:nth-child(10) {
+  animation-delay: 0.39s;
+}
+.app-module-dock .botonPanel:nth-child(11) {
+  animation-delay: 0.43s;
+}
+.app-module-dock .botonPanel:nth-child(12) {
+  animation-delay: 0.47s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-module-dock .botonPanel {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .app-module-dock .botonPanel:hover {
+    transform: none;
+    filter: none;
+  }
+}
+
+.contenedor_padre > .panel > form {
+  flex: 1 1 100%;
+  width: 100%;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+
+.botonPanel {
+  flex: none;
+  align-self: center;
+  width: fit-content;
+  max-width: min(22rem, 100%);
+  min-width: 0;
+  margin: 0;
+  box-sizing: border-box;
+  min-height: 52px;
+  height: auto;
+  padding: 0.75rem 0.85rem;
+  font-family: var(--app-font);
+  font-size: clamp(0.8rem, 1.6vw, 0.9rem);
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: center;
+  border-radius: 14px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  color: var(--color-ink) !important;
+  border: 1px solid rgba(212, 165, 116, 0.35) !important;
+  background: linear-gradient(
+    165deg,
+    rgba(22, 34, 28, 0.9) 0%,
+    rgba(8, 14, 11, 0.94) 100%
+  ) !important;
+  box-shadow:
+    var(--shadow-sm),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  overflow: visible;
+  white-space: normal;
+  word-break: break-word;
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    background var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.botonPanel:hover {
+  transform: translateY(-3px);
+  border-color: rgba(240, 210, 180, 0.5) !important;
+  box-shadow: var(--shadow-md);
+  background: linear-gradient(
+    165deg,
+    rgba(32, 48, 40, 0.95) 0%,
+    rgba(14, 26, 20, 0.98) 100%
+  ) !important;
+  color: #fff !important;
+}
+
+.botonPanel:active {
+  transform: translateY(-1px);
+}
+
+.botonPanel .cafef {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+/*
+ * .botonsum en la barra superior: mismo cristal oscuro / oro que #ordena_boton > button.
+ * (En formularios .panel el .botonsum sigue siendo CTA dorado — persona.css / finanzas.css.)
+ */
+.boton_contenedor > .botonsum {
+  -webkit-appearance: none;
+  appearance: none;
+  min-height: 44px;
+  padding: 0.48rem 1.1rem;
+  font-family: var(--app-font);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border-radius: 999px;
+  color: var(--color-ink, #e8f2ec) !important;
+  background: linear-gradient(
+    165deg,
+    rgba(24, 36, 30, 0.92) 0%,
+    rgba(8, 14, 11, 0.96) 100%
+  ) !important;
+  border: 1px solid rgba(212, 165, 116, 0.38) !important;
+  box-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: pointer;
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out),
+    background var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    filter var(--duration-fast) var(--ease-out);
+}
+
+.boton_contenedor > .botonsum:hover {
+  transform: translateY(-1px);
+  filter: none !important;
+  color: #fff !important;
+  background: linear-gradient(
+    165deg,
+    rgba(36, 52, 44, 0.95) 0%,
+    rgba(14, 26, 20, 0.98) 100%
+  ) !important;
+  border-color: rgba(240, 210, 180, 0.55) !important;
+  box-shadow:
+    0 8px 28px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(212, 165, 116, 0.12);
+}
+
+.boton_contenedor > .botonsum:active {
+  transform: translateY(0);
+}
+
+.boton_contenedor > .botonsum.botonsum--danger {
+  background: linear-gradient(
+    165deg,
+    rgba(120, 28, 24, 0.75) 0%,
+    rgba(60, 14, 12, 0.88) 100%
+  ) !important;
+  color: #ffe8e6 !important;
+  border-color: rgba(255, 180, 175, 0.5) !important;
+}
+
+.boton_contenedor > .botonsum.botonsum--danger:hover {
+  filter: brightness(1.06) !important;
+}
+
+@media (max-width: 640px) {
+  #ordena_boton > #salir {
+    margin-left: 0;
+    flex-basis: 100%;
+    order: 3;
+  }
+
+  #ordena_boton > button:not(#salir) {
+    flex: 1 1 calc(50% - 0.35rem);
+    min-width: calc(50% - 0.35rem);
+  }
+}

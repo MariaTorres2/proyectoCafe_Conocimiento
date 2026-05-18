@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/theme.css' %}" rel="stylesheet">
+<link href="{% static 'css/admin.css' %}?v=bp2" rel="stylesheet">
+<link href="{% static 'css/finanzas.css' %}" rel="stylesheet">
+<link href="{% static 'css/app-shell.css' %}?v=bp2" rel="stylesheet" />
+    <title>UNIDAD MEDIDA</title>
+    
+</head>
+<body>
+    <div class="contenedor_padre">
+        <div class="boton_contenedor">
+            <div class="letras" id="vista_title">UNIDAD MEDIDA</div>
+            <div id="ordena_boton">
+            <div class="letras" id="letra_gestion">Gestionar</div>
+            <button id="botones" onclick="showPanel('panel1')">Agregar</button>
+            <button id="botones" onclick="showPanel('panel2')">Editar</button>
+            <button id="botones" onclick="showPanel('panel3')">Eliminar</button>
+            <button id="botones" onclick="showPanel('panel4')">Ver</button>
+            <button id="botonVolver" >Volver</button>
+            </div>
+        </div>
+        
+ <!-- ///Registro -->
+        <div class="panel" id="panel1">
+            <form id="registroUnidad">
+            <div>
+                <label class="labels">Nombre de Unidad de Medida</label>
+                <input  class="entrada" type="text" id="nombre_unidadmedida" required />
+            </div>
+              <button type="submit" class="botonsum" id="botonaccion">Guardar</button>
+            </form>
+            <div id="resultado"></div>
+          </div>
+
+          <!-- ///Eliminar -->
+<div class="panel" id="panel3">
+    <form id="eliminarUnidadMedida">
+      <label class="labels" id="documento">ID Unidad de Medida</label>
+      <input type="text" class="entrada" id="id_eliminar" required />
+      <div>
+        <button type="submit" class="botonsum" id="botonEliminar">
+          Eliminar
+        </button>
+      </div>
+    </form>
+  </div>
+  
+  <!-- ///Mostrar -->
+  <div class="panel" id="panel4">
+    <div id="tablaPerson">
+      <table id="mostrarUnidadMedida" border="1">
+        <thead>
+          <tr>
+            <th>ID Unidad de Medida</th>
+            <th>Nombre</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+  
+  <!-- ///Buscar -->
+  <div class="panel" id="panel2">
+    <form id="buscarUnidadMedida">
+      <div>
+        <label class="labels" id="documento">ID Unidad de Medida</label>
+        <input type="text" class="entrada" id="id_buscar" required />
+      </div>
+      <button type="submit" class="botonsum" id="botonBuscar">Buscar</button>
+    </form>
+  </div>
+  
+  <!-- ///Editar -->
+  <div class="panel" id="panel22">
+    <form id="editarUnidadMedida">
+      <div>
+        <label class="labels" id="documento">ID Unidad de Medida</label>
+        <input type="text" class="entrada2" id="id_unidadmedida2" disabled />
+      </div>
+      <div>
+        <label class="labels" id="nombre">Nombre Unidad de Medida</label>
+        <input type="text" class="entrada2" id="nombre_unidadmedida2" disabled />
+      </div>
+      <button type="submit" class="botonsum" id="botoneditar" disabled>
+        Actualizar
+      </button>
+    </form>
+    <button class="botonsum" id="botondesbloquear">Editar</button>
+    <button class="botonsum" id="botonvolvered">Volver</button>
+  </div>
+    </div>
+    <script>
+         function showPanel(panelId) {
+        const panels = document.querySelectorAll(".panel");
+        panels.forEach((panel) => (panel.style.display = "none"));
+        const selectedPanel = document.getElementById(panelId);
+        selectedPanel.style.display = "flex";
+        const result = document.getElementById("resultado");
+        result.innerText = "";
+      }
+
+      const redirectVolver = document.getElementById("botonVolver");
+
+redirectVolver.addEventListener("click", () => {
+  window.location.href = "{{ volver_url }}";
+});
+      const redirectVolverEditar = document.getElementById("botonvolvered");
+      redirectVolverEditar.addEventListener("click", () => {
+        showPanel("panel2");
+        const botondesb = document.getElementById("botondesbloquear");
+        const boton = document.getElementById("botoneditar");
+        botondesb.disabled = false;
+        boton.disabled = true;
+        const entradas2 = document.querySelectorAll(".entrada2");
+        entradas2.forEach((entrada) => {
+          entrada.disabled = true;
+        });
+        document.getElementById("editarUnidadMedida").reset();
+      });
+
+///registrar
+        document.getElementById("registroUnidad").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const nombre_unidadmedida = document.getElementById("nombre_unidadmedida").value;
+  try {
+    const response = await fetch("/api/productosmedida", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nombre_unidadmedida }),
+    });
+    const data = await response.json();
+    if (response.ok) {
+        const resultadoDiv = document.getElementById("resultado");
+      resultadoDiv.innerHTML = `
+        <p id="tituloDatos"><strong>Datos guardados</strong></p>
+        <p><strong>Unidad de medida:</strong> ${data.data.nombre_unidadmedida}</p>
+      `;
+      alert("Datos guardados con éxito");
+    } else {
+      alert(data.message);
+    }
+  } catch (error) {
+    alert("Hubo un error al registrar la unidad de medida.");
+  }
+  document.getElementById("registroUnidad").reset();
+});
+
+//// eliminar 
+document.getElementById("eliminarUnidadMedida").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const id_unidadmedida = document.getElementById("id_eliminar").value;
+  try {
+    const response = await fetch(`/api/productosmedida/${id_unidadmedida}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    if (response.ok) {
+      alert(data.message);
+    } else {
+      alert(data.message || "Hubo un error al eliminar la unidad de medida.");
+    }
+  } catch (error) {
+    alert("Hubo un error al eliminar la unidad de medida.");
+  }
+  document.getElementById("eliminarUnidadMedida").reset();
+});
+
+//// Mostrar Unidades
+fetch("/api/productosmedida")
+  .then((response) => response.json())
+  .then((unidades) => {
+    const tablaBody = document.getElementById("mostrarUnidadMedida").getElementsByTagName("tbody")[0];
+    unidades.forEach((unidad) => {
+      const fila = document.createElement("tr");
+      const id_unidadmedida = document.createElement("td");
+      id_unidadmedida.textContent = unidad.id_unidadmedida;
+      fila.appendChild(id_unidadmedida);
+
+      const nombre_unidadmedida = document.createElement("td");
+      nombre_unidadmedida.textContent = unidad.nombre_unidadmedida;
+      fila.appendChild(nombre_unidadmedida);
+
+      tablaBody.appendChild(fila);
+    });
+  })
+  .catch((error) => {
+    console.error("Hubo un error al obtener los datos:", error);
+  });
+
+function obtenerUnidades() {
+  fetch("/api/productosmedida")
+    .then((response) => response.json())
+    .then((unidades) => {
+      actualizarUnidades(unidades);
+    })
+    .catch((error) => console.error("Error al obtener unidades de medida:", error));
+}
+setInterval(obtenerUnidades, 3000);
+
+function actualizarUnidades(unidades) {
+  const tablaBody = document.getElementById("mostrarUnidadMedida").getElementsByTagName("tbody")[0];
+  tablaBody.innerHTML = "";
+  unidades.forEach((unidad) => {
+    const fila = document.createElement("tr");
+
+    const id_unidadmedida = document.createElement("td");
+    id_unidadmedida.textContent = unidad.id_unidadmedida;
+    fila.appendChild(id_unidadmedida);
+
+    const nombre_unidadmedida = document.createElement("td");
+    nombre_unidadmedida.textContent = unidad.nombre_unidadmedida;
+    fila.appendChild(nombre_unidadmedida);
+
+    tablaBody.appendChild(fila);
+  });
+}
+
+//// Buscar 
+document.getElementById("buscarUnidadMedida").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const id_unidadmedida = document.getElementById("id_buscar").value;
+
+  try {
+    const response = await fetch(`/api/productosmedida/${id_unidadmedida}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    if (response.ok) {
+      showPanel("panel22");
+      document.getElementById("id_unidadmedida2").value = data.data.id_unidadmedida;
+      document.getElementById("nombre_unidadmedida2").value = data.data.nombre_unidadmedida;
+    } else {
+      alert(data.message || "No se pudieron cargar los datos.");
+    }
+  } catch (error) {
+    alert("Hubo un error al cargar los datos.");
+  }
+  document.getElementById("buscarUnidadMedida").reset();
+});
+
+//// Editar
+const redirecteditar = document.getElementById("botondesbloquear");
+      redirecteditar.addEventListener("click", () => {
+        const botondesb = document.getElementById("botondesbloquear");
+        const entradas = document.querySelectorAll(".entrada2");
+        const boton = document.getElementById("botoneditar");
+        boton.disabled = false;
+        botondesb.disabled = true;
+        entradas.forEach((entradas) => {
+          if (entradas.id !== "id_unidadmedida2") {
+            entradas.disabled = false;
+          }
+        });
+      });
+
+ document.getElementById("editarUnidadMedida").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const botondesb = document.getElementById("botondesbloquear");
+    const boton = document.getElementById("botoneditar");
+    botondesb.disabled = false;
+    boton.disabled = true;
+
+  const id_unidadmedida = document.getElementById("id_unidadmedida2").value;
+  const nombre_unidadmedida = document.getElementById("nombre_unidadmedida2").value;
+
+  try {
+    const response = await fetch(
+      `/api/productosmedida/${id_unidadmedida}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id_unidadmedida,
+          nombre_unidadmedida,
+        }),
+      }
+    );
+    const data = await response.json();
+    if (response.ok) {
+        alert("Datos actualizados con éxito");
+        const entradas2 = document.querySelectorAll(".entrada2");
+        entradas2.forEach((entrada) => {
+          entrada.disabled = true;
+        });
+    } else {
+      alert(data.message || "Hubo un error al actualizar los datos.");
+    }
+  } catch (error) {
+    alert("Hubo un error al guardar los datos.");
+  }
+  showPanel("panel2");
+  document.getElementById("editarUnidadMedida").reset();
+});
+
+
+    </script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/app-ui.js' %}" defer></script>
+</body>
+</html>

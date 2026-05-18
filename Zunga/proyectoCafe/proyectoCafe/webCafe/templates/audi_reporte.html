@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/theme.css' %}" rel="stylesheet">
+  <link href="{% static 'css/admin.css' %}?v=bp2" rel="stylesheet">
+  <link href="{% static 'css/persona.css' %}" rel="stylesheet">
+<link href="{% static 'css/app-shell.css' %}?v=bp2" rel="stylesheet" />
+  <title>Auditoría reportes</title>
+</head>
+<body>
+  <div class="contenedor_padre">
+    <div class="boton_contenedor">
+      <div class="letras" id="vista_title">Auditoría — Reportes</div>
+      <div id="ordena_boton">
+        <button type="button" class="botonsum" id="botonVolver">Volver</button>
+      </div>
+    </div>
+    <div class="panel app-panel-block">
+      <p class="labels">Listado desde API (Postgres). Solo lectura.</p>
+      <table id="tablaReportes" border="1">
+        <thead>
+          <tr>
+            <th>ID reporte</th>
+            <th>Fecha</th>
+            <th>Total recolección</th>
+            <th>Estado</th>
+            <th>FK recolector</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+    document.getElementById("botonVolver").addEventListener("click", () => {
+      window.location.href = "/vista_admin/";
+    });
+    fetch("/get_todos/reporte/")
+      .then((r) => r.json())
+      .then((rows) => {
+        const tb = document.querySelector("#tablaReportes tbody");
+        if (!Array.isArray(rows)) {
+          console.warn("Sin datos o error:", rows);
+          return;
+        }
+        rows.forEach((rep) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${rep.id_reporte ?? ""}</td>
+            <td>${rep.fecha_reporte ?? ""}</td>
+            <td>${rep.totaltecoleccion_reporte ?? ""}</td>
+            <td>${rep.estado_reporte === true ? "Activo" : rep.estado_reporte === false ? "Inactivo" : ""}</td>
+            <td>${rep.fk_id_recolector ?? ""}</td>`;
+          tb.appendChild(tr);
+        });
+      })
+      .catch(() => {});
+  </script>
+    <script src="{% static 'js/app-ui.js' %}" defer></script>
+</body>
+</html>

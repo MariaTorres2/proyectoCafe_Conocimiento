@@ -1,0 +1,579 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+      {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/theme.css' %}" rel="stylesheet">
+<link href="{% static 'css/admin.css' %}?v=bp2" rel="stylesheet">
+    <link href="{% static 'css/propietario-finanzas.css' %}?v=bp2" rel="stylesheet">
+<link href="{% static 'css/app-shell.css' %}?v=bp2" rel="stylesheet" />
+
+    <title>PROPIETARIO</title>
+    
+</head>
+<body>
+    <div class="contenedor_padre">
+        <div class="boton_contenedor">
+            <div class="letras" id="vista_title">PROPIETARIO</div>
+            <div id="ordena_boton">
+            <div class="letragestion" id="letra_gestion">Gestionar <img id="cafef" src="https://i.ibb.co/prgscZz/cafef.png" width="50px"></div>
+            <button id="botones" onclick="showPanel('panel1')">Insumos <img class="cafef" src="https://i.ibb.co/ynwJSFB/grano.png" width="30px"></button>
+            <button id="botones" onclick="showPanel('panel2')">Finanzas <img class="cafef" src="https://i.ibb.co/ynwJSFB/grano.png" width="30px"></button>
+            <button id="botones" type="button" onclick="window.location.href='/recolector/?panel=agregar'">Recolectores <img class="cafef" src="https://i.ibb.co/ynwJSFB/grano.png" width="30px"></button>
+            <button id="salir">Salir <img class="cafef" src="https://i.ibb.co/ynwJSFB/grano.png" width="30px"></button>
+            </div>
+        </div>
+
+        
+         <div id="panel1" class="panel">
+            <nav class="app-module-dock" aria-label="Módulos de insumos">
+            <button type="button" class="botonPanel" id="botoninsumo">Insumo</button>
+            <button type="button" class="botonPanel" id="botonmetodo_aplicacion">Metodo_aplicacion</button>
+            <button type="button" class="botonPanel" id="botontipo_insumo">Tipo_insumo</button>
+            <button type="button" class="botonPanel" id="botonunidad_medida">Unidad_medida</button>
+            </nav>
+         </div>
+
+         <div id="panel2" class="panel prop-fin-panel">
+            <nav class="prop-fin-quicknav" aria-label="Enlaces a tablas del sistema">
+              <span class="prop-fin-quicknav-label">Consultar registros</span>
+              <button type="button" class="botonPanel prop-fin-nav-btn" id="botonreporte">Tabla de reportes</button>
+              <button type="button" class="botonPanel prop-fin-nav-btn" id="botonpago">Tabla de pagos</button>
+              <button type="button" class="botonPanel prop-fin-nav-btn" id="botonrecoleccion" hidden>Tabla de recolecciones</button>
+            </nav>
+
+            <hr class="prop-fin-hr" />
+
+            <section class="prop-fin-section" aria-labelledby="fin-titulo-principal">
+              <div class="prop-fin-hero">
+                <p class="prop-fin-badge">Finanzas</p>
+                <h2 id="fin-titulo-principal" class="prop-fin-title">Liquidar pagos a recolectores</h2>
+                <p class="prop-fin-lead">
+                  Complete <strong>cada día del contrato</strong> con kilos y precio por kilo.
+                  Si no hubo jornada, marque <strong>No trabajó</strong>. Al final, use el botón principal para guardar la liquidación en el sistema.
+                </p>
+              </div>
+
+              <div class="prop-fin-steps">
+                <div class="prop-fin-step">
+                  <span class="prop-fin-step-num" aria-hidden="true">1</span>
+                  <div><strong>Rellenar</strong> día por día (kg y precio/kg), o marque «No trabajó».</div>
+                </div>
+                <div class="prop-fin-step">
+                  <span class="prop-fin-step-num" aria-hidden="true">2</span>
+                  <div><strong>Opcional:</strong> «Traer kg del sistema» copia los kilos desde recolecciones ya registradas.</div>
+                </div>
+                <div class="prop-fin-step">
+                  <span class="prop-fin-step-num" aria-hidden="true">3</span>
+                  <div><strong>Guardar:</strong> «Registrar liquidación» envía todo el contrato y calcula los pagos.</div>
+                </div>
+              </div>
+
+              <div id="finRecolectoresWrap">
+                <p class="prop-fin-placeholder">Abra la pestaña <strong>Finanzas</strong> para cargar sus recolectores.</p>
+              </div>
+            </section>
+
+            <hr class="prop-fin-hr" />
+
+            <section class="prop-fin-section" aria-label="Herramientas opcionales">
+              <details class="prop-fin-details">
+                <summary>Herramientas (opcional)</summary>
+                <div class="prop-fin-details-body">
+                  <div class="prop-fin-subtitle prop-fin-subtitle--tight">Generar reporte del día</div>
+                  <p class="prop-fin-help">
+                    Use esto solo si necesita crear/actualizar el <em>reporte</em> del día a partir de <strong>recolecciones</strong>.
+                    Después puede usar <strong>Traer kg del sistema</strong> en la liquidación.
+                  </p>
+                  <div class="prop-fin-daily-row">
+                    <div>
+                      <label class="labels" for="daily_id_recolector">Documento del recolector</label><br/>
+                      <input class="entrada" type="text" id="daily_id_recolector" placeholder="Ej. número de documento" autocomplete="off" />
+                    </div>
+                    <div>
+                      <label class="labels" for="daily_fecha">Fecha del día</label><br/>
+                      <input class="entrada" type="date" id="daily_fecha" />
+                    </div>
+                    <button class="btn-prop-fin-outline" type="button" id="btnGenerarDiario">Generar reporte del día</button>
+                  </div>
+                  <div id="dailyResultado" class="prop-fin-msg-area"></div>
+                </div>
+              </details>
+            </section>
+         </div>
+         
+    </div>
+    <script>
+        let __finRecolectoresCargado = false;
+        function showPanel(panelId) {
+            const panels = document.querySelectorAll('.panel');
+            panels.forEach(panel => panel.style.display = 'none');
+            const selectedPanel = document.getElementById(panelId);
+            selectedPanel.style.display = 'flex';
+            const dock = selectedPanel.querySelector('.app-module-dock');
+            if (dock && window.matchMedia && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                dock.querySelectorAll('.botonPanel').forEach((btn) => {
+                    btn.style.animation = 'none';
+                    void btn.offsetWidth;
+                    btn.style.removeProperty('animation');
+                });
+            }
+            if (panelId === 'panel2' && !__finRecolectoresCargado) {
+                __finRecolectoresCargado = true;
+                finanzasCargarRecolectores();
+            }
+        }
+        const redirectSalir = document.getElementById('salir');
+        redirectSalir.addEventListener('click', () => {
+            window.location.href = "/";
+        });
+
+        document.getElementById('botoninsumo').addEventListener('click', () => window.location.href = "/insumo/");
+        document.getElementById('botonmetodo_aplicacion').addEventListener('click', () => window.location.href = "/metodo_aplicacion/");
+        document.getElementById('botontipo_insumo').addEventListener('click', () => window.location.href = "/tipo_insumo/");
+        document.getElementById('botonunidad_medida').addEventListener('click', () => window.location.href = "/unidad_medida/");
+
+        document.getElementById('botonreporte').addEventListener('click', () => window.location.href = "/reporte/");
+        document.getElementById('botonpago').addEventListener('click', () => window.location.href = "/pago/");
+        document.getElementById('botonrecoleccion').addEventListener('click', () => window.location.href = "/recoleccion/");
+
+        function fmtKg(v) {
+          const n = Number(v);
+          return Number.isFinite(n) ? n.toLocaleString("es-CO", { maximumFractionDigits: 3 }) : "—";
+        }
+        function fmtMoney(v) {
+          const n = Number(v);
+          return Number.isFinite(n)
+            ? n.toLocaleString("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 })
+            : "—";
+        }
+
+        function finEscHtml(s) {
+          return String(s)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;");
+        }
+
+        function finSliceDate(v) {
+          if (v == null || v === "") return "";
+          const t = String(v);
+          return t.length >= 10 ? t.slice(0, 10) : t;
+        }
+
+        function finParseLocalDay(iso) {
+          const t = String(iso).slice(0, 10);
+          const p = t.split("-").map(Number);
+          if (p.length < 3 || !p[0]) return null;
+          return new Date(p[0], p[1] - 1, p[2]);
+        }
+
+        function finFormatLocalDay(d) {
+          const y = d.getFullYear();
+          const mo = String(d.getMonth() + 1).padStart(2, "0");
+          const da = String(d.getDate()).padStart(2, "0");
+          return `${y}-${mo}-${da}`;
+        }
+
+        function finTodayLocal() {
+          const n = new Date();
+          return new Date(n.getFullYear(), n.getMonth(), n.getDate());
+        }
+
+        /** Si no hay fechafin en BD, la API usa «hoy» como fin del contrato. */
+        function finEnumerateContractDays(fiStr, ffStr) {
+          const start = finParseLocalDay(fiStr);
+          if (!start) return [];
+          let end = ffStr ? finParseLocalDay(ffStr) : finTodayLocal();
+          if (!end) end = finTodayLocal();
+          if (end < start) return [];
+          const out = [];
+          const cur = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+          const last = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+          while (cur <= last) {
+            out.push(finFormatLocalDay(cur));
+            cur.setDate(cur.getDate() + 1);
+          }
+          return out;
+        }
+
+        function finRowSubtotal(tr) {
+          const aus = tr.querySelector(".fin-ausente");
+          const cell = tr.querySelector(".fin-subtotal");
+          if (!aus || !cell) return;
+          if (aus.checked) {
+            cell.textContent = "No trabajó";
+            return;
+          }
+          const kg = parseFloat((tr.querySelector(".fin-kg") || {}).value || "0");
+          const pk = parseFloat((tr.querySelector(".fin-pk") || {}).value || "0");
+          const m = (Number.isFinite(kg) ? kg : 0) * (Number.isFinite(pk) ? pk : 0);
+          cell.textContent = fmtMoney(m);
+        }
+
+        function finUpdateCardTotals(cardEl) {
+          const span = cardEl.querySelector(".fin-totales-resumen");
+          if (!span) return;
+          let sumKg = 0;
+          let sumMo = 0;
+          cardEl.querySelectorAll("tbody tr").forEach((tr) => {
+            const aus = tr.querySelector(".fin-ausente");
+            if (aus && aus.checked) return;
+            const kg = parseFloat((tr.querySelector(".fin-kg") || {}).value || "0");
+            const pk = parseFloat((tr.querySelector(".fin-pk") || {}).value || "0");
+            const k = Number.isFinite(kg) ? kg : 0;
+            const p = Number.isFinite(pk) ? pk : 0;
+            sumKg += k;
+            sumMo += k * p;
+          });
+          span.innerHTML = `<span><strong>Total kg</strong> · ${fmtKg(sumKg)}</span><span><strong>Total estimado</strong> · ${fmtMoney(sumMo)}</span>`;
+        }
+
+        function finWireCard(cardEl, idRecolector) {
+          cardEl.dataset.recolectorDoc = idRecolector;
+          cardEl.querySelectorAll("tbody tr").forEach((tr) => {
+            const aus = tr.querySelector(".fin-ausente");
+            const kg = tr.querySelector(".fin-kg");
+            const pk = tr.querySelector(".fin-pk");
+            const metodo = tr.querySelector(".fin-metodo");
+            if (!aus || !kg || !pk) return;
+            const onAus = () => {
+              const on = aus.checked;
+              kg.disabled = on;
+              pk.disabled = on;
+              if (metodo) metodo.disabled = on;
+              if (on) {
+                kg.value = "";
+                pk.value = "";
+              }
+              finRowSubtotal(tr);
+              finUpdateCardTotals(cardEl);
+            };
+            aus.addEventListener("change", onAus);
+            kg.addEventListener("input", () => {
+              finRowSubtotal(tr);
+              finUpdateCardTotals(cardEl);
+            });
+            pk.addEventListener("input", () => {
+              finRowSubtotal(tr);
+              finUpdateCardTotals(cardEl);
+            });
+          });
+          cardEl.querySelector(".fin-btn-sugerir").addEventListener("click", () => finSugerirKg(cardEl));
+          cardEl.querySelector(".fin-btn-pago").addEventListener("click", () => finGenerarPago(cardEl));
+        }
+
+        async function finNombrePersona(doc) {
+          try {
+            const r = await fetch(`/consultar_registro/persona/${encodeURIComponent(doc)}/`);
+            if (!r.ok) return "";
+            const j = await r.json();
+            return (j.nombre_persona || "").trim();
+          } catch (e) {
+            return "";
+          }
+        }
+
+        function finSetActiveRecolector(doc) {
+          const wrap = document.getElementById("finRecolectoresWrap");
+          const cards = wrap ? wrap.querySelectorAll("[data-fin-card='1']") : [];
+          cards.forEach((c) => {
+            c.style.display = c.dataset.recolectorDoc === doc ? "block" : "none";
+          });
+          const help = document.getElementById("finRecolectorMinihelp");
+          if (help) {
+            help.textContent = doc
+              ? "Complete la tabla y luego presione «Registrar liquidación»."
+              : "Seleccione un recolector para comenzar.";
+          }
+        }
+
+        async function finSugerirKg(cardEl) {
+          const doc = cardEl.dataset.recolectorDoc || "";
+          const msg = cardEl.querySelector(".fin-msg");
+          if (!doc) return;
+          msg.innerHTML = '<p class="prop-fin-placeholder prop-fin-placeholder--flush">Consultando kilos en el sistema…</p>';
+          const rows = Array.from(cardEl.querySelectorAll("tbody tr"));
+          try {
+            for (const tr of rows) {
+              const aus = tr.querySelector(".fin-ausente");
+              const fecha = (tr.dataset.fecha || "").trim();
+              const inpKg = tr.querySelector(".fin-kg");
+              if (!fecha || !inpKg || (aus && aus.checked)) continue;
+              const r = await fetch(
+                `/api/finanzas_kg_sugerido?id_recolector=${encodeURIComponent(doc)}&fecha=${encodeURIComponent(fecha)}`
+              );
+              const j = await r.json();
+              if (!r.ok) {
+                msg.innerHTML = `<div class="prop-fin-alert prop-fin-alert--err">${finEscHtml(j.message || "No se pudieron leer los kilos.")}</div>`;
+                return;
+              }
+              const kg = j.data && j.data.kg_sugerido != null ? j.data.kg_sugerido : 0;
+              inpKg.value = kg;
+              finRowSubtotal(tr);
+            }
+            finUpdateCardTotals(cardEl);
+            msg.innerHTML = '<div class="prop-fin-alert prop-fin-alert--ok">Kilos copiados en las filas donde no marcó «No trabajó». Revise precio/kg y pulse «Registrar liquidación» cuando esté listo.</div>';
+          } catch (e) {
+            msg.innerHTML = '<div class="prop-fin-alert prop-fin-alert--err">Error de conexión al traer kilos del sistema.</div>';
+          }
+        }
+
+        async function finGenerarPago(cardEl) {
+          const doc = cardEl.dataset.recolectorDoc || "";
+          const msg = cardEl.querySelector(".fin-msg");
+          if (!doc) return;
+          const dias = [];
+          cardEl.querySelectorAll("tbody tr").forEach((tr) => {
+            const fecha = (tr.dataset.fecha || "").trim();
+            if (!fecha) return;
+            const aus = tr.querySelector(".fin-ausente").checked;
+            const kg = parseFloat((tr.querySelector(".fin-kg") || {}).value || "0");
+            const pk = parseFloat((tr.querySelector(".fin-pk") || {}).value || "0");
+            const metodo = ((tr.querySelector(".fin-metodo") || {}).value || "Efectivo").trim();
+            const tieneValores = (Number.isFinite(kg) && kg > 0) || (Number.isFinite(pk) && pk > 0);
+            if (!aus && !tieneValores) return;
+            dias.push({
+              fecha,
+              ausente: aus,
+              kg_dia: aus ? 0 : (Number.isFinite(kg) ? kg : 0),
+              precio_kilo: aus ? 0 : (Number.isFinite(pk) ? pk : 0),
+              metodo_pago: aus ? "" : metodo,
+            });
+          });
+          if (!dias.length) {
+            msg.innerHTML = '<div class="prop-fin-alert prop-fin-alert--err">Ingrese los datos de al menos un día para registrar la liquidación.</div>';
+            return;
+          }
+          dias.sort((a, b) => a.fecha.localeCompare(b.fecha));
+          msg.innerHTML = '<p class="prop-fin-placeholder prop-fin-placeholder--flush">Guardando liquidación en el sistema…</p>';
+          try {
+            const r = await fetch("/api/finanzas_generar_pago", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ id_recolector: doc, dias }),
+            });
+            const j = await r.json();
+            if (!r.ok) {
+              msg.innerHTML = `<div class="prop-fin-alert prop-fin-alert--err">${finEscHtml(j.message || "No se pudo guardar.")}</div>`;
+              return;
+            }
+            const d = j.data || {};
+            const det = Array.isArray(d.detalle) ? d.detalle : [];
+            const omitidos = Array.isArray(d.dias_omitidos) ? d.dias_omitidos : [];
+            const omitidosHtml = omitidos.length
+              ? `<div><strong>Días ya reportados omitidos:</strong> ${finEscHtml(omitidos.map((x) => x.fecha).join(", "))}</div>`
+              : "";
+            const tb = det
+              .map(
+                (x) =>
+                  `<tr><td>${finEscHtml(x.fecha)}</td><td>${x.ausente ? "No trabajó" : fmtKg(x.kg_dia)}</td><td>${x.ausente ? "—" : fmtMoney(x.precio_kilo)}</td><td>${x.ausente ? "—" : finEscHtml(x.metodo_pago || "—")}</td><td class="fin-td-end">${x.ausente ? "—" : fmtMoney(x.monto_dia)}</td></tr>`
+              )
+              .join("");
+            msg.innerHTML = `
+              <div class="prop-fin-alert prop-fin-alert--ok">
+                <div class="fin-alert-title">${finEscHtml(d.mensaje || "Liquidación registrada")}</div>
+                <div><strong>Total kg:</strong> ${fmtKg(d.total_kg)}</div>
+                <div><strong>Total pagado:</strong> ${fmtMoney(d.total_monto)}</div>
+                <div><strong>Días con pago registrado:</strong> ${d.pagos_registrados != null ? d.pagos_registrados : "—"}</div>
+                ${omitidosHtml}
+              </div>
+              <div class="prop-fin-table-wrap">
+                <table class="table table-sm table-striped mb-0">
+                  <thead><tr><th>Fecha</th><th>Kg</th><th>$/kg</th><th>Método</th><th class="fin-th-end">Monto</th></tr></thead>
+                  <tbody>${tb}</tbody>
+                </table>
+              </div>`;
+          } catch (e) {
+            msg.innerHTML = '<div class="prop-fin-alert prop-fin-alert--err">Error de conexión al guardar la liquidación.</div>';
+          }
+        }
+
+        async function finanzasCargarRecolectores() {
+          const wrap = document.getElementById("finRecolectoresWrap");
+          wrap.innerHTML = '<p class="prop-fin-placeholder">Cargando sus recolectores…</p>';
+          try {
+            const r = await fetch("/get_todos/Recolector/");
+            const rows = await r.json();
+            if (!Array.isArray(rows)) {
+              wrap.innerHTML = `<div class="prop-fin-alert prop-fin-alert--err">${finEscHtml(rows.error || rows.message || "No se pudo cargar la lista.")}</div>`;
+              return;
+            }
+            if (!rows.length) {
+              wrap.innerHTML = '<p class="prop-fin-placeholder">No tiene recolectores asignados. Use el menú lateral <strong>Recolectores</strong> para registrar contratos.</p>';
+              return;
+            }
+            wrap.innerHTML = `
+              <div class="prop-fin-picker" role="group" aria-label="Seleccionar recolector">
+                <div>
+                  <label class="labels" for="finRecolectorSelect">Recolector</label><br/>
+                  <select class="selector" id="finRecolectorSelect">
+                    <option value="">--- Seleccione ---</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="labels" for="finRecolectorFiltro">Buscar</label><br/>
+                  <input class="entrada" id="finRecolectorFiltro" type="text" placeholder="Buscar por documento o nombre" autocomplete="off" />
+                </div>
+                <button type="button" class="btn-prop-fin-outline" id="finBtnRecargar">Recargar lista</button>
+              </div>
+              <p id="finRecolectorMinihelp" class="prop-fin-minihelp">Seleccione un recolector para comenzar.</p>
+              <div id="finRecolectorCards"></div>
+            `;
+
+            const sel = document.getElementById("finRecolectorSelect");
+            const filtro = document.getElementById("finRecolectorFiltro");
+            const btnReload = document.getElementById("finBtnRecargar");
+            const cardsWrap = document.getElementById("finRecolectorCards");
+
+            btnReload?.addEventListener("click", () => finanzasCargarRecolectores());
+            sel?.addEventListener("change", (e) => finSetActiveRecolector(e.target.value));
+
+            const list = rows
+              .map((rec) => ({
+                doc: String(rec.id_recolector || "").trim(),
+                fi: finSliceDate(rec.fechainicio_recolector),
+                ff: finSliceDate(rec.fechafin_recolector),
+              }))
+              .filter((x) => x.doc);
+
+            // Cargar nombres en paralelo (no bloquea el render)
+            const namesByDoc = new Map();
+            await Promise.all(
+              list.map(async (x) => {
+                const n = await finNombrePersona(x.doc);
+                if (n) namesByDoc.set(x.doc, n);
+              })
+            );
+
+            // Poblar selector
+            list.forEach((x) => {
+              const opt = document.createElement("option");
+              const nom = namesByDoc.get(x.doc) || "";
+              opt.value = x.doc;
+              opt.textContent = nom ? `${x.doc} · ${nom}` : x.doc;
+              opt.dataset.search = (x.doc + " " + nom).toLowerCase();
+              sel.appendChild(opt);
+            });
+
+            // Filtro del selector (oculta opciones que no coinciden)
+            filtro?.addEventListener("input", () => {
+              const q = (filtro.value || "").trim().toLowerCase();
+              const opts = Array.from(sel.querySelectorAll("option"));
+              opts.forEach((o, idx) => {
+                if (idx === 0) return; // placeholder
+                const hay = (o.dataset.search || "").includes(q);
+                o.style.display = q ? (hay ? "" : "none") : "";
+              });
+              // si lo seleccionado quedó oculto, reset
+              const cur = sel.value;
+              if (cur) {
+                const curOpt = Array.from(sel.querySelectorAll("option")).find((o) => o.value === cur);
+                if (curOpt && curOpt.style.display === "none") {
+                  sel.value = "";
+                  finSetActiveRecolector("");
+                }
+              }
+            });
+
+            // Renderizar tarjetas (una por recolector), pero ocultas hasta seleccionar
+            cardsWrap.innerHTML = "";
+            list.forEach((rec) => {
+              const doc = rec.doc;
+              const fi = rec.fi;
+              const ff = rec.ff;
+              const days = finEnumerateContractDays(fi, ff);
+              const card = document.createElement("div");
+              card.className = "fin-rec-card prop-fin-card";
+              card.dataset.finCard = "1";
+              card.style.display = "none";
+              let bodyRows = "";
+              days.forEach((fecha) => {
+                bodyRows += `<tr data-fecha="${finEscHtml(fecha)}"><td>${finEscHtml(fecha)}</td><td><input class="entrada fin-kg" type="number" step="0.001" min="0" /></td><td><input class="entrada fin-pk" type="number" step="0.01" min="0" /></td><td><select class="selector fin-metodo"><option value="Efectivo">Efectivo</option><option value="Transferencia">Transferencia</option><option value="Tarjeta">Tarjeta</option></select></td><td class="fin-td-center"><input type="checkbox" class="fin-ausente" aria-label="No trabajó este día" title="Marcar si no hubo jornada" /></td><td class="fin-subtotal">—</td></tr>`;
+              });
+              if (!bodyRows) {
+                bodyRows =
+                  '<tr class="fin-empty-row"><td colspan="6" class="text-muted">No hay fechas de contrato válidas. Revise la fecha de inicio del recolector.</td></tr>';
+              }
+              card.innerHTML = `
+                <div class="prop-fin-card-header">
+                  <div>
+                    <div class="labels fin-label-tight">Recolector</div>
+                    <div><strong class="fin-doc-strong">${finEscHtml(doc)}</strong> <span class="fin-nombre text-muted fin-nombre-muted"></span></div>
+                    <div class="prop-fin-card-meta">Contrato · ${finEscHtml(fi || "—")} → ${ff ? finEscHtml(ff) : "hoy (sin fecha de fin en sistema)"}</div>
+                  </div>
+                </div>
+                <div class="prop-fin-actions prop-fin-actions--padded">
+                  <button type="button" class="btn-prop-fin-outline fin-btn-sugerir"${days.length ? "" : " disabled"} title="Rellena la columna de kg desde datos de recolección">Traer kg del sistema</button>
+                  <button type="button" class="btn-prop-fin-solid fin-btn-pago"${days.length ? "" : " disabled"} title="Genera reportes y pagos por cada día del contrato">Registrar liquidación</button>
+                </div>
+                <div class="fin-totales-resumen prop-fin-totals-bar"></div>
+                <div class="prop-fin-table-wrap">
+                  <table class="table table-sm table-striped mb-0">
+                    <thead><tr><th>Fecha</th><th>Kg</th><th>Precio/kg</th><th>Método</th><th class="fin-th-center">No trabajó</th><th class="fin-th-end">Subtotal día</th></tr></thead>
+                    <tbody>${bodyRows}</tbody>
+                  </table>
+                </div>
+                <div class="fin-msg prop-fin-msg-area"></div>`;
+              cardsWrap.appendChild(card);
+              if (days.length) finWireCard(card, doc);
+              finNombrePersona(doc).then((nom) => {
+                const sp = card.querySelector(".fin-nombre");
+                if (sp && nom) sp.textContent = " · " + nom;
+              });
+            });
+
+            // Selección por defecto: primero visible
+            const first = list[0]?.doc || "";
+            if (first) {
+              sel.value = first;
+              finSetActiveRecolector(first);
+            }
+          } catch (e) {
+            wrap.innerHTML = '<div class="prop-fin-alert prop-fin-alert--err">Error de conexión. Verifique que Django y la API respondan.</div>';
+          }
+        }
+
+        document.getElementById("btnGenerarDiario").addEventListener("click", async () => {
+          const id_recolector = (document.getElementById("daily_id_recolector").value || "").trim();
+          const fecha = document.getElementById("daily_fecha").value;
+          if (!id_recolector || !fecha) {
+            alert("Indique el documento del recolector y la fecha.");
+            return;
+          }
+          const out = document.getElementById("dailyResultado");
+          out.innerHTML = '<p class="prop-fin-placeholder prop-fin-placeholder--flush">Generando reporte…</p>';
+          try {
+            const r = await fetch("/api/reporte_diario", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ id_recolector, fecha }),
+            });
+            const j = await r.json();
+            if (!r.ok) {
+              out.innerHTML = `<div class="prop-fin-alert prop-fin-alert--err">${finEscHtml(j.message || "No se pudo generar el reporte.")}</div>`;
+              return;
+            }
+            const d = j.data || {};
+            out.innerHTML = `
+              <div class="prop-fin-alert prop-fin-alert--ok">
+                <div class="fin-alert-title">Reporte del día creado o actualizado</div>
+                <div><strong>Id reporte:</strong> ${finEscHtml(String(d.id_reporte || "—"))}</div>
+                <div><strong>Recolector:</strong> ${finEscHtml(String(d.fk_id_recolector || ""))}</div>
+                <div><strong>Fecha:</strong> ${finEscHtml(String(d.fecha_reporte || ""))}</div>
+                <div><strong>Total recolectado:</strong> ${finEscHtml(String(d.total_recolectado != null ? d.total_recolectado : "—"))}</div>
+                <div><strong>Total pagado (reporte):</strong> ${finEscHtml(String(d.total_pagado != null ? d.total_pagado : "—"))}</div>
+              </div>`;
+          } catch (e) {
+            out.innerHTML = `<div class="prop-fin-alert prop-fin-alert--err">Error de conexión.</div>`;
+          }
+        });
+    </script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/app-ui.js' %}" defer></script>
+</body>
+</html>
+

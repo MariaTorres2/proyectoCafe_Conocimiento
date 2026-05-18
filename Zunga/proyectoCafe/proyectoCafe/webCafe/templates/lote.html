@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+   {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/theme.css' %}" rel="stylesheet">
+<link href="{% static 'css/admin.css' %}?v=bp2" rel="stylesheet">
+<link href="{% static 'css/persona.css' %}" rel="stylesheet">
+<link href="{% static 'css/app-shell.css' %}?v=bp2" rel="stylesheet" />
+    <title>Lote</title>
+  </head>
+  <body>
+    <div class="contenedor_padre">
+      <div class="boton_contenedor">
+        <div class="letras" id="vista_title">LOTE</div>
+        <div id="ordena_boton">
+          <div class="letras" id="letra_gestion">Gestionar</div>
+          <button id="botones" onclick="showPanel('panel1')">Agregar</button>
+          <button id="botones" onclick="showPanel('panel2')">Editar</button>
+          <button id="botones" onclick="showPanel('panel3')">Eliminar</button>
+          <button id="botones" onclick="showPanel('panel4')">Ver</button>
+          <button id="botonVolver">Volver</button>
+        </div>
+      </div>
+
+      <!-- ///Registro -->
+      <div class="panel" id="panel1">
+        <form id="registrofinca">
+          <div>
+            <label class="labels" id="id_finca">ID Finca</label>
+            <input
+              type="text"
+              class="entrada"
+              id="id_finca"
+              maxlength="45"
+              required
+            />
+          </div>
+          <div>
+            <label class="labels" id="nombre_lote">Nombre lote</label>
+            <input
+              type="text"
+              class="entrada"
+              id="nombre_lote"
+              minlength="4"
+              required
+            />
+          </div>
+          <div>
+            <label class="labels" id="cantidadCafe">cantidadCafe</label>
+            <input
+              type="text"
+              class="entrada"
+              id="cantidadCafe"
+              minlength="4"
+              required
+            />
+          </div>
+          <div>
+            <label class="labels" id="tamanio">Tamaño</label>
+            <input type="text" class="entrada" id="tamanio_finca" required />
+          </div>
+          <div>
+        <label class="labels" id="estado">Estado</label>
+        <input
+          type="text"
+          class="entrada"
+          id="estado_insumo"
+          required
+        />
+      </div>
+          <div>
+            <label class="labels" id="mantenimiento">Id mantenimiento</label>
+            <input
+              type="text"
+              class="entrada"
+              id="id_mantenimiento"
+              minlength="1"
+              required
+            />
+          </div>
+          <button type="submit" class="botonsum" id="botonaccion">
+            Guardar
+          </button>
+        </form>
+        <div id="resultado"></div>
+      </div>
+
+      <!-- ///Eliminar -->
+      <div class="panel" id="panel3">
+        <form id="eliminarfinca">
+          <label class="labels" id="documento">Id lote</label>
+          <input type="text" class="entrada" id="documento_eliminar" required />
+          <div>
+            <button type="submit" class="botonsum" id="botoneliminar">
+              Eliminar
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- ///Mostrar -->
+      <div class="panel" id="panel4">
+        <div id="tablaPerson">
+          <table id="mostrarfincas" border="1">
+            <thead>
+              <tr>
+                <th>Id finca</th>
+                <th>Nombre lote</th>
+                <th>Cantidad cafe </th>
+                <th>Tamaño</th>
+                <th>Estado lote</th>
+                <th>Id mantenimiento</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ///Buscar -->
+      <div class="panel" id="panel2">
+        <form id="buscarfinca">
+          <div>
+            <label class="labels" id="documento">Id lote</label>
+            <input type="text" class="entrada" id="documento_buscar" required />
+          </div>
+          <button type="submit" class="botonsum" id="Buscar">Buscar</button>
+        </form>
+      </div>
+
+      <!-- ///Editar -->
+      <div class="panel" id="panel22">
+        <form id="editarfinca">
+          <div>
+            <label class="labels" id="documento">Id lote</label>
+            <input type="text" class="entrada2" id="id_finca2" disabled />
+          </div>
+          <div>
+            <label class="labels" id="nombre_lote">Nombre lote</label>
+            <input type="text" class="entrada2" id="nombre_lote_finca2" disabled />
+          </div>
+          <div>
+            <label class="labels" id="cantidadCafe">Cantidad cafe</label>
+            <input
+              type="text"
+              class="entrada2"
+              id="cantidadCafe_finca2"
+              disabled
+            />
+          </div>
+          <div>
+            <label class="labels" id="tamanio">Tamaño</label>
+            <input type="text" class="entrada2" id="tamanio_finca2" disabled />
+          </div>
+          <div>
+            <label class="labels" id="altitud">Estado</label>
+            <input type="text" class="entrada2" id="altitud_finca2" disabled />
+          </div>
+          <div>
+            <label class="labels" id="mantenimiento">Mantenimiento</label>
+            <input type="text" class="entrada2" id="id_mantenimiento2" disabled />
+          </div>
+          <button type="submit" class="botonsum" id="botoneditar" disabled>
+            Actualizar
+          </button>
+        </form>
+        <button class="botonsum" id="botondesbloquear">Editar</button>
+        <button class="botonsum" id="botonvolvered">Volver</button>
+      </div>
+    </div>
+    <script>
+      function showPanel(panelId) {
+        const panels = document.querySelectorAll(".panel");
+        panels.forEach((panel) => (panel.style.display = "none"));
+        const selectedPanel = document.getElementById(panelId);
+        selectedPanel.style.display = "flex";
+        const result = document.getElementById("resultado");
+        result.innerText = "";
+      }
+      const redirectVolver = document.getElementById("botonVolver");
+
+redirectVolver.addEventListener("click", () => {
+  window.location.href = "/vista_admin/";
+});
+
+      const redirectVolverEditar = document.getElementById("botonvolvered");
+      redirectVolverEditar.addEventListener("click", () => {
+        showPanel("panel2");
+        const botondesb = document.getElementById("botondesbloquear");
+        const boton = document.getElementById("botoneditar");
+        botondesb.disabled = false;
+        boton.disabled = true;
+        const entradas2 = document.querySelectorAll(".entrada2");
+        entradas2.forEach((entrada) => {
+          entrada.disabled = true;
+        });
+        document.getElementById("editarfinca").reset();
+      });
+
+      /////registro
+      document
+        .getElementById("registrofinca")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const id_lote = document.getElementById("id_finca").value;
+          const nombre_lote = document.getElementById("nombre_lote").value;
+          const cantidadCafe = document.getElementById("cantidadCafe").value;
+          const tamanio_finca = document.getElementById("tamanio_finca").value;
+          const estado_insumo = document.getElementById("estado_insumo").value;
+          const id_mantenimiento =
+            document.getElementById("id_mantenimiento").value;
+          try {
+            const response = await fetch(
+              "/api/productoslote",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  id_lote: id_lote,
+                  nombre_lote: nombre_lote,
+                  cantidadCafe: cantidadCafe,
+                  tamanio_finca: tamanio_finca,
+                  estado_insumo: estado_insumo,
+                  id_mantenimiento: id_mantenimiento,
+                }),
+              }
+            );
+
+            const data = await response.json();
+
+            if (response.ok) {
+              const resultadoDiv = document.getElementById("resultado");
+              resultadoDiv.innerHTML = `
+          <p id="tituloDatos"><strong>Datos guardados</strong></p>
+          <p><strong>Id lote:</strong>${data.data.id_finca}</p>
+          <p><strong>Nombre lote:</strong>${data.data.nombre_lote_finca}</p>
+          <p><strong>Cantidad:</strong>${data.data.cantidadCafe_finca}</p>
+          <p><strong>Área:</strong>${data.data.tamanio_finca}</p>
+          <p><strong>Estado:</strong>${data.data.altitud_finca}</p>
+          <p><strong>Mantenimiento:</strong>${data.data.id_mantenimiento}</p>
+        `;
+              alert("Datos guardados con éxito");
+            } else {
+              alert(data.message);
+            }
+          } catch (error) {
+            alert("Hubo un error al registrar los datos.");
+          }
+          document.getElementById("registrofinca").reset();
+        });
+
+      ////Eliminar
+      document
+        .getElementById("eliminarfinca")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const id_finca = document.getElementById("documento_eliminar").value;
+          try {
+            const response = await fetch(
+              `/api/productoslote/${id_finca}`,
+              {
+                method: "DELETE",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            const data = await response.json();
+            if (response.ok) {
+              alert(data.message);
+            } else {
+              alert(data.message || "Hubo un error al eliminar el producto.");
+            }
+          } catch (error) {
+            alert("Hubo un error al eliminar el producto.");
+          }
+          document.getElementById("eliminarfinca").reset();
+        });
+
+      ////Mostrar personas
+      fetch("/api/productoslote")
+        .then((response) => response.json())
+        .then((productos) => {
+          const tablaBody = document
+            .getElementById("mostrarfincas")
+            .getElementsByTagName("tbody")[0];
+
+          productos.forEach((finca) => {
+            const fila = document.createElement("tr");
+
+            const id_finca = document.createElement("td");
+            id_finca.textContent = finca.id_finca;
+            fila.appendChild(id_finca);
+
+            const nombre_lote_finca = document.createElement("td");
+            nombre_lote_finca.textContent = finca.nombre_lote_finca;
+            fila.appendChild(nombre_lote_finca);
+
+            const cantidadCafe_finca = document.createElement("td");
+            cantidadCafe_finca.textContent = finca.cantidadCafe_finca;
+            fila.appendChild(cantidadCafe_finca);
+
+            const tamanio_finca = document.createElement("td");
+            tamanio_finca.textContent = finca.tamanio_finca;
+            fila.appendChild(tamanio_finca);
+
+            const altitud_finca = document.createElement("td");
+            altitud_finca.textContent = finca.altitud_finca;
+            fila.appendChild(altitud_finca);
+
+            const id_mantenimiento = document.createElement("td");
+            id_mantenimiento.textContent = finca.id_mantenimiento;
+            fila.appendChild(id_mantenimiento);
+
+            tablaBody.appendChild(fila);
+          });
+        })
+        .catch((error) => {
+          console.error("Hubo un error al obtener los datos:", error);
+        });
+
+      ///Servidor
+      function obtenerPersonas() {
+        fetch("/api/productoslote")
+          .then((response) => response.json())
+          .then((productos) => {
+            actualizarFincas(productos);
+          })
+          .catch((error) =>
+            console.error("Error al obtener productos:", error)
+          );
+      }
+      setInterval(obtenerPersonas, 5000);
+
+      ///actualizarPersonas
+      function actualizarFincas(productos) {
+        const tablaBody = document
+          .getElementById("mostrarfincas")
+          .getElementsByTagName("tbody")[0];
+        tablaBody.innerHTML = "";
+        productos.forEach((finca) => {
+          const fila = document.createElement("tr");
+
+          const id_finca = document.createElement("td");
+          id_finca.textContent = finca.id_finca;
+          fila.appendChild(id_finca);
+
+          const nombre_lote_finca = document.createElement("td");
+          nombre_lote_finca.textContent = finca.nombre_lote_finca;
+          fila.appendChild(nombre_lote_finca);
+
+          const cantidadCafe_finca = document.createElement("td");
+          cantidadCafe_finca.textContent = finca.cantidadCafe_finca;
+          fila.appendChild(cantidadCafe_finca);
+
+          const tamanio_finca = document.createElement("td");
+          tamanio_finca.textContent = finca.tamanio_finca;
+          fila.appendChild(tamanio_finca);
+
+          const altitud_finca = document.createElement("td");
+          altitud_finca.textContent = finca.altitud_finca;
+          fila.appendChild(altitud_finca);
+
+          const id_mantenimiento = document.createElement("td");
+          id_mantenimiento.textContent = finca.id_mantenimiento;
+          fila.appendChild(id_mantenimiento);
+
+          tablaBody.appendChild(fila);
+        });
+      }
+
+      ////Buscar
+      document
+        .getElementById("buscarfinca")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const id_finca = document.getElementById("documento_buscar").value;
+
+          try {
+            const response = await fetch(
+              `/api/productoslote/${id_finca}`,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            const data = await response.json();
+            if (response.ok) {
+              showPanel("panel22");
+              document.getElementById("id_finca2").value = data.data.id_finca;
+              document.getElementById("nombre_lote_finca2").value = data.data.nombre_lote_finca;
+              document.getElementById("cantidadCafe_finca2").value = data.data.cantidadCafe_finca;
+              document.getElementById("tamanio_finca2").value = data.data.tamanio_finca;
+              document.getElementById("altitud_finca2").value = data.data.altitud_finca;
+              document.getElementById("id_mantenimiento2").value =  data.data.id_mantenimiento;
+            } else {
+              alert(data.message || "No se pudieron cargar los datos.");
+            }
+          } catch (error) {
+            alert("Hubo un error al cargar los datos.");
+          }
+          document.getElementById("buscarfinca").reset();
+        });
+
+      /////editar
+      const redirecteditar = document.getElementById("botondesbloquear");
+      redirecteditar.addEventListener("click", () => {
+        const botondesb = document.getElementById("botondesbloquear");
+        const entradas = document.querySelectorAll(".entrada2");
+        const boton = document.getElementById("botoneditar");
+        boton.disabled = false;
+        botondesb.disabled = true;
+        entradas.forEach((entradas) => {
+          if (entradas.id !== "id_finca2") {
+            entradas.disabled = false;
+          }
+        });
+      });
+
+      document
+        .getElementById("editarfinca")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const botondesb = document.getElementById("botondesbloquear");
+          const boton = document.getElementById("botoneditar");
+          botondesb.disabled = false;
+          boton.disabled = true;
+        
+          const id_finca = document.getElementById("id_finca2").value;
+          const nombre_lote_finca = document.getElementById("nombre_lote_finca2").value;
+          const cantidadCafe_finca = document.getElementById("cantidadCafe_finca2").value;
+          const tamanio_finca = document.getElementById("tamanio_finca2").value;
+          const altitud_finca = document.getElementById("altitud_finca2").value;
+          const id_mantenimiento =document.getElementById("id_mantenimiento2").value;
+          try {
+            const response = await fetch(
+              `/api/productoslote/${id_finca}`,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  id_finca,
+                  nombre_lote_finca,
+                  cantidadCafe_finca,
+                  tamanio_finca,
+                  altitud_finca,
+                  id_mantenimiento,
+                }),
+              }
+            );
+            const data = await response.json();
+            console.log(data)
+            if (response.ok) {
+              alert("Datos actualizados con éxito");
+              const entradas2 = document.querySelectorAll(".entrada2");
+              entradas2.forEach((entrada) => {
+                entrada.disabled = true;
+              });
+            } else {
+              alert(data.message || "Hubo un error al actualizar los datos.");
+            }
+          } catch (error) {
+            alert("Hubo un error al guardar los datos.");
+          }
+          showPanel("panel2");
+          document.getElementById("editarfinca").reset();
+        });
+    </script>
+      <script src="{% static 'js/app-ui.js' %}" defer></script>
+</body>
+</html>

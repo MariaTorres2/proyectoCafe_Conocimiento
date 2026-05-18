@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/theme.css' %}" rel="stylesheet">
+<link href="{% static 'css/admin.css' %}?v=bp2" rel="stylesheet">
+<link href="{% static 'css/persona.css' %}" rel="stylesheet">
+<link href="{% static 'css/app-shell.css' %}?v=bp2" rel="stylesheet" />
+    <title>Metodo_aplicacion</title>
+    
+</head>
+<body>
+    <div class="contenedor_padre">
+        <div class="boton_contenedor">
+            <div class="letras" id="vista_title">METODO APLICACION</div>
+            <div id="ordena_boton">
+            <div class="letras" id="letra_gestion">Gestionar</div>
+            <button id="botones" onclick="showPanel('panel1')">Agregar</button>
+            <button id="botones" onclick="showPanel('panel2')">Editar</button>
+            <button id="botones" onclick="showPanel('panel3')">Eliminar</button>
+            <button id="botones" onclick="showPanel('panel4')">Ver</button>
+            <button id="botonVolver" >Volver</button>
+            </div>
+        </div>
+        
+        <!-- ///Registro -->
+<div class="panel" id="panel1">
+    <form id="registrometodo">
+      <div>
+        <label class="labels" id="nombre">Nombre Aplicación</label>
+        <input
+          type="text"
+          class="entrada"
+          id="nombre_aplicacion"
+          minlength="4"
+          required
+        />
+      </div>
+      <button type="submit" class="botonsum" id="botonaccion">
+        Guardar
+      </button>
+    </form>
+    <div id="resultado"></div>
+  </div>
+  
+  <!-- ///Eliminar -->
+  <div class="panel" id="panel3">
+    <form id="eliminarmetodo">
+      <label class="labels" id="documento">ID Método de Aplicación</label>
+      <input type="text" class="entrada" id="documento_eliminar" required />
+      <div>
+        <button type="submit" class="botonsum" id="botoneliminar">
+          Eliminar
+        </button>
+      </div>
+    </form>
+  </div>
+  
+  <!-- ///Mostrar -->
+  <div class="panel" id="panel4">
+    <div id="tablaPerson">
+      <table id="mostrarmetodo" border="1">
+        <thead>
+          <tr>
+            <th>ID Método de Aplicación</th>
+            <th>Nombre Aplicación</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+  
+  <!-- ///Buscar -->
+  <div class="panel" id="panel2">
+    <form id="buscarmetodo">
+      <div>
+        <label class="labels" id="documento">ID Método de Aplicación</label>
+        <input type="text" class="entrada" id="documento_buscar" required />
+      </div>
+      <button type="submit" class="botonsum" id="Buscar">Buscar</button>
+    </form>
+  </div>
+  
+  <!-- ///Editar -->
+  <div class="panel" id="panel22">
+    <form id="editarmetodo">
+      <div>
+        <label class="labels" id="documento">ID Método de Aplicación</label>
+        <input type="text" class="entrada2" id="id_metodoaplicacion2" disabled />
+      </div>
+      <div>
+        <label class="labels" id="nombre">Nombre Aplicación</label>
+        <input type="text" class="entrada2" id="nombre_aplicacion2" disabled />
+      </div>
+      <button type="submit" class="botonsum" id="botoneditar" disabled>
+        Actualizar
+      </button>
+    </form>
+    <button class="botonsum" id="botondesbloquear">Editar</button>
+    <button class="botonsum" id="botonvolvered">Volver</button>
+  </div>
+
+
+
+
+    </div>
+    <script>
+         function showPanel(panelId) {
+        const panels = document.querySelectorAll(".panel");
+        panels.forEach((panel) => (panel.style.display = "none"));
+        const selectedPanel = document.getElementById(panelId);
+        selectedPanel.style.display = "flex";
+        const result = document.getElementById("resultado");
+        result.innerText = "";
+      }
+      const redirectVolver = document.getElementById("botonVolver");
+
+redirectVolver.addEventListener("click", () => {
+  window.location.href = "{{ volver_url }}";
+});
+
+      const redirectVolverEditar = document.getElementById("botonvolvered");
+      redirectVolverEditar.addEventListener("click", () => {
+        showPanel("panel2");
+        const botondesb = document.getElementById("botondesbloquear");
+        const boton = document.getElementById("botoneditar");
+        botondesb.disabled = false;
+        boton.disabled = true;
+        const entradas2 = document.querySelectorAll(".entrada2");
+        entradas2.forEach((entrada) => {
+          entrada.disabled = true;
+        });
+        document.getElementById("editarmetodo").reset();
+      });
+
+///// Registro
+document.getElementById("registrometodo").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const nombre_metodoaplicacion = document.getElementById("nombre_aplicacion").value;
+
+  try {
+    const response = await fetch("/api/productosmetodoaplica", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nombre_metodoaplicacion,
+      }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      const resultadoDiv = document.getElementById("resultado");
+      resultadoDiv.innerHTML = `
+        <p id="tituloDatos"><strong>Datos guardados</strong></p>
+        <p><strong>Nombre Aplicación:</strong> ${data.data.nombre_metodoaplicacion}</p>
+      `;
+      alert("Datos guardados con éxito");
+    } else {
+      alert(data.message);
+    }
+  } catch (error) {
+    alert("Hubo un error al registrar los datos.");
+  }
+  document.getElementById("registrometodo").reset();
+});
+
+//// Eliminar
+document.getElementById("eliminarmetodo").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const id_metodoaplicacion = document.getElementById("documento_eliminar").value;
+  try {
+    const response = await fetch(`/api/productosmetodoaplica/${id_metodoaplicacion}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    if (response.ok) {
+      alert(data.message);
+    } else {
+      alert(data.message || "Hubo un error al eliminar el método de aplicación.");
+    }
+  } catch (error) {
+    alert("Hubo un error al eliminar el método de aplicación.");
+  }
+  document.getElementById("eliminarmetodo").reset();
+});
+
+//// Mostrarmetodo
+fetch("/api/productosmetodoaplica")
+  .then((response) => response.json())
+  .then((metodos) => {
+    const tablaBody = document.getElementById("mostrarmetodo").getElementsByTagName("tbody")[0];
+    metodos.forEach((metodo) => {
+      const fila = document.createElement("tr");
+
+      const id_metodoaplicacion = document.createElement("td");
+      id_metodoaplicacion.textContent = metodo.id_metodoaplicacion;
+      fila.appendChild(id_metodoaplicacion);
+
+      const nombre_aplicacion = document.createElement("td");
+      nombre_aplicacion.textContent = metodo.nombre_aplicacion;
+      fila.appendChild(nombre_aplicacion);
+
+      tablaBody.appendChild(fila);
+    });
+  })
+  .catch((error) => {
+    console.error("Hubo un error al obtener los datos:", error);
+  });
+
+function obtenerMetodos() {
+  fetch("/api/productosmetodoaplica")
+    .then((response) => response.json())
+    .then((metodos) => {
+      actualizarMetodos(metodos);
+    })
+    .catch((error) => console.error("Error al obtener métodos:", error));
+}
+setInterval(obtenerMetodos, 3000);
+
+function actualizarMetodos(metodos) {
+  const tablaBody = document.getElementById("mostrarmetodo").getElementsByTagName("tbody")[0];
+  tablaBody.innerHTML = "";
+  metodos.forEach((metodo) => {
+    const fila = document.createElement("tr");
+
+    const id_metodoaplicacion = document.createElement("td");
+    id_metodoaplicacion.textContent = metodo.id_metodoaplicacion;
+    fila.appendChild(id_metodoaplicacion);
+
+    const nombre_metodoaplicacion = document.createElement("td");
+      nombre_metodoaplicacion.textContent = metodo.nombre_metodoaplicacion;
+      fila.appendChild(nombre_metodoaplicacion);
+
+    tablaBody.appendChild(fila);
+  });
+}
+
+//// Buscar
+document.getElementById("buscarmetodo").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const id_metodoaplicacion = document.getElementById("documento_buscar").value;
+
+  try {
+    const response = await fetch(`/api/productosmetodoaplica/${id_metodoaplicacion}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    if (response.ok) {
+      showPanel("panel22");
+      document.getElementById("id_metodoaplicacion2").value = data.data.id_metodoaplicacion;
+      document.getElementById("nombre_aplicacion2").value = data.data.nombre_metodoaplicacion;
+    } else {
+      alert(data.message || "No se pudieron cargar los datos.");
+    }
+  } catch (error) {
+    alert("Hubo un error al cargar los datos.");
+  }
+  document.getElementById("buscarmetodo").reset();
+});
+
+//// Editar
+const redirecteditar = document.getElementById("botondesbloquear");
+      redirecteditar.addEventListener("click", () => {
+        const botondesb = document.getElementById("botondesbloquear");
+        const entradas = document.querySelectorAll(".entrada2");
+        const boton = document.getElementById("botoneditar");
+        boton.disabled = false;
+        botondesb.disabled = true;
+        entradas.forEach((entradas) => {
+          if (entradas.id !== "id_metodoaplicacion2") {
+            entradas.disabled = false;
+          }
+        });
+      });
+
+      document
+  .getElementById("editarmetodo")
+  .addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const botondesb = document.getElementById("botondesbloquear");
+    const boton = document.getElementById("botoneditar");
+    botondesb.disabled = false;
+    boton.disabled = true;
+
+    const id_metodoaplicacion = document.getElementById("id_metodoaplicacion2").value;
+    const nombre_metodoaplicacion = document.getElementById("nombre_aplicacion2").value;
+
+    try {
+      const response = await fetch(
+        `/api/productosmetodoaplica/${id_metodoaplicacion}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id_metodoaplicacion,
+            nombre_metodoaplicacion,
+          }),
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+      if (response.ok) {
+        alert("Datos actualizados con éxito");
+        const entradas2 = document.querySelectorAll(".entrada2");
+        entradas2.forEach((entrada) => {
+          entrada.disabled = true;
+        });
+      } else {
+        alert(data.message || "Hubo un error al actualizar los datos.");
+      }
+    } catch (error) {
+      alert("Hubo un error al guardar los datos.");
+    }
+    showPanel("panel2");
+    document.getElementById("editarmetodo").reset();
+  });
+
+    </script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/app-ui.js' %}" defer></script>
+</body>
+</html>

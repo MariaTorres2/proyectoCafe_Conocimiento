@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/theme.css' %}" rel="stylesheet">
+<link href="{% static 'css/admin.css' %}?v=bp2" rel="stylesheet">
+<link href="{% static 'css/finanzas.css' %}" rel="stylesheet">
+<link href="{% static 'css/app-shell.css' %}?v=bp2" rel="stylesheet" />
+    <title>Tipo_insumo</title>
+    
+</head>
+<body>
+    <div class="contenedor_padre">
+        <div class="boton_contenedor">
+            <div class="letras" id="vista_title">TIPO INSUMO</div>
+            <div id="ordena_boton">
+            <div class="letras" id="letra_gestion">Gestionar</div>
+            <button id="botones" onclick="showPanel('panel1')">Agregar</button>
+            <button id="botones" onclick="showPanel('panel2')">Editar</button>
+            <button id="botones" onclick="showPanel('panel3')">Eliminar</button>
+            <button id="botones" onclick="showPanel('panel4')">Ver</button>
+            <button id="botonVolver" >Volver</button>
+            </div>
+        </div>
+
+        <!-- ///Registro -->
+<div class="panel" id="panel1">
+    <form id="registroUnidad">
+      <div>
+        <label class="labels" id="id">Id tipo insumo</label>
+        <input
+          type="text"
+          class="entrada"
+          id="id_tipoinsumo"
+          maxlength="45"
+          required
+        />
+      </div>
+        <div>
+            <label class="labels">Nombre de Tipo de Insumo</label>
+            <input class="entrada" type="text" id="nombre_tipo" required />
+        </div>
+        <button type="submit" class="botonsum" id="botonaccion">Guardar</button>
+    </form>
+    <div id="resultado"></div>
+</div>
+  <!-- ///Eliminar -->
+<div class="panel" id="panel3">
+  <form id="eliminarTipoInsumo">
+    <label class="labels" id="documento">ID Tipo de Insumo</label>
+    <input type="text" class="entrada" id="id_eliminar" required />
+    <div>
+      <button type="submit" class="botonsum" id="botonEliminar">
+        Eliminar
+      </button>
+    </div>
+  </form>
+</div>
+
+ <!-- Mostrar -->
+ <div class="panel" id="panel4">
+  <div id="tablaPerson">
+    <table id="mostrarTipoinsumos" border="1">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Nombre tipo insumo</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+        
+<!-- ///Buscar -->
+  <div class="panel" id="panel2">
+    <form id="buscarTipoinsumo">
+      <div>
+        <label class="labels" id="id_tipoinsumo">ID tipo insumo</label>
+        <input type="text" class="entrada" id="id_buscar" required />
+      </div>
+      <button type="submit" class="botonsum" id="botonBuscar">Buscar</button>
+    </form>
+  </div>
+  
+  <!-- ///Editar -->
+  <div class="panel" id="panel22">
+    <form id="editartiposinsumo">
+      <div>
+        <label class="labels" id="tipoinsumo">ID tipo insumo</label>
+        <input type="text" class="entrada2" id="id_tipoinsumo2" disabled />
+      </div>
+      <div>
+        <label class="labels" id="nombre">Nombre tipo insumo</label>
+        <input type="text" class="entrada2" id="nombre_tipoinsumo2" disabled />
+      </div>
+      <button type="submit" class="botonsum" id="botoneditar" disabled>
+        Actualizar
+      </button>
+    </form>
+    <button class="botonsum" id="botondesbloquear">Editar</button>
+    <button class="botonsum" id="botonvolvered">Volver</button>
+  </div>
+
+
+
+    </div>
+    <script>
+         function showPanel(panelId) {
+        const panels = document.querySelectorAll(".panel");
+        panels.forEach((panel) => (panel.style.display = "none"));
+        const selectedPanel = document.getElementById(panelId);
+        selectedPanel.style.display = "flex";
+        const result = document.getElementById("resultado");
+        result.innerText = "";
+      }
+      const redirectVolver = document.getElementById("botonVolver");
+
+redirectVolver.addEventListener("click", () => {
+  window.location.href = "{{ volver_url }}";
+});
+
+///registrar
+
+document.getElementById("registroUnidad").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const nombre_tipo = document.getElementById("nombre_tipo").value;
+  const id_tipoinsumo = document.getElementById("id_tipoinsumo").value;
+  try {
+    const response = await fetch("/api/tiposinsumo", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nombre_tipo, id_tipoinsumo }),
+    });
+    const data = await response.json();
+    if (response.ok) {
+      const resultadoDiv = document.getElementById("resultado");
+      resultadoDiv.innerHTML = `
+        <p id="tituloDatos"><strong>Datos guardados</strong></p>
+         <p><strong>Id de Insumo:</strong> ${data.data.id_tipoinsumo}</p>
+        <p><strong>Tipo de Insumo:</strong> ${data.data.nombre_tipo}</p>
+      `;
+      alert("Datos guardados con éxito");
+    } else {
+      alert(data.message);
+    }
+  } catch (error) {
+    alert("Hubo un error al registrar el tipo de insumo.");
+  }
+  document.getElementById("registroUnidad").reset();
+});
+
+//// Buscar 
+document.getElementById("buscarTipoinsumo").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const id_tipoinsumo = document.getElementById("id_buscar").value;
+
+  try {
+    const response = await fetch(`/api/tiposinsumo/${id_tipoinsumo}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    console.log("Respuesta de la API:", data);
+    if (response.ok) {
+      showPanel("panel22");
+      document.getElementById("id_tipoinsumo2").value = data.id_tipoinsumo;
+      document.getElementById("nombre_tipoinsumo2").value = data.nombre_tipo;
+    } else {
+      alert(data.message || "No se pudieron cargar los datos.");
+    }
+  } catch (error) {
+    alert("Hubo un error al cargar los datos.");
+  }
+  document.getElementById("buscarTipoinsumo").reset();
+});
+
+//eliminar
+document.getElementById("eliminarTipoInsumo").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const id_tipoinsumo = document.getElementById("id_eliminar").value;
+
+  try {
+    const response = await fetch(`/api/productostiposinsumo/${id_tipoinsumo}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    if (response.ok) {
+      alert(data.message || "Tipo de insumo eliminado correctamente.");
+    } else {
+      alert(data.message || "Hubo un error al eliminar el tipo de insumo.");
+    }
+  } catch (error) {
+    alert("Hubo un error al eliminar el tipo de insumo.");
+    console.error("Error:", error);
+  }
+  document.getElementById("eliminarTipoInsumo").reset();
+});
+
+//// Editar
+const redirecteditar = document.getElementById("botondesbloquear");
+      redirecteditar.addEventListener("click", () => {
+        const botondesb = document.getElementById("botondesbloquear");
+        const entradas = document.querySelectorAll(".entrada2");
+        const boton = document.getElementById("botoneditar");
+        boton.disabled = false;
+        botondesb.disabled = true;
+        entradas.forEach((entradas) => {
+          if (entradas.id !== "id_tipoinsumo2") {
+            entradas.disabled = false;
+          }
+        });
+      });
+
+ document.getElementById("editartiposinsumo").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const botondesb = document.getElementById("botondesbloquear");
+    const boton = document.getElementById("botoneditar");
+    botondesb.disabled = false;
+    boton.disabled = true;
+
+    const id_tipoinsumo = parseInt(document.getElementById("id_tipoinsumo2").value, 10);
+  const nombre_tipo = document.getElementById("nombre_tipoinsumo2").value;
+
+  try {
+    const response = await fetch(
+      `/api/tiposinsumo/${id_tipoinsumo}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id_tipoinsumo,
+          nombre_tipo,
+        }),
+      }
+    );
+    const data = await response.json();
+    if (response.ok) {
+        alert("Datos actualizados con éxito");
+        showPanel("panel2");
+        const entradas2 = document.querySelectorAll(".entrada2");
+        entradas2.forEach((entrada) => {
+          entrada.disabled = true;
+        });
+    } else {
+      alert(data.message || "Hubo un error al actualizar los datos.");
+    }
+  } catch (error) {
+    alert("Hubo un error al guardar los datos.");
+  }
+  showPanel("panel2");
+  document.getElementById("editartiposinsumo").reset();
+});
+
+
+function obtenerTiposInsumo() {
+  fetch("/api/tiposinsumo")
+    .then((response) => response.json())
+    .then((tiposInsumo) => {
+      actualizarTiposInsumo(tiposInsumo);
+    })
+    .catch((error) => console.error("Error al obtener tipos de insumo:", error));
+}
+
+function actualizarTiposInsumo(tiposInsumo) {
+  const tablaBody = document.getElementById("mostrarTipoinsumos").getElementsByTagName("tbody")[0];
+  tablaBody.innerHTML = ""; 
+  tiposInsumo.forEach((tipoInsumo) => {
+    const fila = document.createElement("tr");
+    
+    const idTipoInsumo = document.createElement("td");
+    idTipoInsumo.textContent = tipoInsumo.id_tipoinsumo;
+    fila.appendChild(idTipoInsumo);
+
+    const nombreTipoInsumo = document.createElement("td");
+    nombreTipoInsumo.textContent = tipoInsumo.nombre_tipo;
+    fila.appendChild(nombreTipoInsumo);
+    tablaBody.appendChild(fila);
+  });
+}
+
+setInterval(obtenerTiposInsumo, 3000);
+
+obtenerTiposInsumo();
+
+
+    </script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/app-ui.js' %}" defer></script>
+</body>
+</html>

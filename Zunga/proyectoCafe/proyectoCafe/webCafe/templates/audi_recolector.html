@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/theme.css' %}" rel="stylesheet">
+  <link href="{% static 'css/admin.css' %}?v=bp2" rel="stylesheet">
+  <link href="{% static 'css/persona.css' %}" rel="stylesheet">
+<link href="{% static 'css/app-shell.css' %}?v=bp2" rel="stylesheet" />
+  <title>Auditoría recolectores</title>
+</head>
+<body>
+  <div class="contenedor_padre">
+    <div class="boton_contenedor">
+      <div class="letras" id="vista_title">Auditoría — Recolectores</div>
+      <div id="ordena_boton">
+        <button type="button" class="botonsum" id="botonVolver">Volver</button>
+      </div>
+    </div>
+    <div class="panel app-panel-block">
+      <p class="labels">Listado desde API (Postgres). Solo lectura.</p>
+      <table id="tablaRecolectores" border="1">
+        <thead>
+          <tr>
+            <th>ID recolector</th>
+            <th>Fecha inicio</th>
+            <th>Fecha fin</th>
+            <th>Estado</th>
+            <th>Días trabajados</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+    document.getElementById("botonVolver").addEventListener("click", () => {
+      window.location.href = "/vista_admin/";
+    });
+    fetch("/get_todos/recolector/")
+      .then((r) => r.json())
+      .then((rows) => {
+        const tb = document.querySelector("#tablaRecolectores tbody");
+        if (!Array.isArray(rows)) {
+          console.warn("Sin datos o error:", rows);
+          return;
+        }
+        rows.forEach((rec) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${rec.id_recolector ?? ""}</td>
+            <td>${rec.fechainicio_recolector ?? ""}</td>
+            <td>${rec.fechafin_recolector ?? ""}</td>
+            <td>${rec.estado_recolector === true ? "Activo" : rec.estado_recolector === false ? "Inactivo" : ""}</td>
+            <td>${rec.diastrabajados_recolector ?? ""}</td>`;
+          tb.appendChild(tr);
+        });
+      })
+      .catch(() => {});
+  </script>
+    <script src="{% static 'js/app-ui.js' %}" defer></script>
+</body>
+</html>

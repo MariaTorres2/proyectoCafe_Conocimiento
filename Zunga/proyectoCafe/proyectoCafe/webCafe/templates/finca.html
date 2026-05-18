@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+   {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/theme.css' %}" rel="stylesheet">
+<link href="{% static 'css/admin.css' %}?v=bp2" rel="stylesheet">
+<link href="{% static 'css/persona.css' %}" rel="stylesheet">
+<link href="{% static 'css/app-shell.css' %}?v=bp2" rel="stylesheet" />
+    <title>Finca</title>
+  </head>
+  <body>
+    <div class="contenedor_padre">
+      <div class="boton_contenedor">
+        <div class="letras" id="vista_title">FINCA</div>
+        <div id="ordena_boton">
+          <div class="letras" id="letra_gestion">Gestionar</div>
+          <button id="botones" onclick="showPanel('panel1')">Agregar</button>
+          <button id="botones" onclick="showPanel('panel2')">Editar</button>
+          <button id="botones" onclick="showPanel('panel3')">Eliminar</button>
+          <button id="botones" onclick="showPanel('panel4')">Ver</button>
+          <button id="botonVolver">Volver</button>
+        </div>
+      </div>
+
+      <!-- ///Registro -->
+      <div class="panel" id="panel1">
+        <form id="registrofinca">
+          <div>
+            <label class="labels" id="nombre">Nombre finca</label>
+            <input
+              type="text"
+              class="entrada"
+              id="nombre_finca"
+              minlength="4"
+              required
+            />
+          </div>
+          <div>
+            <label class="labels" id="direccion">Direccion</label>
+            <input
+              type="text"
+              class="entrada"
+              id="direccion_finca"
+              minlength="4"
+              required
+            />
+          </div>
+          <div>
+            <label class="labels" id="area">Area</label>
+            <input type="text" class="entrada" id="area_finca" required />
+          </div>
+          <div>
+            <label class="labels" id="altitud">Altitud</label>
+            <input type="text" class="entrada" id="altitud_finca" />
+          </div>
+          <div>
+            <label class="labels" id="propietario">Id propietario</label>
+            <input
+              type="text"
+              class="entrada"
+              id="id_propietario"
+              minlength="1"
+              required
+            />
+          </div>
+          <button type="submit" class="botonsum" id="botonaccion">
+            Guardar
+          </button>
+        </form>
+        <div id="resultado"></div>
+      </div>
+
+      <!-- ///Eliminar -->
+      <div class="panel" id="panel3">
+        <form id="eliminarfinca">
+          <label class="labels" id="documento">Id finca a eliminar</label>
+          <input type="text" class="entrada" id="documento_eliminar" required />
+          <div>
+            <button type="submit" class="botonsum botonsum--danger" id="botoneliminar">
+              Eliminar Finca
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- ///Mostrar -->
+      <div class="panel" id="panel4">
+        <div id="tablaPerson">
+          <table id="mostrarfincas" border="1">
+            <thead>
+              <tr>
+                <th>Id finca</th>
+                <th>Nombre finca</th>
+                <th>Direccion finca</th>
+                <th>Area finca</th>
+                <th>Altitud finca</th>
+                <th>Id propietario</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ///Buscar -->
+      <div class="panel" id="panel2">
+        <form id="buscarfinca">
+          <div>
+            <label class="labels" id="documento">Id finca</label>
+            <input type="text" class="entrada" id="documento_buscar" required />
+          </div>
+          <button type="submit" class="botonsum" id="Buscar">Buscar</button>
+        </form>
+      </div>
+
+      <!-- ///Editar -->
+      <div class="panel" id="panel22">
+        <form id="editarfinca">
+          <div>
+            <label class="labels" id="documento">Id finca</label>
+            <input type="text" class="entrada2" id="id_finca2" disabled />
+          </div>
+          <div>
+            <label class="labels" id="nombre">Nombre</label>
+            <input type="text" class="entrada2" id="nombre_finca2" disabled />
+          </div>
+          <div>
+            <label class="labels" id="direccion">Direccion</label>
+            <input
+              type="text"
+              class="entrada2"
+              id="direccion_finca2"
+              disabled
+            />
+          </div>
+          <div>
+            <label class="labels" id="area">Area</label>
+            <input type="text" class="entrada2" id="area_finca2" disabled />
+          </div>
+          <div>
+            <label class="labels" id="altitud">Altitud</label>
+            <input type="text" class="entrada2" id="altitud_finca2" disabled />
+          </div>
+          <div>
+            <label class="labels" id="propietario">Propietario</label>
+            <input type="text" class="entrada2" id="id_propietario2" disabled />
+          </div>
+          <button type="submit" class="botonsum" id="botoneditar" disabled>
+            Actualizar
+          </button>
+        </form>
+        <button class="botonsum" id="botondesbloquear">Editar</button>
+        <button class="botonsum" id="botonvolvered">Volver</button>
+      </div>
+    </div>
+    <script>
+      function showPanel(panelId) {
+        const panels = document.querySelectorAll(".panel");
+        panels.forEach((panel) => (panel.style.display = "none"));
+        const selectedPanel = document.getElementById(panelId);
+        selectedPanel.style.display = "flex";
+        const result = document.getElementById("resultado");
+        result.innerText = "";
+      }
+      const redirectVolver = document.getElementById("botonVolver");
+
+redirectVolver.addEventListener("click", () => {
+  window.location.href = "/vista_admin/";
+});
+
+      const redirectVolverEditar = document.getElementById("botonvolvered");
+      redirectVolverEditar.addEventListener("click", () => {
+        showPanel("panel2");
+        const botondesb = document.getElementById("botondesbloquear");
+        const boton = document.getElementById("botoneditar");
+        botondesb.disabled = false;
+        boton.disabled = true;
+        const entradas2 = document.querySelectorAll(".entrada2");
+        entradas2.forEach((entrada) => {
+          entrada.disabled = true;
+        });
+        document.getElementById("editarfinca").reset();
+      });
+
+      /////registro
+      document
+        .getElementById("registrofinca")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const nombre_finca = document.getElementById("nombre_finca").value;
+          const direccion_finca =
+            document.getElementById("direccion_finca").value;
+          const area_finca = document.getElementById("area_finca").value;
+
+          const altitud_finca = document.getElementById("altitud_finca").value;
+          const id_propietario =
+            document.getElementById("id_propietario").value;
+          try {
+            const response = await fetch(
+              "/api/productosfinca",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  nombre_finca,
+                  direccion_finca,
+                  area_finca,
+                  altitud_finca,
+                  id_propietario,
+                }),
+              }
+            );
+
+            const data = await response.json();
+
+            if (response.ok) {
+              const resultadoDiv = document.getElementById("resultado");
+              resultadoDiv.innerHTML = `
+          <p id="tituloDatos"><strong>Datos guardados</strong></p>
+          <p><strong>Nombre finca:</strong>${data.data.nombre_finca}</p>
+          <p><strong>Direccion:</strong>${data.data.direccion_finca}</p>
+          <p><strong>Area:</strong>${data.data.area_finca}</p>
+          <p><strong>Altitud:</strong>${data.data.altitud_finca}</p>
+          <p><strong>Propietario:</strong>${data.data.id_propietario}</p>
+        `;
+              alert("Datos guardados con éxito");
+            } else {
+              alert(data.message);
+            }
+          } catch (error) {
+            alert("Hubo un error al registrar los datos.");
+          }
+          document.getElementById("registrofinca").reset();
+        });
+
+      ////Eliminar
+      document
+        .getElementById("eliminarfinca")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const id_finca = document.getElementById("documento_eliminar").value;
+          try {
+            const response = await fetch(
+              `/api/productosfinca/${id_finca}`,
+              {
+                method: "DELETE",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            const data = await response.json();
+            if (response.ok) {
+              alert(data.message);
+            } else {
+              alert(data.message || "Hubo un error al eliminar el producto.");
+            }
+          } catch (error) {
+            alert("Hubo un error al eliminar el producto.");
+          }
+          document.getElementById("eliminarfinca").reset();
+        });
+
+      ////Mostrar personas
+      fetch("/api/productosfinca")
+        .then((response) => response.json())
+        .then((productos) => {
+          const tablaBody = document
+            .getElementById("mostrarfincas")
+            .getElementsByTagName("tbody")[0];
+
+          productos.forEach((finca) => {
+            const fila = document.createElement("tr");
+
+            const id_finca = document.createElement("td");
+            id_finca.textContent = finca.id_finca;
+            fila.appendChild(id_finca);
+
+            const nombre_finca = document.createElement("td");
+            nombre_finca.textContent = finca.nombre_finca;
+            fila.appendChild(nombre_finca);
+
+            const direccion_finca = document.createElement("td");
+            direccion_finca.textContent = finca.direccion_finca;
+            fila.appendChild(direccion_finca);
+
+            const area_finca = document.createElement("td");
+            area_finca.textContent = finca.area_finca;
+            fila.appendChild(area_finca);
+
+            const altitud_finca = document.createElement("td");
+            altitud_finca.textContent = finca.altitud_finca;
+            fila.appendChild(altitud_finca);
+
+            const id_propietario = document.createElement("td");
+            id_propietario.textContent = finca.id_propietario;
+            fila.appendChild(id_propietario);
+
+            tablaBody.appendChild(fila);
+          });
+        })
+        .catch((error) => {
+          console.error("Hubo un error al obtener los datos:", error);
+        });
+
+      ///Servidor
+      function obtenerPersonas() {
+        fetch("/api/productosfinca")
+          .then((response) => response.json())
+          .then((productos) => {
+            actualizarFincas(productos);
+          })
+          .catch((error) =>
+            console.error("Error al obtener productos:", error)
+          );
+      }
+      setInterval(obtenerPersonas, 5000);
+
+      ///actualizarPersonas
+      function actualizarFincas(productos) {
+        const tablaBody = document
+          .getElementById("mostrarfincas")
+          .getElementsByTagName("tbody")[0];
+        tablaBody.innerHTML = "";
+        productos.forEach((finca) => {
+          const fila = document.createElement("tr");
+
+          const id_finca = document.createElement("td");
+          id_finca.textContent = finca.id_finca;
+          fila.appendChild(id_finca);
+
+          const nombre_finca = document.createElement("td");
+          nombre_finca.textContent = finca.nombre_finca;
+          fila.appendChild(nombre_finca);
+
+          const direccion_finca = document.createElement("td");
+          direccion_finca.textContent = finca.direccion_finca;
+          fila.appendChild(direccion_finca);
+
+          const area_finca = document.createElement("td");
+          area_finca.textContent = finca.area_finca;
+          fila.appendChild(area_finca);
+
+          const altitud_finca = document.createElement("td");
+          altitud_finca.textContent = finca.altitud_finca;
+          fila.appendChild(altitud_finca);
+
+          const id_propietario = document.createElement("td");
+          id_propietario.textContent = finca.id_propietario;
+          fila.appendChild(id_propietario);
+
+          tablaBody.appendChild(fila);
+        });
+      }
+
+      ////Buscar
+      document
+        .getElementById("buscarfinca")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const id_finca = document.getElementById("documento_buscar").value;
+
+          try {
+            const response = await fetch(
+              `/api/productosfinca/${id_finca}`,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            const data = await response.json();
+            if (response.ok) {
+              showPanel("panel22");
+              document.getElementById("id_finca2").value = data.data.id_finca;
+              document.getElementById("nombre_finca2").value = data.data.nombre_finca;
+              document.getElementById("direccion_finca2").value = data.data.direccion_finca;
+              document.getElementById("area_finca2").value = data.data.area_finca;
+              document.getElementById("altitud_finca2").value = data.data.altitud_finca;
+              document.getElementById("id_propietario2").value =  data.data.id_propietario;
+            } else {
+              alert(data.message || "No se pudieron cargar los datos.");
+            }
+          } catch (error) {
+            alert("Hubo un error al cargar los datos.");
+          }
+          document.getElementById("buscarfinca").reset();
+        });
+
+      /////editar
+      const redirecteditar = document.getElementById("botondesbloquear");
+      redirecteditar.addEventListener("click", () => {
+        const botondesb = document.getElementById("botondesbloquear");
+        const entradas = document.querySelectorAll(".entrada2");
+        const boton = document.getElementById("botoneditar");
+        boton.disabled = false;
+        botondesb.disabled = true;
+        entradas.forEach((entrada) => {
+          // BLOQUEAR ID Finca e ID Propietario
+          if (entrada.id !== "id_finca2" && entrada.id !== "id_propietario2") {
+            entrada.disabled = false;
+          }
+        });
+      });
+
+      document
+        .getElementById("editarfinca")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const botondesb = document.getElementById("botondesbloquear");
+          const boton = document.getElementById("botoneditar");
+          botondesb.disabled = false;
+          boton.disabled = true;
+        
+          const id_finca = document.getElementById("id_finca2").value;
+          const nombre_finca = document.getElementById("nombre_finca2").value;
+          const direccion_finca = document.getElementById("direccion_finca2").value;
+          const area_finca = document.getElementById("area_finca2").value;
+          const altitud_finca = document.getElementById("altitud_finca2").value;
+          const id_propietario =document.getElementById("id_propietario2").value;
+          try {
+            const response = await fetch(
+              `/api/productosfinca/${id_finca}`,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  id_finca,
+                  nombre_finca,
+                  direccion_finca,
+                  area_finca,
+                  altitud_finca,
+                  id_propietario,
+                }),
+              }
+            );
+            const data = await response.json();
+            console.log(data)
+            if (response.ok) {
+              alert("Datos actualizados con éxito");
+              const entradas2 = document.querySelectorAll(".entrada2");
+              entradas2.forEach((entrada) => {
+                entrada.disabled = true;
+              });
+            } else {
+              alert(data.message || "Hubo un error al actualizar los datos.");
+            }
+          } catch (error) {
+            alert("Hubo un error al guardar los datos.");
+          }
+          showPanel("panel2");
+          document.getElementById("editarfinca").reset();
+        });
+    </script>
+      <script src="{% static 'js/app-ui.js' %}" defer></script>
+</body>
+</html>

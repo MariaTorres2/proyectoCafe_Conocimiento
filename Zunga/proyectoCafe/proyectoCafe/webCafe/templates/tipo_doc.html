@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+   {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/theme.css' %}" rel="stylesheet">
+<link href="{% static 'css/admin.css' %}?v=bp2" rel="stylesheet">
+<link href="{% static 'css/persona.css' %}" rel="stylesheet">
+<link href="{% static 'css/app-shell.css' %}?v=bp2" rel="stylesheet" />
+    <title>Documento</title>
+  </head>
+  <body>
+    <div class="contenedor_padre">
+      <div class="boton_contenedor">
+        <div class="letras" id="vista_title">Tipo de documento</div>
+        <div id="ordena_boton">
+          <div class="letras" id="letra_gestion">Gestionar</div>
+          <button id="botones" onclick="showPanel('panel1')">Agregar</button>
+          <button id="botones" onclick="showPanel('panel2')">Editar</button>
+          <button id="botones" onclick="showPanel('panel3')">Eliminar</button>
+          <button id="botones" onclick="showPanel('panel4')">Ver</button>
+          <button id="botonVolver">Volver</button>
+        </div>
+      </div>
+
+      <!-- ///Registro -->
+      <div class="panel" id="panel1">
+        <form id="registrotipodoc">
+          <div>
+            <label class="labels" id="tipodoc">Tipo de documento</label>
+            <input
+              type="text"
+              class="entrada"
+              id="nombre_tipodoc"
+              maxlength="45"
+              required
+            />
+          </div>
+          <button type="submit" class="botonsum" id="botonaccion">
+            Guardar
+          </button>
+        </form>
+        <div id="resultado"></div>
+      </div>
+
+      <!-- ///Eliminar -->
+      <div class="panel" id="panel3">
+        <form id="eliminartipodoc">
+          <label class="labels" id="documento">Id tipo de documento</label>
+          <input type="text" class="entrada" id="id_eliminar" required />
+          <div>
+            <button type="submit" class="botonsum" id="botoneliminar">
+              Eliminar
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- ///Mostrar -->
+      <div class="panel" id="panel4">
+        <div id="tablaPerson">
+          <table id="mostrarIddoc" border="1">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Tipo de documento</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ///Buscar -->
+      <div class="panel" id="panel2">
+        <form id="buscartipodoc">
+          <div>
+            <label class="labels" id="tipodoc">Id tipo de documento</label>
+            <input type="text" class="entrada" id="documento_buscar" required />
+          </div>
+          <button type="submit" class="botonsum" id="Buscar">Buscar</button>
+        </form>
+      </div>
+
+      <!-- ///Editar -->
+      <div class="panel" id="panel22">
+        <form id="editartipodoc">
+          <div>
+            <label class="labels" id="documento">ID</label>
+            <input type="text" class="entrada2" id="id_tipodoc2" disabled />
+          </div>
+          <div>
+            <label class="labels" id="nombre">Tipo de documento</label>
+            <input type="text" class="entrada2" id="nombre_tipodoc2" disabled />
+          </div>
+          <button type="submit" class="botonsum" id="botoneditar" disabled>
+            Actualizar
+          </button>
+        </form>
+        <div>
+          <button class="botonsum" id="botondesbloquear">Editar</button>
+          <button class="botonsum" id="botonvolvered">Volver</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      function showPanel(panelId) {
+        const panels = document.querySelectorAll(".panel");
+        panels.forEach((panel) => (panel.style.display = "none"));
+        const selectedPanel = document.getElementById(panelId);
+        selectedPanel.style.display = "flex";
+        const result = document.getElementById("resultado");
+        result.innerText = "";
+      }
+      const redirectVolver = document.getElementById("botonVolver");
+
+redirectVolver.addEventListener("click", () => {
+  window.location.href = "/vista_admin/";
+});
+
+      const redirectVolverEditar = document.getElementById("botonvolvered");
+      redirectVolverEditar.addEventListener("click", () => {
+        showPanel("panel2");
+        const botondesb = document.getElementById("botondesbloquear");
+        const boton = document.getElementById("botoneditar");
+        botondesb.disabled = false;
+        boton.disabled = true;
+        const entradas2 = document.querySelectorAll(".entrada2");
+        entradas2.forEach((entrada) => {
+          entrada.disabled = true;
+        });
+        document.getElementById("editartipodoc").reset();
+      });
+
+      //// registro
+      document
+        .getElementById("registrotipodoc")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const nombre_tipodoc =
+            document.getElementById("nombre_tipodoc").value;
+          try {
+            const response = await fetch(
+              "/api/productosTipodoc",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  nombre_tipodoc,
+                }),
+              }
+            );
+
+            const data = await response.json();
+            if (response.ok) {
+              const resultadoDiv = document.getElementById("resultado");
+              resultadoDiv.innerHTML = `
+          <p id="tituloDatos"><strong>Datos guardados</strong></p>
+          <p><strong>Tipo de documento:</strong>${data.data.nombre_tipodoc}</p>
+        `;
+              alert("Datos guardados con éxito");
+            } else {
+              alert(data.message || "Hubo un error al registrar los datos.");
+            }
+          } catch (error) {
+            alert("Hubo un error al registrar los datos.");
+          }
+          document.getElementById("registrotipodoc").reset();
+        });
+
+      ///eliminar
+      document
+        .getElementById("eliminartipodoc")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const id_tipodoc = document.getElementById("id_eliminar").value;
+
+          try {
+            const response = await fetch(
+              `/api/productosTipodoc/${id_tipodoc}`,
+              {
+                method: "DELETE",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            console.log(id_tipodoc);
+            const data = await response.json();
+            if (response.ok) {
+              alert(data.message);
+            } else {
+              alert(
+                data.message ||
+                  "Hubo un error al eliminar el tipo de documento."
+              );
+            }
+          } catch (error) {
+            alert("Hubo un error al eliminar el tipo de documento.");
+          }
+          document.getElementById("eliminartipodoc").reset();
+        });
+
+      ///Mostrar tipos de documentos
+      fetch("/api/productosTipodoc")
+        .then((response) => response.json())
+        .then((productos) => {
+          const tablaBody = document
+            .getElementById("mostrarIddoc")
+            .getElementsByTagName("tbody")[0];
+
+          productos.forEach((tipo_doc) => {
+            const fila = document.createElement("tr");
+
+            const id = document.createElement("td");
+            id.textContent = tipo_doc.id_tipodoc;
+            fila.appendChild(id);
+
+            const nombre_tipodoc = document.createElement("td");
+            nombre_tipodoc.textContent = tipo_doc.nombre_tipodoc;
+            fila.appendChild(nombre_tipodoc);
+
+            tablaBody.appendChild(fila);
+          });
+        })
+        .catch((error) => {
+          console.error("Hubo un error al obtener los datos:", error);
+        });
+
+      ///Servidor
+      function obtenerPersonas() {
+        fetch("/api/productosTipodoc")
+          .then((response) => response.json())
+          .then((productos) => {
+            actualizarPersonas(productos);
+          })
+          .catch((error) =>
+            console.error("Error al obtener los tipos de documento:", error)
+          );
+      }
+      setInterval(obtenerPersonas, 5000);
+
+      ///actualizarPersonas
+      function actualizarPersonas(productos) {
+        const tablaBody = document
+          .getElementById("mostrarIddoc")
+          .getElementsByTagName("tbody")[0];
+        tablaBody.innerHTML = "";
+        productos.forEach((tipo_doc) => {
+          const fila = document.createElement("tr");
+          const id = document.createElement("td");
+          id.textContent = tipo_doc.id_tipodoc;
+          fila.appendChild(id);
+
+          const nombre_tipodoc = document.createElement("td");
+          nombre_tipodoc.textContent = tipo_doc.nombre_tipodoc;
+          fila.appendChild(nombre_tipodoc);
+
+          tablaBody.appendChild(fila);
+        });
+      }
+
+      ////Buscar
+      document
+        .getElementById("buscartipodoc")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const id_tipodoc = document.getElementById("documento_buscar").value;
+
+          try {
+            const response = await fetch(
+              `/api/productosTipodoc/${id_tipodoc}`,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            const data = await response.json();
+            if (response.ok) {
+              showPanel("panel22");
+              document.getElementById("id_tipodoc2").value =
+                data.data.id_tipodoc;
+              document.getElementById("nombre_tipodoc2").value =
+                data.data.nombre_tipodoc;
+            } else {
+              alert(data.message || "No se pudieron cargar los datos.");
+            }
+          } catch (error) {
+            alert("Hubo un error al cargar los datos.");
+          }
+          document.getElementById("buscartipodoc").reset();
+        });
+
+      /////editar
+      const redirecteditar = document.getElementById("botondesbloquear");
+      redirecteditar.addEventListener("click", () => {
+        const botondesb = document.getElementById("botondesbloquear");
+        const entradas = document.querySelectorAll(".entrada2");
+        const boton = document.getElementById("botoneditar");
+        boton.disabled = false;
+        botondesb.disabled = true;
+        entradas.forEach((entradas) => {
+          if (entradas.id !== "id_tipodoc2") {
+            entradas.disabled = false;
+          }
+        });
+      });
+
+      document
+        .getElementById("editartipodoc")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const botondesb = document.getElementById("botondesbloquear");
+          const boton = document.getElementById("botoneditar");
+          botondesb.disabled = false;
+          boton.disabled = true;
+          const id_tipodoc = document.getElementById("id_tipodoc2").value;
+          const nombre_tipodoc =
+            document.getElementById("nombre_tipodoc2").value;
+          try {
+            const response = await fetch(
+              `/api/productosTipodoc/${id_tipodoc}`,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  id_tipodoc,
+                  nombre_tipodoc,
+                }),
+              }
+            );
+
+            const data = await response.json();
+            if (response.ok) {
+              alert("Datos actualizados con éxito");
+              const entradas2 = document.querySelectorAll(".entrada2");
+              entradas2.forEach((entrada) => {
+                entrada.disabled = true;
+              });
+            } else {
+              alert(data.message || "Hubo un error al actualizar los datos.");
+            }
+          } catch (error) {
+            alert("Hubo un error al guardar los datos.");
+          }
+          showPanel("panel2");
+          document.getElementById("editartipodoc").reset();
+        });
+    </script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+      <script src="{% static 'js/app-ui.js' %}" defer></script>
+</body>
+</html>

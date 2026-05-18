@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/theme.css' %}" rel="stylesheet">
+<link href="{% static 'css/admin.css' %}?v=bp2" rel="stylesheet">
+<link href="{% static 'css/finanzas.css' %}" rel="stylesheet">
+<link href="{% static 'css/app-shell.css' %}?v=bp2" rel="stylesheet" />
+    <title>Recolector</title>
+    
+</head>
+<body>
+    <div class="contenedor_padre">
+        <div class="boton_contenedor">
+            <div class="letras" id="vista_title">RECOLECTOR</div>
+            <div id="ordena_boton">
+            <div class="letragestion" id="letra_gestion">Gestionar<img id="cafef" src="https://i.ibb.co/prgscZz/cafef.png" width="50px"></div>
+            <button id="botones" onclick="showPanel('panel1')">Produccion <img class="cafef" src="https://i.ibb.co/ynwJSFB/grano.png" width="30px"></button>
+            <button id="salir">Salir <img class="cafef" src="https://i.ibb.co/ynwJSFB/grano.png" width="30px"></button>
+            </div>
+ 
+
+        </div>
+
+        <div id="panel0" class="panel">
+            <div id="carrusel">
+                <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+                  <div class="carousel-inner">
+                    <div class="carousel-item active">
+                      <img src="{% static 'img/cafe.jpg' %}" class="d-block w-100" id="img" alt="cafe"/>
+                    </div>
+                    <div class="carousel-item">
+                      <img
+                        src="{% static 'img/campo.jpg' %}"
+                        class="d-block w-100"
+                        id="img"
+                        alt="campo-cafe"
+                      />
+                    </div>
+                    <div class="carousel-item">
+                      <img
+                        src="{% static 'img/paisaje.jpg' %}"
+                        class="d-block w-100"
+                        id="img"
+                        alt="paisaje-finca"
+                      />
+                    </div>
+                    <div class="carousel-item">
+                      <img
+                        src="{% static 'img/planta.jpg' %}"
+                        class="d-block w-100"
+                        id="img"
+                        alt="planta-cafe"
+                      />
+                    </div>
+                    <div class="carousel-item">
+                      <img
+                        src="{% static 'img/RECOLECTOR.jpg' %}"
+                        class="d-block w-100"
+                        id="img"
+                        alt="planta-cafe"
+                      />
+                    </div>
+                    <div class="carousel-item">
+                      <img
+                        src="{% static 'img/cafe.jpg' %}"
+                        class="d-block w-100"
+                        id="img"
+                        alt="planta-cafe"
+                      />
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+        
+         
+         <div id="panel1" class="panel">
+        <div class="p-2">
+          <button class="botonsum" id="btnPerfil" type="button">Mi perfil</button>
+        </div>
+        <form id="buscarR" class="d-none">
+          <div>
+            <label class="labels" id="documento">Documento recolector</label>
+            <input type="text" class="entrada" id="documento_buscar" required />
+          </div>
+          <button type="submit" class="botonsum" id="Buscar">Buscar</button>
+        </form>
+      </div>
+      
+         
+          <!-- ///Mostrar -->
+      <div class="panel" id="panel22">
+        <div id="tablaPerson">
+          <table id="mostrarR" border="1">
+            <thead>
+              <tr>
+                <th>Documento Persona</th>
+                <th>Nombre Persona</th>
+                <th>Cantidad Total</th>
+                <th>Fecha inicio de recolector</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+    <script>
+
+        function showPanel(panelId) {
+            const panels = document.querySelectorAll('.panel');
+            panels.forEach(panel => panel.style.display = 'none');
+            const selectedPanel = document.getElementById(panelId);
+            selectedPanel.style.display = 'flex';
+        }
+
+        const redirectSalir = document.getElementById('salir');
+        redirectSalir.addEventListener('click', () => {
+            window.location.href = "/";
+        });
+
+        // Este botón no existe en esta vista; evitar romper el JS
+        const redirectrecolector= document.getElementById('botonrecolector');
+        if (redirectrecolector) {
+            redirectrecolector.addEventListener('click', () => {
+                window.location.href = "/recolector/";
+            });
+        }
+
+document.addEventListener('DOMContentLoaded', function() {
+  const btnPerfil = document.getElementById("btnPerfil");
+  if (btnPerfil) btnPerfil.addEventListener("click", () => window.location.href = "/perfil_recolector/");
+
+  const documento_persona = "{{ fk_persona }}";
+  if (!documento_persona) {
+    alert("No hay persona asociada a este usuario.");
+    return;
+  }
+  (async () => {
+    console.log("Documento Persona enviado:", documento_persona); 
+
+    try {
+      console.log("Solicitud fetch iniciada");
+      const response = await fetch(`/api/recoleccionesvista/${documento_persona}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      console.log("Código de estado de la respuesta:", response.status);
+      console.log(data);
+
+      if (response.ok) {
+        console.log("Datos recibidos:", data);
+        showPanel("panel22"); 
+        actualizarRecolecciones(data.recolecciones);
+      } else {
+        alert(data.message || "No se encontraron recolecciones para el documento proporcionado.");
+      }
+    } catch (error) {
+      alert("Hubo un error al cargar los datos.");
+      console.error("Error:", error);
+    }
+  })();
+});
+
+ function actualizarRecolecciones(recolecciones) {
+   console.log("Datos recibidos:", recolecciones); 
+   if (!Array.isArray(recolecciones)) {
+     recolecciones = [];
+   }
+ const tablaBody = document.getElementById("mostrarR").getElementsByTagName("tbody")[0];
+  tablaBody.innerHTML = ""; 
+
+  recolecciones.forEach((recoleccion) => {
+    const fila = document.createElement("tr");
+
+    const documento_persona = document.createElement("td");
+     documento_persona.textContent = recoleccion.documento_persona;
+   fila.appendChild(documento_persona);
+
+    const nombre_persona = document.createElement("td");
+     nombre_persona.textContent = recoleccion.nombre_persona;     
+     fila.appendChild(nombre_persona);
+
+     const cantidadtotal = document.createElement("td");
+     cantidadtotal.textContent = recoleccion.cantidadtotal;
+    fila.appendChild(cantidadtotal);
+
+    const fechainicio_recolector= document.createElement("td");
+     fechainicio_recolector.textContent = recoleccion.fechainicio_recolector;
+     fila.appendChild(fechainicio_recolector);
+     tablaBody.appendChild(fila);
+   }); }
+
+    </script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/app-ui.js' %}" defer></script>
+</body>
+</html>

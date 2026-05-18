@@ -1,0 +1,3 @@
+django
+requests
+pydantic>=2.4,<3

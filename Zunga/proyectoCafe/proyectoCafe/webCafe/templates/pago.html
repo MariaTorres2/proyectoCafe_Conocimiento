@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/theme.css' %}" rel="stylesheet">
+<link href="{% static 'css/admin.css' %}?v=bp2" rel="stylesheet">
+<link href="{% static 'css/persona.css' %}" rel="stylesheet">
+<link href="{% static 'css/app-shell.css' %}?v=bp2" rel="stylesheet" />
+    <title>Pago</title>
+    
+</head>
+<body>
+    <div class="contenedor_padre">
+        <div class="boton_contenedor">
+            <div class="letras" id="vista_title">Pago</div>
+            <div id="ordena_boton">
+            <div class="letras" id="letra_gestion">Gestionar</div>
+            <button id="botones" onclick="showPanel('panel1')">Agregar</button>
+            <button id="botones" onclick="showPanel('panel2')">Editar</button>
+            <button id="botones" onclick="showPanel('panel3')">Eliminar</button>
+            <button id="botones" onclick="showPanel('panel4')">Ver</button>
+            <button id="botonVolver" >Volver</button>
+            </div>
+        </div>
+        
+<!-- ///Registro -->
+<div class="panel" id="panel1">
+    <form id="registroPago">
+        <div>
+            <label class="labels">Fecha de Pago</label>
+            <input class="entrada" type="date" id="fecha_pago" required />
+        </div>
+        <div>
+            <label class="labels">Precio por Kilo</label>
+            <input class="entrada" type="text" step="0.01" id="preciokilo_pago" required />
+        </div>
+        <div>
+            <label class="labels">ID del Reporte</label>
+            <input class="entrada" type="text" id="fk_idreport" required />
+        </div>
+        <div>
+            <label class="labels">Método de Pago</label>
+            <select class="selector"  id="metodo_pago" name="metodopago" required>\
+                <option value="0">---Seleccione---</option>
+                <option value="1">Efectivo</option>
+                <option value="2">Transferencia</option>
+                <option value="3">Tarjeta</option>
+              </select>
+        </div>
+        <button type="submit" class="botonsum" id="botonaccion">Guardar</button>
+    </form>
+    <div id="resultado"></div>
+</div>
+
+<!-- ///Eliminar -->
+<div class="panel" id="panel3">
+    <form id="eliminarPago">
+        <label class="labels" id="documento">ID Pago</label>
+        <input type="text" class="entrada" id="id_eliminar" required />
+        <div>
+            <button type="submit" class="botonsum" id="botonEliminar">
+                Eliminar
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- ///Mostrar -->
+<div class="panel" id="panel4">
+    <div id="tablaPerson">
+        <table id="mostrarPago" border="1">
+            <thead>
+                <tr>
+                    <th>ID Pago</th>
+                    <th>Fecha de Pago</th>
+                    <th>Precio por Kilo</th>
+                    <th>Estado de Pago</th>
+                    <th>Monto de Pago</th>
+                    <th>ID Reporte Asociado</th>
+                    <th>Método de Pago</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+
+<!-- ///Buscar -->
+<div class="panel" id="panel2">
+    <form id="buscarpago">
+        <div>
+            <label class="labels" id="id_tipoinsumo">ID Pago</label>
+            <input type="text" class="entrada" id="id_buscar" required />
+        </div>
+        <button type="submit" class="botonsum" id="botonBuscar">Buscar</button>
+    </form>
+</div>
+
+<!-- ///Editar -->
+<div class="panel" id="panel22">
+    <form id="editarpago">
+        <div>
+            <label class="labels" id="tipoinsumo">ID Pago</label>
+            <input type="text" class="entrada2" id="id_pago2" disabled />
+        </div>
+        <div>
+            <label class="labels">Fecha de Pago</label>
+            <input type="date" class="entrada2" id="fecha_pago2" disabled />
+        </div>
+        <div>
+            <label class="labels">Precio por Kilo</label>
+            <input type="text" class="entrada2" id="preciokilo_pago2" disabled />
+        </div>
+        <div>
+            <label class="labels">Estado de Pago</label>
+            <input type="text" class="entrada2" id="estado_pago2" disabled />
+        </div>
+        <div>
+            <label class="labels">Monto de Pago</label>
+            <input type="text" class="entrada2" id="monto_pago2" disabled />
+        </div>
+        <div>
+            <label class="labels">ID Reporte Asociado</label>
+            <input type="number" class="entrada2" id="fk_idreport2" disabled />
+        </div>
+        <div>
+            <label class="labels">Método de Pago</label>
+            <select class="selector"  id="metodo_pago2" name="metodopago" disabled>\
+                <option value="" disabled>---Seleccione---</option>
+                <option value="1">Efectivo</option>
+                <option value="2">Transferencia</option>
+                <option value="3">Tarjeta</option>
+              </select>
+        </div>
+        <button type="submit" class="botonsum" id="botoneditar" disabled>
+            Actualizar
+        </button>
+    </form>
+    <button class="botonsum" id="botondesbloquear">Editar</button>
+    <button class="botonsum" id="botonvolvered">Volver</button>
+</div>
+
+
+    </div>
+    <script>
+       function showPanel(panelId) {
+        const panels = document.querySelectorAll(".panel");
+        panels.forEach((panel) => (panel.style.display = "none"));
+        const selectedPanel = document.getElementById(panelId);
+        selectedPanel.style.display = "flex";
+        const result = document.getElementById("resultado");
+        result.innerText = "";
+      }
+      
+      const redirectVolver = document.getElementById("botonVolver");
+
+redirectVolver.addEventListener("click", () => {
+  window.location.href = "{{ volver_url }}";
+});
+
+function safeLocaleDate(v) {
+  if (!v) return "NULL";
+  const d = new Date(v);
+  if (isNaN(d.getTime())) return "NULL";
+  return d.toLocaleDateString();
+}
+
+      const redirectVolverEditar = document.getElementById("botonvolvered");
+      redirectVolverEditar.addEventListener("click", () => {
+        showPanel("panel2");
+        const botondesb = document.getElementById("botondesbloquear");
+        const boton = document.getElementById("botoneditar");
+        const selector= document.getElementById("metodo_pago2");
+        botondesb.disabled = false;
+        boton.disabled = true;
+        selector.disabled= true;
+        const entradas2 = document.querySelectorAll(".entrada2");
+        entradas2.forEach((entrada) => {
+          entrada.disabled = true;
+        });
+        document.getElementById("editarpago").reset();
+      });
+
+
+////registro
+      document.getElementById("registroPago").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const fecha_pago = document.getElementById("fecha_pago").value;
+  const preciokilo_pago = parseFloat(document.getElementById("preciokilo_pago").value);
+  const fk_idreport = (document.getElementById("fk_idreport").value || "").trim();
+  const metodo_pago = parseInt(document.getElementById("metodo_pago").value, 10);
+
+  if (metodo_pago === 0) {
+    alert("Por favor, seleccione un método de pago válido.");
+    return;
+  }
+
+  try {
+    const response = await fetch("/api/pago", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fecha_pago, preciokilo_pago, fk_idreport, metodo_pago }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      const resultadoDiv = document.getElementById("resultado");
+      resultadoDiv.innerHTML = `
+        <p id="tituloDatos"><strong>Datos guardados</strong></p>
+        <p><strong>Fecha de Pago:</strong> ${fecha_pago}</p>
+        <p><strong>Precio por Kilo:</strong> ${preciokilo_pago}</p>
+        <p><strong>ID del Reporte:</strong> ${fk_idreport}</p>
+        <p><strong>Método de Pago:</strong> ${
+          metodo_pago === 1 ? "Efectivo" : metodo_pago === 2 ? "Transferencia" : "Tarjeta"
+        }</p>
+      `;
+      alert("Datos guardados con éxito");
+    } else {
+      alert(data.message);
+    }
+  } catch (error) {
+    console.error("Error al registrar el pago:", error);
+    alert("Hubo un error al registrar el pago.");
+  }
+  document.getElementById("registroPago").reset();
+});
+
+//// eliminar 
+document.getElementById("eliminarPago").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const id_pago = document.getElementById("id_eliminar").value;
+
+  if (!id_pago) { 
+    alert("Debe ingresar un ID de pago para eliminar.");
+    return;
+  }
+
+  try {
+    const response = await fetch(`/api/pago/${id_pago}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+
+    if (response.ok) {
+      alert(data.message);
+    } else {
+      alert(data.message || "Hubo un error al eliminar el pago.");
+    }
+  } catch (error) {
+    alert("Hubo un error al eliminar el pago.");
+  }
+
+  document.getElementById("eliminarPago").reset();
+});
+
+// Mostrar Pagos
+fetch("/api/pago")
+  .then((response) => response.json())
+  .then((pagos) => {
+    const tablaBody = document.getElementById("mostrarPago").getElementsByTagName("tbody")[0];
+    if (!Array.isArray(pagos)) return;
+    pagos.forEach((pago) => {
+      const fila = document.createElement("tr");
+
+      const id_pago = document.createElement("td");
+      id_pago.textContent = pago.id_pago;
+      fila.appendChild(id_pago);
+
+      const fecha_pago = document.createElement("td");
+      fecha_pago.textContent = safeLocaleDate(pago.fecha_pago);
+      fila.appendChild(fecha_pago);
+
+      const preciokilo_pago = document.createElement("td");
+      preciokilo_pago.textContent = pago.preciokilo_pago;
+      fila.appendChild(preciokilo_pago);
+
+      const estado_pago = document.createElement("td");
+      estado_pago.textContent = pago.estado_pago;
+      fila.appendChild(estado_pago);
+
+      const monto_pago = document.createElement("td");
+      monto_pago.textContent = pago.monto_pago !== null ? pago.monto_pago : "N/A";
+      fila.appendChild(monto_pago);
+
+      const fk_idreport = document.createElement("td");
+      fk_idreport.textContent = pago.fk_idreport;
+      fila.appendChild(fk_idreport);
+
+      const metodo_pago = document.createElement("td");
+      metodo_pago.textContent = pago.metodo_pago || "N/A";
+      fila.appendChild(metodo_pago);
+
+      tablaBody.appendChild(fila);
+    });
+  })
+  .catch((error) => {
+    console.error("Hubo un error al obtener los datos:", error);
+  });
+
+
+function obtenerPagos() {
+  fetch("/api/pago")
+    .then((response) => response.json())
+    .then((pagos) => {
+      actualizarPagos(pagos);
+    })
+    .catch((error) => console.error("Error al obtener pagos:", error));
+}
+
+setInterval(obtenerPagos, 3000);
+
+function actualizarPagos(pagos) {
+  const tablaBody = document.getElementById("mostrarPago").getElementsByTagName("tbody")[0];
+  tablaBody.innerHTML = ""; 
+  if (!Array.isArray(pagos)) return;
+
+  pagos.forEach((pago) => {
+    const fila = document.createElement("tr");
+
+    const id_pago = document.createElement("td");
+    id_pago.textContent = pago.id_pago;
+    fila.appendChild(id_pago);
+
+    const fecha_pago = document.createElement("td");
+    fecha_pago.textContent = safeLocaleDate(pago.fecha_pago);
+    fila.appendChild(fecha_pago);
+
+    const preciokilo_pago = document.createElement("td");
+    preciokilo_pago.textContent = pago.preciokilo_pago;
+    fila.appendChild(preciokilo_pago);
+
+    const estado_pago = document.createElement("td");
+    estado_pago.textContent = pago.estado_pago;
+    fila.appendChild(estado_pago);
+
+    const monto_pago = document.createElement("td");
+    monto_pago.textContent = pago.monto_pago !== null ? pago.monto_pago : "N/A";
+    fila.appendChild(monto_pago);
+
+    const fk_idreport = document.createElement("td");
+    fk_idreport.textContent = pago.fk_idreport;
+    fila.appendChild(fk_idreport);
+
+    const metodo_pago = document.createElement("td");
+    metodo_pago.textContent = pago.metodo_pago || "N/A";
+    fila.appendChild(metodo_pago);
+
+    tablaBody.appendChild(fila);
+  });
+}
+
+//// Editar
+const redirecteditar = document.getElementById("botondesbloquear");
+      redirecteditar.addEventListener("click", () => {
+        const botondesb = document.getElementById("botondesbloquear");
+        const entradas = document.querySelectorAll(".entrada2");
+        const boton = document.getElementById("botoneditar");
+        const selector= document.getElementById("metodo_pago2");
+        boton.disabled = false;
+        botondesb.disabled = true;
+        selector.disabled=false;
+        entradas.forEach((entradas) => {
+          if (entradas.id !== "id_pago2"
+            && entradas.id !== "fk_idreport2"
+             && entradas.id !== "estado_pago2"
+             && entradas.id !== "monto_pago2"
+          ) {
+            entradas.disabled = false;
+          }
+        });
+      });
+
+      ////buscar
+      document.getElementById("buscarpago").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const id_pago = document.getElementById("id_buscar").value;
+
+  try {
+    const response = await fetch(`/api/pago/${id_pago}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    console.log(data); // Verifica la estructura de la respuesta aquí.
+    if (response.ok) {
+      showPanel("panel22"); // Asegúrate de que este sea el ID correcto del panel.
+      
+      document.getElementById("id_pago2").value = data.data.id_pago;
+      document.getElementById("fecha_pago2").value = data.data.fecha_pago ? data.data.fecha_pago.split("T")[0] : "";
+      document.getElementById("preciokilo_pago2").value = data.data.preciokilo_pago || "";
+      document.getElementById("estado_pago2").value = data.data.estado_pago || "";
+      document.getElementById("monto_pago2").value = data.data.monto_pago || "";
+      document.getElementById("fk_idreport2").value = data.data.fk_idreport || "";
+      document.getElementById("metodo_pago2").value = data.data.metodo_pago_codigo || "";
+    } else {
+      alert(data.message || "No se pudieron cargar los datos.");
+    }
+  } catch (error) {
+    alert("Hubo un error al cargar los datos.");
+  }
+  document.getElementById("buscarpago").reset();
+});
+
+
+//editar
+
+document.getElementById("editarpago").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const botondesb = document.getElementById("botondesbloquear");
+  const boton = document.getElementById("botoneditar");
+  const selector = document.getElementById("metodo_pago2");
+  botondesb.disabled = false;
+  boton.disabled = true;
+  selector.disabled = false;
+
+  const id_pago = document.getElementById("id_pago2").value;
+  const fecha_pago = document.getElementById("fecha_pago2").value;
+  const preciokilo_pago = parseFloat(document.getElementById("preciokilo_pago2").value) || null;
+  const estado_pago = document.getElementById("estado_pago2").value;
+  const monto_pago = parseFloat(document.getElementById("monto_pago2").value) || null;
+  const metodo_pago = document.getElementById("metodo_pago2").value;
+
+  console.log("Datos a enviar:", { id_pago, fecha_pago, preciokilo_pago, estado_pago, monto_pago, metodo_pago });
+
+  try {
+    const response = await fetch(`/api/pago/${id_pago}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id_pago,
+        fecha_pago,
+        preciokilo_pago,
+        estado_pago,
+        monto_pago,
+        metodo_pago,
+      }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      alert("Datos actualizados con éxito");
+      document.querySelectorAll(".entrada2").forEach((entrada) => {
+        entrada.disabled = true;
+      });
+      selector.disabled = true;
+    } else {
+      console.error("Error en respuesta del servidor:", data);
+      alert(data.message || "Hubo un error al actualizar los datos.");
+    }
+  } catch (error) {
+    console.error("Error al guardar los datos:", error);
+    alert("Hubo un error al guardar los datos.");
+  }
+  
+  showPanel("panel2");
+  document.getElementById("editarpago").reset();
+});
+
+
+
+
+    </script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/app-ui.js' %}" defer></script>
+</body>
+</html>

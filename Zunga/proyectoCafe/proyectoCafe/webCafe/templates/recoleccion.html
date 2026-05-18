@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/theme.css' %}" rel="stylesheet">
+<link href="{% static 'css/admin.css' %}?v=bp2" rel="stylesheet">
+<link href="{% static 'css/persona.css' %}" rel="stylesheet">
+<link href="{% static 'css/app-shell.css' %}?v=bp2" rel="stylesheet" />
+    <title>Recoleccion</title>
+    
+</head>
+<body>
+    <div class="contenedor_padre">
+        <div class="boton_contenedor">
+            <div class="letras" id="vista_title">Recoleccion</div>
+            <div id="ordena_boton">
+            <div class="letras" id="letra_gestion">Gestionar</div>
+            <button id="botones" onclick="showPanel('panel1')">Agregar</button>
+            <button id="botones" onclick="showPanel('panel2')">Editar</button>
+            <button id="botones" onclick="showPanel('panel3')">Eliminar</button>
+            <button id="botones" onclick="showPanel('panel4')">Ver</button>
+            <button id="botonVolver" >Volver</button>
+            </div>
+        </div>
+        
+        <!-- ///Registro -->
+<div class="panel" id="panel1">
+    <form id="registrorecoleccion">
+      <div>
+        <label class="labels" id="fecha">Fecha recoleccion</label>
+        <input
+          type="date"
+          class="entrada"
+          id="fecha_recoleccion"
+          required
+        />
+      </div>
+      <div>
+        <label class="labels" id="recolect">Id recolector</label>
+        <input
+          type="text"
+          class="entrada"
+          id="id_recolector"
+          required
+        />
+      </div>
+      <button type="submit" class="botonsum" id="botonaccion">
+        Guardar
+      </button>
+    </form>
+    <div id="resultado"></div>
+  </div>
+  
+  <!-- ///Eliminar -->
+  <div class="panel" id="panel3">
+    <form id="eliminarrecoleccion">
+      <label class="labels" id="documento">Id recoleccion</label>
+      <input type="text" class="entrada" id="documento_eliminar" required />
+      <div>
+        <button type="submit" class="botonsum" id="botoneliminar">
+          Eliminar
+        </button>
+      </div>
+    </form>
+  </div>
+  
+  <!-- ///Mostrar -->
+  <div class="panel" id="panel4">
+    <div id="tablaPerson">
+      <table id="mostrarrecoleccion" border="1">
+        <thead>
+          <tr>
+            <th>Ide recoleccion</th>
+            <th>Fecha recoleccion</th>
+            <th>Id recolector</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+  
+  <!-- ///Buscar -->
+  <div class="panel" id="panel2">
+    <form id="buscarrecoleccion">
+      <div>
+        <label class="labels" id="documento">Id recoleccion</label>
+        <input type="text" class="entrada" id="documento_buscar" required />
+      </div>
+      <button type="submit" class="botonsum" id="Buscar">Buscar</button>
+    </form>
+  </div>
+  
+  <!-- ///Editar -->
+  <div class="panel" id="panel22">
+    <form id="editarrecoleccion">
+      <div>
+        <label class="labels" id="documento">Id recoleccion</label>
+        <input type="text" class="entrada2" id="id_recoleccion2" disabled />
+      </div>
+      <div>
+        <label class="labels" id="fec">Fecha</label>
+        <input type="date" class="entrada2" id="fecha_recoleccion2" disabled />
+      </div>
+      <div>
+        <label class="labels" id="recole">Id recolector</label>
+        <input type="text" class="entrada2" id="id_recolector2" disabled />
+      </div>
+      <button type="submit" class="botonsum" id="botoneditar" disabled>
+        Actualizar
+      </button>
+    </form>
+    <button class="botonsum" id="botondesbloquear">Editar</button>
+    <button class="botonsum" id="botonvolvered">Volver</button>
+  </div>
+
+
+
+
+    </div>
+    <script>
+         function showPanel(panelId) {
+        const panels = document.querySelectorAll(".panel");
+        panels.forEach((panel) => (panel.style.display = "none"));
+        const selectedPanel = document.getElementById(panelId);
+        selectedPanel.style.display = "flex";
+        const result = document.getElementById("resultado");
+        result.innerText = "";
+      }
+      const redirectVolver = document.getElementById("botonVolver");
+
+redirectVolver.addEventListener("click", () => {
+  window.location.href = "{{ volver_url }}";
+});
+
+      const redirectVolverEditar = document.getElementById("botonvolvered");
+      redirectVolverEditar.addEventListener("click", () => {
+        showPanel("panel2");
+        const botondesb = document.getElementById("botondesbloquear");
+        const boton = document.getElementById("botoneditar");
+        botondesb.disabled = false;
+        boton.disabled = true;
+        const entradas2 = document.querySelectorAll(".entrada2");
+        entradas2.forEach((entrada) => {
+          entrada.disabled = true;
+        });
+        document.getElementById("editarrecoleccion").reset();
+      });
+
+function safeDateYYYYMMDD(v) {
+  if (!v) return "NULL";
+  const d = new Date(v);
+  if (isNaN(d.getTime())) return "NULL";
+  return d.toISOString().split("T")[0];
+}
+
+///// Registro
+document.getElementById("registrorecoleccion").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const fecha_recoleccion = document.getElementById("fecha_recoleccion").value;
+  const id_recolector = document.getElementById("id_recolector").value;
+
+
+  try {
+    const response = await fetch("/api/recoleccion", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fecha_recoleccion,
+        id_recolector,
+      }),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      const resultadoDiv = document.getElementById("resultado");
+      resultadoDiv.innerHTML = `
+        <p id="tituloDatos"><strong>Datos guardados</strong></p>
+        <p><strong>Fecha Recolección:</strong> ${data.data.fecha_recoleccion}</p>
+         <p><strong>Id recolector:</strong> ${data.data.id_recolector}</p>
+      `;
+      alert("Datos guardados con éxito");
+    } else {
+      alert(data.message);
+    }
+  } catch (error) {
+    alert("Hubo un error al registrar los datos.");
+  }
+  document.getElementById("registrorecoleccion").reset();
+});
+
+// Limitar fecha al rango de contrato del recolector (UX)
+async function aplicarRangoFechasRecolector() {
+  const doc = (document.getElementById("id_recolector").value || "").trim();
+  const fechaInput = document.getElementById("fecha_recoleccion");
+  if (!doc || !fechaInput) return;
+  try {
+    const r = await fetch(`/consultar_registro/recolector/${doc}/`);
+    const j = await r.json();
+    const data = (j && (j.data || j)) || {};
+    const min = (data.fechainicio_recolector || "").toString().slice(0, 10);
+    const maxRaw = (data.fechafin_recolector || "").toString().slice(0, 10);
+    const hoy = new Date().toISOString().split("T")[0];
+    const max = maxRaw || hoy;
+    if (min) fechaInput.min = min;
+    if (max) fechaInput.max = max;
+  } catch (e) {
+    // si falla, el backend igual valida
+  }
+}
+
+document.getElementById("id_recolector").addEventListener("blur", aplicarRangoFechasRecolector);
+document.getElementById("id_recolector").addEventListener("change", aplicarRangoFechasRecolector);
+
+
+//// Eliminar
+document.getElementById("eliminarrecoleccion").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const id_recoleccion = document.getElementById("documento_eliminar").value;
+  try {
+    const response = await fetch(`/api/recoleccion/${id_recoleccion}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    if (response.ok) {
+      alert(data.message);
+    } else {
+      alert(data.message || "Hubo un error al eliminar la recolección.");
+    }
+  } catch (error) {
+    alert("Hubo un error al eliminar la recolección.");
+  }
+  document.getElementById("eliminarrecoleccion").reset();
+});
+
+//// Mostrarmetodo
+fetch("/api/recoleccion")
+  .then((response) => response.json())
+  .then((recolecciones) => {
+    const tablaBody = document.getElementById("mostrarrecoleccion").getElementsByTagName("tbody")[0];
+    if (!Array.isArray(recolecciones)) return;
+    recolecciones.forEach((recoleccion) => {
+      const fila = document.createElement("tr");
+
+      const id_recoleccion = document.createElement("td");
+      id_recoleccion.textContent = recoleccion.id_recoleccion;
+      fila.appendChild(id_recoleccion);
+
+      const fecha_recoleccion = document.createElement("td");
+      fecha_recoleccion.textContent = safeDateYYYYMMDD(recoleccion.fecha_recoleccion);
+      fila.appendChild(fecha_recoleccion);
+
+      const id_recolector = document.createElement("td");
+      id_recolector.textContent = recoleccion.id_recolector;
+      fila.appendChild(id_recolector);
+
+
+      tablaBody.appendChild(fila);
+    });
+  })
+  .catch((error) => {
+    console.error("Hubo un error al obtener los datos:", error);
+  });
+
+  function obtenerRecoleccion() {
+  fetch("/api/recoleccion")
+    .then((response) => response.json())
+    .then((recoleccionData) => {
+      actualizarRecoleccion(recoleccionData);
+    })
+    .catch((error) => console.error("Error al obtener datos de recolección:", error));
+}
+
+
+setInterval(obtenerRecoleccion, 3000);
+
+function actualizarRecoleccion(recoleccionData) {
+  const tablaBody = document.getElementById("mostrarrecoleccion").getElementsByTagName("tbody")[0];
+  tablaBody.innerHTML = "";
+  if (!Array.isArray(recoleccionData)) return;
+
+  recoleccionData.forEach((recoleccion) => {
+    const fila = document.createElement("tr");
+
+    const idRecoleccion = document.createElement("td");
+    idRecoleccion.textContent = recoleccion.id_recoleccion;
+    fila.appendChild(idRecoleccion);
+
+    const fechaRecoleccion = document.createElement("td");
+    fechaRecoleccion.textContent = safeDateYYYYMMDD(recoleccion.fecha_recoleccion);
+    fila.appendChild(fechaRecoleccion);
+
+    const idRecolector = document.createElement("td");
+    idRecolector.textContent = recoleccion.id_recolector;
+    fila.appendChild(idRecolector);
+
+
+    tablaBody.appendChild(fila);
+  });
+}
+
+
+
+//// Buscar
+document.getElementById("buscarrecoleccion").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const id_recoleccion = document.getElementById("documento_buscar").value;
+
+  try {
+    const response = await fetch(`/api/recoleccion/${id_recoleccion}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    if (response.ok) {
+      showPanel("panel22");
+      document.getElementById("id_recoleccion2").value = data.data.id_recoleccion;
+      document.getElementById("fecha_recoleccion2").value = safeDateYYYYMMDD(data.data.fecha_recoleccion);
+      document.getElementById("id_recolector2").value=data.data.id_recolector
+
+    } else {
+      alert(data.message || "No se pudieron cargar los datos.");
+    }
+  } catch (error) {
+    alert("Hubo un error al cargar los datos.");
+  }
+  document.getElementById("buscarrecoleccion").reset();
+});
+
+//// Editar
+const redirecteditar = document.getElementById("botondesbloquear");
+redirecteditar.addEventListener("click", () => {
+  const botondesb = document.getElementById("botondesbloquear");
+  const entradas = document.querySelectorAll(".entrada2");
+  const boton = document.getElementById("botoneditar");
+  boton.disabled = false;
+  botondesb.disabled = true;
+  entradas.forEach((entradas) => {
+    if (entradas.id !== "id_recoleccion2") {
+      entradas.disabled = false;
+    }
+  });
+});
+
+document.getElementById("editarrecoleccion").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const botondesb = document.getElementById("botondesbloquear");
+  const boton = document.getElementById("botoneditar");
+  botondesb.disabled = false;
+  boton.disabled = true;
+
+  const id_recoleccion = document.getElementById("id_recoleccion2").value;
+  const fecha_recoleccion = document.getElementById("fecha_recoleccion2").value;
+  const id_recolector = document.getElementById("id_recolector2").value;
+ 
+  try {
+    const response = await fetch(
+      `/api/recoleccion/${id_recoleccion}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fecha_recoleccion,
+          id_recolector,
+
+        }),
+      }
+    );
+    const data = await response.json();
+    if (response.ok) {
+      alert("Datos actualizados con éxito");
+      const entradas2 = document.querySelectorAll(".entrada2");
+      entradas2.forEach((entrada) => {
+        entrada.disabled = true;
+      });
+    } else {
+      alert(data.message || "Hubo un error al actualizar los datos.");
+    }
+  } catch (error) {
+    alert("Hubo un error al guardar los datos.");
+  }
+  showPanel("panel2");
+  document.getElementById("editarrecoleccion").reset();
+});
+    </script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/app-ui.js' %}" defer></script>
+</body>
+</html>

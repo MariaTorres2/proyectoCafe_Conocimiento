@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/theme.css' %}" rel="stylesheet">
+<link href="{% static 'css/admin.css' %}?v=bp2" rel="stylesheet">
+<link href="{% static 'css/persona.css' %}" rel="stylesheet">
+<link href="{% static 'css/app-shell.css' %}?v=bp2" rel="stylesheet" />
+    <title>{% if is_recolector %}Mis reportes{% else %}Reporte{% endif %}</title>
+    
+</head>
+<body>
+    <div class="contenedor_padre">
+        <div class="boton_contenedor">
+            <div class="letras" id="vista_title">{% if is_recolector %}Mis reportes{% else %}Reporte{% endif %}</div>
+            <div id="ordena_boton">
+            <div class="letras" id="letra_gestion">Gestionar</div>
+            {% if not is_recolector %}<button id="botones" onclick="showPanel('panel3')">Eliminar</button>{% endif %}
+            <button id="botones" onclick="showPanel('panel4')">Ver</button>
+            <button id="botonVolver" >Volver</button>
+            </div>
+        </div>
+
+        <!-- ///Eliminar -->
+<div class="panel" id="panel3">
+    {% if is_recolector %}
+    <div class="app-alert-danger">No tienes permisos para eliminar reportes.</div>
+    {% else %}
+    <form id="eliminarReporte">
+      <label class="labels" id="reporte">ID Reporte</label>
+      <input type="text" class="entrada" id="id_eliminar" required />
+      <div>
+        <button type="submit" class="botonsum" id="botonEliminar">
+          Eliminar
+        </button>
+      </div>
+    </form>
+    {% endif %}
+  </div>
+  
+  <!-- ///Mostrar -->
+  <div class="panel" id="panel4">
+    {% if is_recolector %}
+    <div class="app-filter-toolbar">
+      <div class="app-filter-toolbar__line">
+        Aquí solo se muestran <b>tus</b> reportes.
+      </div>
+      <div id="contadorReportes" class="app-filter-toolbar__line"></div>
+      <div class="app-filter-row">
+        <div>
+          <label class="labels">Filtrar por fecha</label>
+          <input class="entrada" type="date" id="filtroFechaReporte" />
+        </div>
+        <button class="botonsum" type="button" id="btnLimpiarFiltro">Limpiar</button>
+      </div>
+    </div>
+    {% endif %}
+    <div id="tablaPerson">
+      <table id="mostrarReportes" border="1">
+        <thead>
+          <tr>
+            <th>ID Reporte</th>
+            <th>Estado Reporte</th>
+            <th>Total Recolección Reporte</th>
+            <th>FK ID Recolector</th>
+            <th>Fecha Reporte</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+        
+
+
+
+    </div>
+    <script>
+        function showPanel(panelId) {
+        const panels = document.querySelectorAll(".panel");
+        panels.forEach((panel) => (panel.style.display = "none"));
+        const selectedPanel = document.getElementById(panelId);
+        selectedPanel.style.display = "flex";
+        const result = document.getElementById("resultado");
+        result.innerText = "";
+      }
+      const redirectVolver = document.getElementById("botonVolver");
+
+redirectVolver.addEventListener("click", () => {
+  window.location.href = "{{ volver_url }}";
+});
+
+function safeDateYYYYMMDD(v) {
+  if (!v) return "NULL";
+  const d = new Date(v);
+  if (isNaN(d.getTime())) return "NULL";
+  return d.toISOString().split("T")[0];
+}
+
+      //// Eliminar Reporte
+document.getElementById("eliminarReporte").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const id_reporte = document.getElementById("id_eliminar").value;
+  try {
+    const response = await fetch(`/api/productosreporte/${id_reporte}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    if (response.ok) {
+      alert("Reporte eliminado con éxito");
+    } else {
+      alert(data.message || "Hubo un error al eliminar el reporte.");
+    }
+  } catch (error) {
+    alert("Hubo un error al eliminar el reporte.");
+  }
+  document.getElementById("eliminarReporte").reset();
+});
+
+//// Mostrar Reportes 
+let _reportesCache = [];
+
+function pintarTabla(reportes) {
+  const tablaBody = document.getElementById("mostrarReportes").getElementsByTagName("tbody")[0];
+  tablaBody.innerHTML = "";
+  if (!Array.isArray(reportes)) return;
+  const contador = document.getElementById("contadorReportes");
+  if (contador) contador.textContent = `Mostrando ${reportes.length} reporte(s).`;
+  reportes.forEach((reporte) => {
+    const fila = document.createElement("tr");
+    
+    const id_reporte = document.createElement("td");
+    id_reporte.textContent = reporte.id_reporte;
+    fila.appendChild(id_reporte);
+
+    const estado_reporte = document.createElement("td");
+    estado_reporte.textContent = reporte.estado_reporte ? "Activo" : "Inactivo";
+    fila.appendChild(estado_reporte);
+
+    const totalrecoleccion_reporte = document.createElement("td");
+    totalrecoleccion_reporte.textContent = reporte.totalrecoleccion_reporte || "NULL";
+    fila.appendChild(totalrecoleccion_reporte);
+
+    const fk_idrecolector = document.createElement("td");
+    fk_idrecolector.textContent = reporte.fk_idrecolector || "NULL";
+    fila.appendChild(fk_idrecolector);
+
+    const fecha_reporte = document.createElement("td");
+    fecha_reporte.textContent = safeDateYYYYMMDD(reporte.fecha_reporte);
+    fila.appendChild(fecha_reporte);
+
+    tablaBody.appendChild(fila);
+  });
+}
+
+function aplicarFiltroFecha() {
+  const inp = document.getElementById("filtroFechaReporte");
+  if (!inp) return;
+  const v = (inp.value || "").trim();
+  if (!v) return pintarTabla(_reportesCache);
+  pintarTabla(_reportesCache.filter(r => safeDateYYYYMMDD(r.fecha_reporte) === v));
+}
+
+fetch("/api/productosreporte")
+  .then((response) => response.json())
+  .then((reportes) => {
+    _reportesCache = Array.isArray(reportes) ? reportes : [];
+    pintarTabla(_reportesCache);
+    aplicarFiltroFecha();
+  })
+  .catch((error) => {
+    console.error("Hubo un error al obtener los datos:", error);
+  });
+
+function obtenerReportes() {
+  fetch("/api/productosreporte") 
+    .then((response) => response.json())
+    .then((reportes) => {
+      _reportesCache = Array.isArray(reportes) ? reportes : [];
+      aplicarFiltroFecha();
+    })
+    .catch((error) => console.error("Error al obtener reportes:", error));
+}
+
+setInterval(obtenerReportes, 3000);
+
+document.addEventListener("DOMContentLoaded", () => {
+  const inp = document.getElementById("filtroFechaReporte");
+  const btn = document.getElementById("btnLimpiarFiltro");
+  if (inp) inp.addEventListener("change", aplicarFiltroFecha);
+  if (btn) btn.addEventListener("click", () => {
+    if (inp) inp.value = "";
+    pintarTabla(_reportesCache);
+  });
+});
+    </script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/app-ui.js' %}" defer></script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+  <head>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a1612" />
+    <meta name="description" content="Acceso al sistema de gestión de fincas cafeteras — Suaza, Huila." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="{% static 'css/theme.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/inicio.css' %}?v=10" rel="stylesheet" />
+    <title>Ingreso · Fincas cafeteras</title>
+  </head>
+  <body class="login-page">
+    <div class="contenedor_padre login-shell">
+      <!-- Capa decorativa sobre el carrusel (brillo / malla) -->
+      <div class="login-ambient" aria-hidden="true"></div>
+
+      <section
+        id="carrusel"
+        class="login-hero"
+        aria-roledescription="carrusel"
+        aria-label="Imágenes de la región cafetera"
+        data-carousel-interval="5200"
+      >
+        <div class="login-hero__scrim" aria-hidden="true"></div>
+        <div class="login-hero__grain" aria-hidden="true"></div>
+        <div class="login-hero__bloom" aria-hidden="true"></div>
+        <div class="carousel-inner2" id="loginCarouselTrack">
+          <img src="{% static 'img/cafe.jpg' %}" class="slide" alt="" />
+          <img src="{% static 'img/campo.jpg' %}" class="slide" alt="" />
+          <img src="{% static 'img/paisaje.jpg' %}" class="slide" alt="" />
+          <img src="{% static 'img/cafes.jpeg' %}" class="slide" alt="" />
+          <img src="{% static 'img/planta.jpg' %}" class="slide" alt="" />
+          <img src="{% static 'img/RECOLECTOR.jpg' %}" class="slide" alt="" />
+          <img src="{% static 'img/cafePaquete.jpeg' %}" class="slide" alt="" />
+        </div>
+      </section>
+
+      <main class="login">
+        <div class="login__inner login-dock">
+          <aside class="login-dock__rail" aria-label="Región">
+            <span class="login-dock__rail-mark"></span>
+            <p class="login-dock__rail-text">Suaza</p>
+            <p class="login-dock__rail-sub">Huila</p>
+          </aside>
+          <div class="login-dock__panel">
+            <header class="login-brand">
+              <span class="login-brand__badge">Portal de acceso</span>
+              <span class="login-brand__logo-wrap">
+                <img
+                  class="login-brand__logo"
+                  src="{% static 'img/logo_f.png' %}"
+                  alt="Logo"
+                  width="200"
+                  height="auto"
+                />
+              </span>
+              <h1 class="login-brand__title">Fincas cafeteras</h1>
+              <p class="login-brand__subtitle">Cosecha, equipo y finanzas en una sola plataforma.</p>
+            </header>
+
+            <form class="login-card formulario" id="formulario" method="post" action="">
+              {% csrf_token %}
+              <div class="login-card__head">
+                <h2 class="login-card__title">Entrar</h2>
+                <p class="login-card__hint">Credenciales asignadas por administración</p>
+              </div>
+              <div class="login-field">
+                <label class="login-label" for="username">Usuario</label>
+                <input type="text" id="username" name="username" autocomplete="username" required placeholder="Ej. admin" />
+              </div>
+              <div class="login-field">
+                <label class="login-label" for="password">Contraseña</label>
+                <input type="password" id="password" name="password" autocomplete="current-password" required placeholder="••••••••" />
+              </div>
+              <button id="ingresoBoton" type="submit" class="login-submit">
+                <span>Continuar</span>
+                <svg class="login-submit__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </button>
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="{% static 'js/app-ui.js' %}"></script>
+    <script>
+      (function () {
+        var hero = document.getElementById("carrusel");
+        var inner = document.getElementById("loginCarouselTrack");
+        var slides = inner ? inner.querySelectorAll(".slide") : [];
+        var total = slides.length;
+        if (!inner || !hero || total < 2) return;
+
+        var index = 0;
+        var intervalMs = parseInt(hero.getAttribute("data-carousel-interval") || "5200", 10);
+        if (intervalMs < 2500) intervalMs = 2500;
+        var reduceMotion = false;
+        try {
+          reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        } catch (e) {}
+
+        function applyIndex(i, animate) {
+          index = (i + total) % total;
+          if (animate === false || reduceMotion) {
+            inner.style.transition = "none";
+          } else {
+            inner.style.transition = "transform 0.85s cubic-bezier(0.45, 0, 0.25, 1)";
+          }
+          inner.style.transform = "translateX(-" + index * 100 + "%)";
+        }
+
+        function next() {
+          applyIndex(index + 1, true);
+        }
+
+        applyIndex(0, false);
+        if (!reduceMotion) {
+          setInterval(next, intervalMs);
+        }
+      })();
+    </script>
+  </body>
+</html>

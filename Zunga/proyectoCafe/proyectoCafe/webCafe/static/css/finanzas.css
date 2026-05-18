@@ -1,0 +1,161 @@
+/* Catálogos / vistas con finanzas.css — mismo lenguaje que persona.css */
+
+.labels {
+  display: block;
+  font-family: var(--app-font);
+  font-size: clamp(0.85rem, 1.8vw, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(212, 165, 116, 0.88);
+  margin: 1rem 0 0.4rem;
+}
+
+.entrada,
+.entrada2,
+.selector,
+#id_tipodoc {
+  font-family: var(--app-font);
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  width: 100%;
+  max-width: 420px;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  background: rgba(4, 10, 7, 0.72);
+  color: var(--color-ink);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.entrada:hover,
+.entrada2:hover,
+.selector:hover,
+#id_tipodoc:hover {
+  border-color: rgba(212, 165, 116, 0.35);
+}
+
+.entrada:focus,
+.entrada2:focus,
+.selector:focus,
+#id_tipodoc:focus {
+  outline: none;
+  border-color: var(--color-accent-warm);
+  box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.18);
+}
+
+#botonaccion,
+#botoneliminar,
+#Buscar,
+#botoneditar,
+#botondesbloquea,
+#botonvolvered {
+  margin-top: 0.75rem;
+}
+
+#registrofinca {
+  margin-top: 1.25rem;
+}
+
+#resultado {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  font-size: 1rem;
+  border-top: 1px solid var(--color-border-strong);
+  color: var(--color-ink-muted);
+  animation: app-slide-up 0.4s var(--ease-out);
+}
+
+#tituloDatos {
+  margin-top: 0.5rem;
+}
+
+.botonsum {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  min-height: 44px;
+  padding: 0 1.25rem;
+  margin-top: 0.75rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.25rem;
+  font-family: var(--app-font);
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: var(--radius-pill);
+  border: none;
+  cursor: pointer;
+  color: #0a120e;
+  letter-spacing: 0.03em;
+  background: linear-gradient(135deg, #e8c99a 0%, var(--color-accent-warm) 40%, #b88952 100%);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out),
+    filter var(--duration-fast) var(--ease-out);
+}
+
+.botonsum:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+#panel4 {
+  justify-items: center;
+}
+
+#tablaPerson {
+  width: min(920px, 95%);
+  max-height: min(70vh, 560px);
+  margin: 1.5rem auto 0;
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface-elevated);
+  box-shadow: var(--shadow-md);
+  overflow: auto;
+  animation: app-slide-up 0.45s var(--ease-out) 0.1s both;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 0.65rem 0.5rem;
+  text-align: center;
+  border-bottom: 1px solid var(--color-border);
+}
+
+tr {
+  background-color: rgba(255, 255, 255, 0.04);
+  transition: background var(--duration-fast) var(--ease-out);
+}
+
+tbody tr:hover {
+  background: rgba(212, 165, 116, 0.1);
+}
+
+th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(28, 48, 36, 0.98) 0%, rgba(10, 22, 16, 0.99) 100%);
+  color: var(--color-accent-warm);
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 2px solid var(--color-border-strong);
+}
+
+#mostrarrecolecciones {
+  margin-left: 0;
+}

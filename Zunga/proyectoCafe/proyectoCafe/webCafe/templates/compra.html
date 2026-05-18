@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/theme.css' %}" rel="stylesheet">
+  <link href="{% static 'css/admin.css' %}?v=bp2" rel="stylesheet">
+  <link href="{% static 'css/persona.css' %}" rel="stylesheet">
+<link href="{% static 'css/app-shell.css' %}?v=bp2" rel="stylesheet" />
+  <title>Compra (RDF)</title>
+</head>
+<body>
+  <div class="contenedor_padre">
+    <div class="boton_contenedor">
+      <div class="letras" id="vista_title">Registrar compra</div>
+      <div id="ordena_boton">
+        <button type="button" class="botonsum" onclick="location.href='/vista_admin/'">Volver</button>
+      </div>
+    </div>
+    <form method="post" action="/insert_compra/" class="panel app-panel-narrow">
+      {% csrf_token %}
+      <div><label class="labels">ID compra</label><input class="entrada" name="id_compra" required></div>
+      <div><label class="labels">ID numérico</label><input class="entrada" type="number" name="id_numeric" value="1" required></div>
+      <div><label class="labels">Fecha</label><input class="entrada" type="date" name="fecha" required></div>
+      <div><label class="labels">Cantidad</label><input class="entrada" type="number" step="1" name="cantidad" required></div>
+      <div><label class="labels">Precio</label><input class="entrada" type="number" step="0.01" name="precio" required></div>
+      <div><label class="labels">Estado activo</label>
+        <select class="selector" name="estado">
+          <option value="1">Sí</option>
+          <option value="0">No</option>
+        </select>
+      </div>
+      <div><label class="labels">ID insumo (RDF)</label><input class="entrada" name="id_insumo" required></div>
+      <div><label class="labels">ID finca (RDF)</label><input class="entrada" name="id_finca" required></div>
+      <button type="submit" class="botonsum">Guardar</button>
+    </form>
+    {% if messages %}
+      <ul>{% for m in messages %}<li>{{ m }}</li>{% endfor %}</ul>
+    {% endif %}
+  </div>
+    <script src="{% static 'js/app-ui.js' %}" defer></script>
+</body>
+</html>

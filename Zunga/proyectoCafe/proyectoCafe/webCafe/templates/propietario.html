@@ -1,0 +1,446 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+   {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/theme.css' %}" rel="stylesheet">
+<link href="{% static 'css/admin.css' %}?v=bp2" rel="stylesheet">
+<link href="{% static 'css/persona.css' %}" rel="stylesheet">
+<link href="{% static 'css/app-shell.css' %}?v=bp2" rel="stylesheet" />
+    <title>Propietario</title>
+    
+</head>
+<body>
+    <div class="contenedor_padre">
+        <div class="boton_contenedor">
+            <div class="letras" id="vista_title">Propietario</div>
+            <div id="ordena_boton">
+            <div class="letras" id="letra_gestion">Gestionar</div>
+            <button id="botones" onclick="showPanel('panel2')">Editar</button>
+            <button id="botones" onclick="showPanel('panel3')">Eliminar</button>
+            <button id="botones" onclick="showPanel('panel4')">Ver</button>
+            <button id="botonVolver" >Volver</button>
+            </div>
+        </div>
+
+<!-- ///Registro -->
+<div class="panel" id="panel1">
+    <form id="form_propietario" method="POST">
+      <div>
+        <label class="labels" id="documento"  >Documento</label>
+        <input  type="text"  class="entrada"   id="id_propietario" name="id_propietario"  minlength="8"  required  />
+      </div>
+      <div>
+        <label class="labels" id="nombre">Email</label>
+        <input type="email" class="entrada" id="email_propietario" name="email_propietario" required />
+      </div>
+      <div>
+        <label class="labels">Usuario (login)</label>
+        <input type="text" class="entrada" id="username_propietario" name="username_propietario" required />
+      </div>
+      <div>
+        <label class="labels">Contraseña (login)</label>
+        <input type="password" class="entrada" id="password_propietario" name="password_propietario" required />
+      </div>
+      <button type="submit" class="botonsum" id="botonaccion">
+        Guardar
+      </button>
+    </form>
+    <div id="resultado"></div>
+  </div>
+
+ <!-- ///Eliminar -->
+      <div class="panel" id="panel3">
+        <form id="eliminarpersona">
+          <label class="labels" id="documento">Documento</label>
+          <input type="text" class="entrada" id="documento_eliminar" required />
+          <div>
+            <button type="submit" class="botonsum" id="botoneliminar">
+              Eliminar
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- ///Mostrar -->
+ <div class="panel" id="panel4">
+  <div id="tablaPerson">
+    <table id="mostrarPropietarios" border="1">
+      <thead>
+        <tr>
+          <th>id</th>
+          <th>Documento</th>
+          <th>Email</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+  
+</div>
+
+<!-- ///Buscar -->
+<div class="panel" id="panel2">
+  <form id="buscarpersona">
+    <div>
+      <label class="labels" id="documento">Documento</label>
+      <input type="text" class="entrada" id="documento_buscar" required />
+    </div>
+    <button type="submit" class="botonsum" id="Buscar">Buscar</button>
+  </form>
+
+</div>
+
+<!-- ///Editar -->
+<div class="panel" id="panel22">
+  <form id="editarpersona">
+    {% csrf_token %}
+    <div>
+      <label class="labels" id="documento">Documento</label>
+      <input
+        type="text"
+        class="entrada2"
+        id="documento_persona2" name="documento_persona2"
+        disabled
+      />
+    </div>
+    <div>
+      <label class="labels" id="nombre">Email</label>
+      <input type="email" class="entrada2" id="email_propietario2" name="email_propietario2" disabled/>
+    </div>
+    <div>
+      <label class="labels" id="estado">Estado</label>
+      <select class="selector" id="estado_propietario2" name="estado_propietario2" disabled>
+        <option value="2">---Seleccione---</option>
+        <option value="1">Activo</option>
+        <option value="0">Suspendido</option>
+      </select>
+    </div>
+    <button type="submit" class="botonsum" id="botoneditar" disabled>
+      Actualizar
+    </button>
+  </form>
+<div>
+  <button class="botonsum" id="botondesbloquear">Editar</button>
+  <button class="botonsum" id="botonvolvered">Volver</button>
+</div>
+  <div id="resultado_busqueda"></div>
+</div>
+        
+    </div>
+    <script>
+/// Cambiar panel
+        function showPanel(panelId) {
+            const panels = document.querySelectorAll('.panel');
+            panels.forEach(panel => panel.style.display = 'none');
+            const selectedPanel = document.getElementById(panelId);
+            if (selectedPanel) selectedPanel.style.display = 'flex';
+            const result = document.getElementById("resultado");
+            if (result) result.innerText = '';
+        }
+        const redirectVolver = document.getElementById("botonVolver");
+
+redirectVolver.addEventListener("click", () => {
+  window.location.href = "/vista_admin/";
+});
+
+        const redirectVolverEditar = document.getElementById("botonvolvered");
+      redirectVolverEditar.addEventListener("click", (e) => {
+         e.preventDefault();     
+    e.stopPropagation(); 
+        showPanel("panel2");
+        const botondesb = document.getElementById("botondesbloquear");
+        const boton = document.getElementById("botoneditar");
+        const selector= document.getElementById("estado_propietario2");
+        const email = document.getElementById("email_propietario2");
+        botondesb.disabled = false;
+        boton.disabled = true;
+        selector.disabled=true;
+        email.disabled=true;
+        
+        document.getElementById("editarpersona").reset();
+      });
+
+///Tomar documento
+document.addEventListener("DOMContentLoaded", () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const panelActivo = urlParams.get('panel');
+    const docRecibido= urlParams.get('doc');
+    if (panelActivo === 'agregar') {
+        if (typeof showPanel === "function") {
+            showPanel('panel1'); 
+        } }
+    if (docRecibido) {
+        const inputID = document.getElementById("id_propietario");
+        if (inputID) {
+            inputID.value = docRecibido;
+            inputID.readOnly = true;
+            inputID.classList.add("entrada--solo-lectura");
+        }
+    }
+});
+
+//// Registrar
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    const formulario = document.getElementById("form_propietario");
+    const divResultado = document.getElementById("resultado");
+    if (formulario) {
+        formulario.onsubmit = async function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const token = getCookie("csrftoken");
+            try {
+                const resSesion = await fetch("/obtener_persona_temporal/");
+                const datosSesion = await resSesion.json();
+                if (!datosSesion.success) {
+                    alert("No hay datos");
+                    return;
+                }
+                const envioPersona = new FormData();
+                Object.keys(datosSesion.data).forEach(k => envioPersona.append(k, datosSesion.data[k]));
+                envioPersona.append("id_tipodoc", datosSesion.data.fk_tipo_documento);
+                const respP = await fetch("/insert_persona/", {
+                    method: "POST",
+                    headers: { "X-CSRFToken": token },
+                    body: envioPersona
+                });
+                const dataP = await respP.json();
+                if (dataP.success) {
+                    const respProp = await fetch("/insert_propietario/", {
+                        method: "POST",
+                        headers: { 
+                            "X-CSRFToken": token, 
+                            "X-Requested-With": "XMLHttpRequest" 
+                        },
+                        body: new FormData(formulario)
+                    });
+                    const dataProp = await respProp.json();
+                    if (dataProp.success) {
+                        divResultado.innerHTML = `
+
+                         <h3 class="app-result-title">Datos guardados</h3>
+                         <div class="app-result-body">
+                          <p><strong>Propietario:</strong> ${dataP.data.nombre_persona}</p>
+                          <p><strong>Documento:</strong> ${dataProp.data.id_propietario}</p>
+                          <p><strong>Email:</strong> ${dataProp.data.email_propietario}</p>    
+                          <p><strong>Usuario (login):</strong> ${dataProp.data.username || ''}</p>
+                          <p class="app-search-muted">El código del propietario en el sistema es el mismo número de documento.</p>
+                          <p class="app-search-muted">Para registrar otro propietario, use el flujo desde Personas o recargue esta página.</p>
+                          </div>
+                            `;
+                        const docFin = String(dataProp.data.id_propietario || "").trim();
+                        const inpDoc = document.getElementById("id_propietario");
+                        if (inpDoc && docFin) {
+                            inpDoc.value = docFin;
+                            inpDoc.readOnly = true;
+                            inpDoc.classList.add("entrada--solo-lectura");
+                        }
+                        const em = document.getElementById("email_propietario");
+                        const un = document.getElementById("username_propietario");
+                        const pw = document.getElementById("password_propietario");
+                        const btnG = document.getElementById("botonaccion");
+                        if (em) { em.value = ""; em.disabled = true; em.removeAttribute("required"); }
+                        if (un) { un.value = ""; un.disabled = true; un.removeAttribute("required"); }
+                        if (pw) { pw.value = ""; pw.disabled = true; pw.removeAttribute("required"); }
+                        if (btnG) btnG.disabled = true;
+                        if (typeof divResultado.scrollIntoView === "function") {
+                            divResultado.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                        }
+                    } else {
+                        alert("Error Propietario: " + dataProp.message);
+                        await fetch(`/eliminar_registro/persona/${dataP.data.documento_persona}/`, {
+                          method: "DELETE",
+                          headers: { "X-CSRFToken": token }
+                        });
+                    }
+                } else {
+                    alert("Error Persona: " + dataP.message);
+                }
+            } catch (err) {
+                alert("Fallo de conexión");
+            }   
+            return false; 
+        };
+    }
+});
+
+      
+
+         ////Buscar
+document.getElementById("buscarpersona").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const documento = document.getElementById("documento_buscar").value;
+    const contenedor = document.getElementById("resultado_busqueda");
+    try {
+        const response = await fetch(`/consultar_registro/Propietario/${documento}/`);
+        const data = await response.json();
+        if (response.ok) {
+            const registro = data.data ? data.data : data;
+            showPanel("panel22");
+            document.getElementById("documento_persona2").value = registro.id_propietario || '';
+            document.getElementById("email_propietario2").value = registro.email_propietario || '';
+            const estadoValue = registro.estado_propietario ? "1" : "0";
+            const selectEstado = document.getElementById("estado_propietario2");
+            if (selectEstado) {
+                selectEstado.value = estadoValue;
+            }
+        } else {
+            contenedor.innerHTML = `
+                <p class="app-alert-danger app-mt-sm">
+                    ${data.message || 'No se encontró el registro'}
+                </p>
+            `;
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Hubo un error al cargar los datos.");
+    }
+    document.getElementById("buscarpersona").reset();
+});
+
+
+      /////Editar
+    //Desbloquear
+const redirecteditar = document.getElementById("botondesbloquear");
+redirecteditar.addEventListener("click", () => {
+    const entradas = document.querySelectorAll(".entrada2");
+    const selector = document.getElementById("estado_propietario2");
+    const botonEditar = document.getElementById("botoneditar");
+    const botonDesbloquear = document.getElementById("botondesbloquear");
+    botonEditar.disabled = false;
+    botonDesbloquear.disabled = true;
+
+    if (selector) selector.disabled = false;
+    entradas.forEach((input) => {
+        if (input.id !== "documento_persona2") {
+            input.disabled = false;
+        }
+    });
+});
+//Funcion
+document.getElementById("editarpersona").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const contenedorAbajo = document.getElementById("resultado_busqueda");
+    const documento = document.getElementById("documento_persona2").value;
+    const email_propietario = document.getElementById("email_propietario2").value;
+    const estado_propietario = document.getElementById("estado_propietario2").value;
+
+    if (estado_propietario === "2") {
+        alert("Por favor, seleccione un estado válido.");
+        return;
+    }
+    const estado_bool = estado_propietario === "1";
+    const datos = {
+        email_propietario: email_propietario,
+        estado_propietario: estado_bool
+    };
+    try {
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const response = await fetch(`/corregir_registro/Propietario/${documento}/`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrftoken
+            },
+            body: JSON.stringify(datos)
+        });
+        const data = await response.json();
+        if (response.ok) {
+            document.querySelectorAll(".entrada2, .selector").forEach(el => el.disabled = true);
+            document.getElementById("botoneditar").disabled = true;
+            document.getElementById("botondesbloquear").disabled = false;
+            if (contenedorAbajo) {
+                contenedorAbajo.innerHTML = `
+                    <h3 class="app-result-title">Datos actualizados</h3>
+                    <div class="app-result-body">
+                        <p><b>Documento:</b> ${documento}</p>
+                        <p><b>Email:</b> ${email_propietario}</p>
+                        <p><b>Estado:</b> ${estado_bool ? 'Activo' : 'Inactivo'}</p>
+                    </div>
+                `;
+            }
+        } else {
+            alert("Error: " + (data.message || "No se pudo guardar"));
+        }
+
+    } catch (error) {
+        console.error("Error en la petición:", error);
+        alert("Hubo un error al conectar con el servidor.");
+    }
+});
+        
+        ////eliminar
+        document.getElementById("eliminarpersona").addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const documento = document.getElementById("documento_eliminar").value;
+          try {
+            const csrftoken = getCookie("csrftoken");
+            const response = await fetch(`/eliminar_registro/Propietario/${documento}/`, {
+                method: "POST",
+                headers: { "X-CSRFToken": csrftoken }
+            });
+            const data = await response.json();
+            if (response.ok) {
+              alert("Propietario eliminado con éxito");
+              obtenerPropietarios();
+            } else {
+              alert(data.message || "Hubo un error al eliminar el propietario.");
+            }
+          } catch (error) {
+            alert("Hubo un error al eliminar el propietario.");
+          }
+          document.getElementById("eliminarpersona").reset();
+        });
+
+        ////Mostrar propietarios
+        async function obtenerPropietarios() {
+            try {
+                const response = await fetch('/get_todos/Propietario/');
+                const propietarios = await response.json();
+                const tablaBody = document.querySelector('#mostrarPropietarios tbody');
+                if (!tablaBody) return;
+                tablaBody.innerHTML = ''; 
+                
+                propietarios.forEach(prop => {
+                    const fila = document.createElement('tr');
+                    fila.innerHTML = `
+                        <td>${prop.id_propietario || '---'}</td>
+                        <td>${prop.id_propietario || '---'}</td>
+                        <td>${prop.email_propietario || '---'}</td>
+                        <td>${prop.estado_propietario ? 'Activo' : 'Suspendido'}</td>
+                    `;
+                    tablaBody.appendChild(fila);
+                });
+            } catch (error) {
+                console.error('Error al obtener propietarios:', error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            obtenerPropietarios();
+            setInterval(obtenerPropietarios, 5000);
+        });
+    </script>
+   <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/app-ui.js' %}" defer></script>
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+   {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/theme.css' %}" rel="stylesheet">
+<link href="{% static 'css/admin.css' %}?v=bp2" rel="stylesheet">
+<link href="{% static 'css/finanzas.css' %}" rel="stylesheet">
+<link href="{% static 'css/app-shell.css' %}?v=bp2" rel="stylesheet" />
+    <title>Tipo_cafe</title>
+  </head>
+  <body>
+    <div class="contenedor_padre">
+      <div class="boton_contenedor">
+        <div class="letras" id="vista_title">TIPO DE CAFE</div>
+        <div id="ordena_boton">
+          <div class="letras" id="letra_gestion">Gestionar</div>
+          <button id="botones" onclick="showPanel('panel1')">Agregar</button>
+          <button id="botones" onclick="showPanel('panel2')">Editar</button>
+          <button id="botones" onclick="showPanel('panel3')">Eliminar</button>
+          <button id="botones" onclick="showPanel('panel4')">Ver</button>
+          <button id="botonVolver">Volver</button>
+        </div>
+      </div>
+      <!-- ///Registro -->
+      <div class="panel" id="panel1">
+        <form id="registrocafe">
+          <div>
+            <label class="labels" id="tipo_mantenimiento">tipo_mantenimiento</label>
+            <input
+              type="text"
+              class="entrada"
+              id="tipo_mantenimiento_tipocafe"
+              minlength="4"
+              required
+            />
+          </div>
+          <div>
+        <label class="labels" id="fecha_mantenimiento">Fecha mantenimiento</label>
+        <input
+          type="date"
+          class="entrada"
+          id="fecha_mantenimiento_tipocafe"
+          required
+        />
+      </div>
+          <button type="submit" class="botonsum" id="botonaccion">
+            Guardar
+          </button>
+        </form>
+        <div id="resultado"></div>
+      </div>
+
+      <!-- ///Eliminar -->
+      <div class="panel" id="panel3">
+        <form id="eliminartipocafe">
+          <label class="labels" id="tipo_mantenimiento">tipo_mantenimiento</label>
+          <input type="text" class="entrada" id="documento_eliminar" required />
+          <div>
+            <button type="submit" class="botonsum" id="botoneliminar">
+              Eliminar
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- ///Mostrar -->
+      <div class="panel" id="panel4">
+        <div id="tablaPerson">
+          <table id="mostrartipocafe" border="1">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Tipo mantenimiento</th>
+                <th>fecha_mantenimiento</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+<!-- ///Buscar -->
+<div class="panel" id="panel2">
+    <form id="buscartipocafe">
+      <div>
+        <label class="labels" id="documento">tipo_mantenimiento</label>
+        <input type="text" class="entrada" id="documento_buscar" required />
+      </div>
+      <button type="submit" class="botonsum" id="Buscar">Buscar</button>
+    </form>
+  </div>
+
+  <!-- ///Editar -->
+  <div class="panel" id="panel22">
+    <form id="editar_mantenimiento">
+      <div>
+        <label class="labels" id="documento">Id</label>
+        <input type="text" class="entrada2" id="id_tipocafe2" disabled />
+      </div>
+      <div>
+        <label class="labels" id="tipo_mantenimiento">tipo_mantenimiento</label>
+        <input type="text" class="entrada2" id="tipo_mantenimiento_tipocafe2" disabled />
+      </div>
+      <div>
+        <label class="labels" id="fecha_mantenimiento">fecha_mantenimiento</label>
+        <input
+          type="date"
+          class="entrada2"
+          id="fecha_mantenimiento_tipocafe2"
+          disabled
+        />
+      </div>
+      <button type="submit" class="botonsum" id="botoneditar" disabled>
+        Actualizar
+      </button>
+    </form>
+    <button class="botonsum" id="botondesbloquear">Editar</button>
+    <button class="botonsum" id="botonvolvered">Volver</button>
+  </div>
+    </div>
+    <script>
+      function showPanel(panelId) {
+        const panels = document.querySelectorAll(".panel");
+        panels.forEach((panel) => (panel.style.display = "none"));
+        const selectedPanel = document.getElementById(panelId);
+        selectedPanel.style.display = "flex";
+        const result = document.getElementById("resultado");
+        result.innerText = "";
+      }
+      const redirectVolver = document.getElementById("botonVolver");
+
+redirectVolver.addEventListener("click", () => {
+  window.location.href = "/vista_admin/";
+});
+
+function safeDateYYYYMMDD(value) {
+  return value ? String(value).slice(0, 10) : "";
+}
+
+      const redirectVolverEditar = document.getElementById("botonvolvered");
+      redirectVolverEditar.addEventListener("click", () => {
+        showPanel("panel2");
+        const botondesb = document.getElementById("botondesbloquear");
+        const boton = document.getElementById("botoneditar");
+        botondesb.disabled = false;
+        boton.disabled = true;
+        const entradas2 = document.querySelectorAll(".entrada2");
+        entradas2.forEach((entrada) => {
+          entrada.disabled = true;
+        });
+        document.getElementById("editar_mantenimiento").reset();
+      });
+
+      /////registro
+      document
+        .getElementById("registrocafe")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const tipo_mantenimiento_tipocafe =
+            document.getElementById("tipo_mantenimiento_tipocafe").value;
+          const fecha_mantenimiento_tipocafe =
+            document.getElementById("fecha_mantenimiento_tipocafe").value;
+
+          if (!fecha_mantenimiento_tipocafe) {
+            alert("Indique la fecha de mantenimiento.");
+            return;
+          }
+          try {
+            const response = await fetch(
+              "/api/productostipocafe",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  tipo_mantenimiento_tipocafe,
+                  fecha_mantenimiento_tipocafe: fecha_mantenimiento_tipocafe,
+                }),
+              }
+            );
+
+            const data = await response.json();
+            if (response.ok) {
+              const resultadoDiv = document.getElementById("resultado");
+              resultadoDiv.innerHTML = `
+          <p id="tituloDatos"><strong>Datos guardados</strong></p>
+          <p><strong>Tipo de cafe:</strong>${data.data.tipo_mantenimiento_tipocafe}</p>
+          <p><strong>fecha_mantenimiento:</strong>${data.data.fecha_mantenimiento_tipocafe}</p>
+        `;
+              alert("Datos guardados con éxito");
+            } else {
+              alert(data.message);
+            }
+          } catch (error) {
+            alert("Hubo un error al registrar los datos.");
+          }
+          document.getElementById("registrocafe").reset();
+        });
+
+      ////Eliminar
+      document
+        .getElementById("eliminartipocafe")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const id_tipocafe =
+            document.getElementById("documento_eliminar").value;
+          try {
+            const response = await fetch(
+              `/api/productostipocafe/${id_tipocafe}`,
+              {
+                method: "DELETE",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            const data = await response.json();
+            if (response.ok) {
+              alert(data.message);
+            } else {
+              alert(data.message || "Hubo un error al eliminar el producto.");
+            }
+          } catch (error) {
+            alert("Hubo un error al eliminar el producto.");
+          }
+          document.getElementById("eliminartipocafe").reset();
+        });
+
+      ////Mostrar tipocafes
+      fetch("/api/productostipocafe")
+        .then((response) => response.json())
+        .then((productos) => {
+          const tablaBody = document
+            .getElementById("mostrartipocafe")
+            .getElementsByTagName("tbody")[0];
+
+          productos.forEach((tipocafe) => {
+            const fila = document.createElement("tr");
+
+            const id_tipocafe = document.createElement("td");
+            id_tipocafe.textContent = tipocafe.id_tipocafe;
+            fila.appendChild(id_tipocafe);
+
+            const tipo_mantenimiento_tipocafe = document.createElement("td");
+            tipo_mantenimiento_tipocafe.textContent = tipocafe.tipo_mantenimiento_tipocafe;
+            fila.appendChild(tipo_mantenimiento_tipocafe);
+
+            const fecha_mantenimiento_tipocafe = document.createElement("td");
+            fecha_mantenimiento_tipocafe.textContent = safeDateYYYYMMDD(tipocafe.fecha_mantenimiento_tipocafe) || "NULL";
+            fila.appendChild(fecha_mantenimiento_tipocafe);
+
+            tablaBody.appendChild(fila);
+          });
+        })
+        .catch((error) => {
+          console.error("Hubo un error al obtener los datos:", error);
+        });
+
+      ///Servidor
+      function obtenerTipocafe() {
+        fetch("/api/productostipocafe")
+          .then((response) => response.json())
+          .then((productos) => {
+            actualizarTipocafe(productos);
+          })
+          .catch((error) =>
+            console.error("Error al obtener productos:", error)
+          );
+      }
+      setInterval(obtenerTipocafe, 3000);
+
+      ///actualizarPersonas
+      function actualizarTipocafe(productos) {
+        const tablaBody = document
+          .getElementById("mostrartipocafe")
+          .getElementsByTagName("tbody")[0];
+        tablaBody.innerHTML = "";
+        productos.forEach((tipocafe) => {
+          const fila = document.createElement("tr");
+
+          const id_tipocafe = document.createElement("td");
+          id_tipocafe.textContent = tipocafe.id_tipocafe;
+          fila.appendChild(id_tipocafe);
+
+          const tipo_mantenimiento_tipocafe = document.createElement("td");
+          tipo_mantenimiento_tipocafe.textContent = tipocafe.tipo_mantenimiento_tipocafe;
+          fila.appendChild(tipo_mantenimiento_tipocafe);
+
+          const fecha_mantenimiento_tipocafe = document.createElement("td");
+          fecha_mantenimiento_tipocafe.textContent = safeDateYYYYMMDD(tipocafe.fecha_mantenimiento_tipocafe) || "NULL";
+          fila.appendChild(fecha_mantenimiento_tipocafe);
+
+          tablaBody.appendChild(fila);
+        });
+      }
+
+////Buscar
+document
+        .getElementById("buscartipocafe")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const id_tipocafe = document.getElementById("documento_buscar").value;
+
+          try {
+            const response = await fetch(
+              `/api/productostipocafe/${id_tipocafe}`,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            const data = await response.json();
+            if (response.ok) {
+              showPanel("panel22");
+              document.getElementById("id_tipocafe2").value = data.data.id_tipocafe;
+              document.getElementById("tipo_mantenimiento_tipocafe2").value = data.data.tipo_mantenimiento_tipocafe;
+              document.getElementById("fecha_mantenimiento_tipocafe2").value = safeDateYYYYMMDD(data.data.fecha_mantenimiento_tipocafe);
+            } else {
+              alert(data.message || "No se pudieron cargar los datos.");
+            }
+          } catch (error) {
+            alert("Hubo un error al cargar los datos.");
+          }
+          document.getElementById("buscartipocafe").reset();
+        });
+
+      /////editar
+      const redirecteditar = document.getElementById("botondesbloquear");
+      redirecteditar.addEventListener("click", () => {
+        const botondesb = document.getElementById("botondesbloquear");
+        const entradas = document.querySelectorAll(".entrada2");
+        const boton = document.getElementById("botoneditar");
+        boton.disabled = false;
+        botondesb.disabled = true;
+        entradas.forEach((entradas) => {
+          if (entradas.id !== "id_tipocafe2") {
+            entradas.disabled = false;
+          }
+        });
+      });
+
+      document
+        .getElementById("editar_mantenimiento")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const botondesb = document.getElementById("botondesbloquear");
+          const boton = document.getElementById("botoneditar");
+          botondesb.disabled = false;
+          boton.disabled = true;
+        
+          const id_tipocafe = document.getElementById("id_tipocafe2").value;
+          const tipo_mantenimiento_tipocafe = document.getElementById("tipo_mantenimiento_tipocafe2").value;
+          const fecha_mantenimiento_tipocafe = document.getElementById("fecha_mantenimiento_tipocafe2").value;
+          try {
+            const response = await fetch(
+              `/api/productostipocafe/${id_tipocafe}`,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  id_tipocafe,
+                  tipo_mantenimiento_tipocafe,
+                  fecha_mantenimiento_tipocafe,
+                }),
+              }
+            );
+            const data = await response.json();
+            console.log(data)
+            if (response.ok) {
+              alert("Datos actualizados con éxito");
+              const entradas2 = document.querySelectorAll(".entrada2");
+              entradas2.forEach((entrada) => {
+                entrada.disabled = true;
+              });
+            } else {
+              alert(data.message || "Hubo un error al actualizar los datos.");
+            }
+          } catch (error) {
+            alert("Hubo un error al guardar los datos.");
+          }
+          showPanel("panel2");
+          document.getElementById("editar_mantenimiento").reset();
+        });
+
+
+
+    </script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+      <script src="{% static 'js/app-ui.js' %}" defer></script>
+</body>
+</html>
